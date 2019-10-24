@@ -13,7 +13,7 @@ baseurl: "/" # the subpath of your site, e.g. /blog
 url: "https://leezw.net" # the base hostname & protocol for your site
 github_username:  mzzw
 paginate: 5
-theme-dark: true #Set to true to change to dark website theme
+theme-dark: false #Set to true to change to dark website theme
 
 plugins: [jekyll-paginate, kramdown]
 # Build settings
