@@ -9,7 +9,7 @@
 title: Leezw
 email: lee@leezw.net
 description: 一本书有20%讲的是知识，80%帮助你理解知识。有时我们可以跳过那80%。
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://leezw.net" # the base hostname & protocol for your site
 github_username:  mzzw
 paginate: 5
