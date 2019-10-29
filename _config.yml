@@ -14,6 +14,22 @@ url: "https://leezw.net" # the base hostname & protocol for your site
 github_username:  mzzw
 paginate: 5
 theme-dark: false #Set to true to change to dark website theme
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+default:
+  -
+    scope:
+      path: "_posts"
+      type: "posts"
+    values:
+      layout: "post"
+      author: "李泉"
+      categories: "regular"
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
 
 plugins: [jekyll-paginate,jekyll-admin, kramdown,jekyll-seo-tag,jemoji,jekyll-redirect-from]
 # Build settings
