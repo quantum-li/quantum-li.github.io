@@ -8,28 +8,27 @@
 # Site settings
 title: Leezw
 email: lee@leezw.net
-description: 一本书有20%讲的是知识，80%帮助你理解知识。有时我们可以跳过那80%。
+description: 一本书有少部分讲的是知识，大部分帮助你理解知识。
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://leezw.net" # the base hostname & protocol for your site
 github_username:  mzzw
 paginate: 5
+permalink: /:categories/:title
 theme-dark: false #Set to true to change to dark website theme
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
-default:
-  -
-    scope:
-      path: "_posts"
-      type: "posts"
-    values:
-      layout: "post"
-      author: "李泉"
-      categories: "regular"
-  -
-    scope:
+defaults:
+  - scope:
       path: ""
       type: "pages"
     values:
       layout: "page"
+  - scope:
+      path: "_posts"
+      type: "posts"
+    values:
+      layout: "post"
+      categories: "regular"
+      comments: true
 
 plugins: [jekyll-paginate,jekyll-admin, kramdown,jekyll-seo-tag,jemoji,jekyll-redirect-from]
 # Build settings
