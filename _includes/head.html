@@ -11,5 +11,33 @@
   <link rel="stylesheet" href="{{ "/css/style.css" | prepend: site.baseurl }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
+  <!-- fancybox -->
+  <script type="text/javascript" src="/assets/fancybox/lib/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="/assets/fancybox/lib/jquery.mousewheel.pack.js"></script>
+  <link rel="stylesheet" href="/assets/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/assets/fancybox/source/jquery.fancybox.pack.js"></script>
+  <link rel="stylesheet" href="/assets/fancybox/source/helpers/jquery.fancybox-buttons.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/assets/fancybox/source/helpers/jquery.fancybox-buttons.js"></script>
+  <script type="text/javascript" src="/assets/fancybox/source/helpers/jquery.fancybox-media.js"></script>
+  <link rel="stylesheet" href="/assets/fancybox/source/helpers/jquery.fancybox-thumbs.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="/assets/fancybox/source/helpers/jquery.fancybox-thumbs.js"></script>
+  <script>
+   $(document).ready(function() {
+    $(".fancybox").fancybox({
+    prevEffect  : 'none',
+    nextEffect  : 'none',
+    helpers  : {
+      title  : {
+        type: 'outside'
+      },
+      thumbs  : {
+        width  : 50,
+        height  : 50
+      }
+    }
+  });
+  });
+</script>
+  <!-- fancybox-->
   {% seo %}
 </head>

@@ -560,6 +560,19 @@ pre {
   float: right;
   margin-top:-1rem;
 }
+.picture {
+  float: left;
+  margin-left: em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+@media screen and (min-width: 800px){
+  .picture {
+     margin-left: 1em;
+     width: 30%;
+  }
+}
 /**
  * Pagination
  */
