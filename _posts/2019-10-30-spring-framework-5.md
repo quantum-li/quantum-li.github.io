@@ -4,6 +4,8 @@ categories:
 - spring
 - java
 - program
+permalink: /posts/what-is-new-in-spring-framework-5
+description: spring框架，java，编程，代码，spring-framework5更新内容
 ---
 
 # 1. JDK依赖变更

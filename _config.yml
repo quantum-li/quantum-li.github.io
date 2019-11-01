@@ -11,7 +11,7 @@ email: lee@leezw.net
 description: 一本书有少部分讲的是知识，大部分帮助你理解知识。
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://leezw.net" # the base hostname & protocol for your site
-github_username:  mzzw
+github_username: mzzw
 paginate: 10
 permalink: /:categories/:title
 theme-dark: false #Set to true to change to dark website theme
