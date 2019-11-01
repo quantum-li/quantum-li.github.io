@@ -1,5 +1,5 @@
 ---
-title: Redis 基础属性
+title: Redis 基础知识
 categories:
 - redis
 - database
