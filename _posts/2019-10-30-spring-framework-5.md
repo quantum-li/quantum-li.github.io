@@ -1,7 +1,17 @@
 ---
 title: Spring Framework 5 更新
+categories:
+- spring
+- java
+- program
 ---
 
-{% highlight java linenos %}
-  public void static main(String... arg){  String s="highlightlighthighlighthighlight"; }
-{% endhighlight ruby %}
+# 1. JDK依赖变更
+* spring-framework 5 需要JAVA SE 8+ ,JAVA EE 7+
+# 2. 核心代码改动
+* 基于JDK 8对于反射的增强，spring-framework 5 可以有效地访问方法参数
+* @Nullable 和 @NotNull 可以再编译时增加对空值的处理从而避免空指针
+* spring-framework 5 使用了名为*spring-jcl*的 Commons Logging 桥模块。新版本将自动检测Log4j 2.x,SLF4J,*[JUL]: java.util.logging 而不需要其他扩展
+
+# 3. 容器改动
+*
