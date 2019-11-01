@@ -6,6 +6,7 @@ categories:
 - program
 permalink: /posts/what-is-new-in-spring-framework-5
 description: spring框架，java，编程，代码，spring-framework5更新内容
+excerpt: Spring Framework 5 已经更新好久了，来讲一下都有哪些更新内容。
 ---
 
 # 1. JDK依赖变更

@@ -17,7 +17,13 @@ layout: default
     <a class='postLink' href="{{site.url}}{{site.baseurl}}{{post.url}}">{{post.title}}</a>
     </div>
     <div class="postExt">
-   {{ post.content | strip_html | truncate:200}}
+        <a href="{{site.url}}{{site.baseurl}}{{post.url}}">
+     {% if post.excerpt.size < 200 %}
+        {{ post.excerpt | strip_html }}
+     {% else %}
+        {{ post.excerpt | strip_html | truncate:200}}
+     {% endif %}
+        </a>
     </div>
   </div>
 

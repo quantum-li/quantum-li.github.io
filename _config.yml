@@ -16,6 +16,7 @@ paginate: 10
 permalink: /:categories/:title
 theme-dark: false #Set to true to change to dark website theme
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+excerpt_separator:  '<!-- more -->'
 defaults:
   - scope:
       path: ""
