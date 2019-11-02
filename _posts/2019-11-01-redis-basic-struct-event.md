@@ -6,7 +6,8 @@ categories:
 - nosql
 - key/value database
 description: Redis基础知识，数据结构，事件
-permalink: /posts/redis-basic-struct-event
+permalink: "/posts/redis-basic-struct-event"
+excerpt: 列举一些Redis的数据结构，实现。键值回收和事件。
 ---
 
 # 数据结构

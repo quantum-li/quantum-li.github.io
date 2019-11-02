@@ -24,6 +24,14 @@
   <script type="text/javascript" src="/assets/fancybox/source/helpers/jquery.fancybox-thumbs.js"></script>
   <script>
    $(document).ready(function() {
+     $(".post-content img").each(function (n, e) {
+       $(e).wrap("<a class='fancybox'\
+    rel='fancybox-thumb'\
+    href='"+ $(e).attr("src") + "'\
+    title='"+ $(e).attr("alt") + "'>\
+    </a>")
+     });
+
     $(".fancybox").fancybox({
     prevEffect  : 'none',
     nextEffect  : 'none',

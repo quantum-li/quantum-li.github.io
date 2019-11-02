@@ -482,9 +482,10 @@ blockquote {
  */
 .post-header {
   margin-bottom: $spacing-unit;
+  margin-top: 2rem;
 }
 .post-title {
-  font-size: 62px;
+  font-size: 36px;
 
   text-align: center;
   font-family: "PT Sans";
@@ -497,26 +498,45 @@ blockquote {
   margin-bottom: $spacing-unit;
   padding-bottom: 3em !important;
   p {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
-  h2 {
-    font-size: 32px;
-    @include media-query($on-laptop) {
-      font-size: 28px;
-    }
+  ul {
+    font-size: 1rem;
   }
-  h3 {
-    font-size: 26px;
-    @include media-query($on-laptop) {
-      font-size: 22px;
-    }
+  ol {
+    font-size: 1rem;
   }
-  h4 {
-    font-size: 20px;
-    @include media-query($on-laptop) {
-      font-size: 18px;
-    }
+  table {
+    font-size: 1rem;
   }
+  .highlight {
+    font-size: 0.9rem;
+  }
+  img:not([alt=leezw]):not([class=picture]) {
+    width: 70%;
+    display: block;
+    margin: 0 auto;
+    max-height: 20rem;
+    object-fit: cover;
+  }
+  // h2 {
+  //   font-size: 32px;
+  //   @include media-query($on-laptop) {
+  //     font-size: 28px;
+  //   }
+  // }
+  // h3 {
+  //   font-size: 26px;
+  //   @include media-query($on-laptop) {
+  //     font-size: 22px;
+  //   }
+  // }
+  // h4 {
+  //   font-size: 20px;
+  //   @include media-query($on-laptop) {
+  //     font-size: 18px;
+  //   }
+  // }
 }
 .top-line {
   height: 2px;
