@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404</title>
+    <link
+        href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic|Source+Sans+Pro:400,700,200,300|Josefin+Sans:400,600,700,300'
+        rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="/favicon.ico">
+    <script type="text/javascript" src="/assets/fancybox/lib/jquery-1.10.2.min.js"></script>
+    <script>
+        var notFoundNo=0;
+        function notFound() {
+            var cur = notFoundNo;
+            notFoundNo++;
+            var fromX = window.innerWidth+20;
+            var fromY = Math.random()*window.innerHeight;
+            var toX = -window.innerWidth;
+            var fontSize=Math.random()*2+1;
+            var leaf = '<div id="notFound' + cur + '" style="\
+          display:block;\
+          z-index:999;\
+          width:max-content;\
+          font-size:'+fontSize+'rem;\
+          position:fixed;\
+          text-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);\
+          top:'+ fromY + 'px;\
+          left:'+ fromX + 'px;"\
+          >';
+            var contents=[
+                "404",
+                "The requested URL was not found on this server.",
+                "404 File or Directory Not Found.",
+                "HTTP 404 Not Found",
+                "404 Page Not Found",
+                "404 Error",
+                "HTTP 404",
+                "The page cannot be found",
+                "页面不存在",
+                "🙃","☹️","😭",""
+            ];
+            var index = Math.floor((Math.random()*contents.length)); 
+            leaf=leaf+contents[index];
+            leaf = leaf + '</div>';
+            $("body").prepend(leaf);
+            $("#notFound" + cur).animate({
+                top:fromY+"px",
+                left: toX + "px"
+            }, Math.random() * 10000 + 20000, function () {
+                $("#notFound" + cur).remove();
+            });
+        };
+
+        $(document).ready(function () {
+            setInterval(function(){
+                notFound();
+            },2000);
+        });
+    </script>
+</head>
+
+<body>
+<span class="forkongithub"><a style="color:#aaa" class="forkongithub-a" href="/index.html">Leezw<br/></a></span>
+<div class="top-line"></div>
+</body>
+
+</html>

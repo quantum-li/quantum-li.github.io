@@ -36,15 +36,16 @@
       leafNo++;
       var halfScreenWidth = window.innerWidth / 2;
       var fromX = Math.random() * (window.innerWidth*0.8)+(window.innerWidth*0.1);
-      var fromY = -20;
+      var fromY = -50;
       var fromR = Math.random() * 360;
       var toX = Math.random() * (halfScreenWidth) - (halfScreenWidth / 2);
       toX = fromX + toX;
       var toY = window.innerHeight+200;
       var toR = Math.random() * 8 - 4;
-
+      var fontSize=Math.random()*1.5+0.8;
       var leaf = '<div id="leaf' + cur + '" style="\
           display:block;\
+          font-size:'+fontSize+'rem;\
           z-index:-99;\
           position:fixed;\
           top:'+ fromY + 'px;\

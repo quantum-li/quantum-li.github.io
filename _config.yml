@@ -19,11 +19,6 @@ markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 excerpt_separator:  '<!-- more -->'
 defaults:
   - scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "page"
-  - scope:
       path: "_posts"
       type: "posts"
     values:
