@@ -18,9 +18,8 @@
         function notFound() {
             var cur = notFoundNo;
             notFoundNo++;
-            var fromX = window.innerWidth+20;
+            var fromX = window.innerWidth+2;
             var fromY = Math.random()*window.innerHeight;
-            var toX = -window.innerWidth;
             var fontSize=Math.random()*2+1;
             var leaf = '<div id="notFound' + cur + '" style="\
           display:block;\
@@ -45,12 +44,13 @@
                 "🙃","☹️","😭",""
             ];
             var index = Math.floor((Math.random()*contents.length)); 
+            toX=-contents[index].length*fontSize;
             leaf=leaf+contents[index];
             leaf = leaf + '</div>';
             $("body").prepend(leaf);
             $("#notFound" + cur).animate({
                 top:fromY+"px",
-                left: toX + "px"
+                left: toX + "rem"
             }, Math.random() * 10000 + 20000, function () {
                 $("#notFound" + cur).remove();
             });
