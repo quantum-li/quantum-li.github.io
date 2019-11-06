@@ -1,12 +1,12 @@
 ---
-title: shell脚本基础
-description: shell,linux,编程,shell基础
-excerpt: shell编程，命令行基础知识。包括变量、语法、关键词、处理输入输出等
+title: Linux命令行与Shell脚本编程大全
+description: 《Linux命令行与Shell脚本编程大全》,shell,linux,编程,shell基础
+excerpt: Linux命令行与shell脚本编程基础。包括Linux命令行，shell脚本基础，高级shell脚本编程。涵盖shell语法、常用命令、逻辑控制等。
 categories:
 - shell
 - linux
 - program
-permalink: "/posts/head-of-shell"
+permalink: "/posts/linux-commandline-and-shellscripting-bible"
 ---
 
 # 常用命令

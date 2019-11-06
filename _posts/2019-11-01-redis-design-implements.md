@@ -1,13 +1,13 @@
 ---
-title: Redis 基础知识
+title: Redis 设计与实现
 categories:
 - redis
 - database
 - nosql
 - key/value database
-description: Redis基础知识，数据结构，事件
-permalink: "/posts/redis-basic-struct-event"
-excerpt: 列举一些Redis的数据结构，实现。键值回收和事件。
+description: 《Redis 设计与实现》，Redis基础知识，数据结构，事件
+permalink: "/posts/redis-design-implements"
+excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速、有效地了解Redis内部构造以及运作机制。
 ---
 
 # 数据结构
