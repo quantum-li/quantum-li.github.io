@@ -169,6 +169,9 @@ blockquote {
         margin-bottom: 0;
     }
 }
+blockquote p{
+  font-size:18px !important;
+}
 
 
 /**
@@ -498,20 +501,21 @@ blockquote {
   margin-bottom: $spacing-unit;
   padding-bottom: 3em !important;
   p {
-    font-size: 1rem;
+    font-size: 1.5rem;
+    //font-size: 1rem;
   }
-  ul {
-    font-size: 1rem;
-  }
-  ol {
-    font-size: 1rem;
-  }
-  table {
-    font-size: 1rem;
-  }
-  .highlight {
-    font-size: 0.9rem;
-  }
+  // ul {
+  //   font-size: 1rem;
+  // }
+  // ol {
+  //   font-size: 1rem;
+  // }
+  // table {
+  //   font-size: 1rem;
+  // }
+  // .highlight {
+  //   font-size: 0.9rem;
+  // }
   img:not([alt=leezw]):not([class=picture]) {
     width: 70%;
     display: block;
@@ -519,24 +523,24 @@ blockquote {
     max-height: 20rem;
     object-fit: cover;
   }
-  // h2 {
-  //   font-size: 32px;
-  //   @include media-query($on-laptop) {
-  //     font-size: 28px;
-  //   }
-  // }
-  // h3 {
-  //   font-size: 26px;
-  //   @include media-query($on-laptop) {
-  //     font-size: 22px;
-  //   }
-  // }
-  // h4 {
-  //   font-size: 20px;
-  //   @include media-query($on-laptop) {
-  //     font-size: 18px;
-  //   }
-  // }
+  h2 {
+    font-size: 32px;
+    @include media-query($on-laptop) {
+      font-size: 28px;
+    }
+  }
+  h3 {
+    font-size: 26px;
+    @include media-query($on-laptop) {
+      font-size: 22px;
+    }
+  }
+  h4 {
+    font-size: 20px;
+    @include media-query($on-laptop) {
+      font-size: 18px;
+    }
+  }
 }
 .top-line {
   height: 2px;
@@ -678,4 +682,28 @@ blockquote {
     -moz-transform: rotate(-45deg);
     -o-transform: rotate(-45deg);
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+/**
+ * Code formatting
+ */
+pre,
+code {
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+code {
+    padding: 1px 5px;
+}
+
+pre {
+    padding: 8px 12px;
+    overflow-x: auto;
+
+    > code {
+        border: 0;
+        padding-right: 0;
+        padding-left: 0;
+    }
 }
