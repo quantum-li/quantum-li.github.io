@@ -4,7 +4,7 @@ categories:
 - 计算机网络
 description: 计算机网络第六版基础知识
 permalink: "/posts/computer-networks-6"
-excerpt: 计算机网络第六版知识摘要
+excerpt: 计算机网络第六版知识摘要，物理层、链路层、网络层等常用关键知识。
 ---
 # 概述
 ## 数据交换方式
