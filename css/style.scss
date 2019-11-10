@@ -695,6 +695,7 @@ code {
 
 code {
     padding: 1px 5px;
+    font-family: Helvetica !important;
 }
 
 pre {
@@ -713,3 +714,7 @@ pre {
   margin-right: 4rem;
   margin-bottom: 0.5rem;
 }
+
+.highlight {
+    border-radius: 10px;
+  }
