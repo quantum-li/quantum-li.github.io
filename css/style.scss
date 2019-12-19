@@ -718,3 +718,46 @@ pre {
 .highlight {
     border-radius: 10px;
   }
+
+  table {
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0px; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    box-sizing: border-box;
+    position: relative;
+    background-color: #fff;
+  }
+  
+  body {
+    max-height: 585px;
+    overflow: auto;
+  }
+  
+  th{
+    font-weight: unset;
+    padding-right: 10px;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-family: Lato-Bold;
+    font-size: 1rem;
+    color: #fa4251;
+    line-height: 1.4;
+    background-color: transparent;
+  }
+  
+  td{
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-family: Lato-Regular;
+    font-size: 1rem;
+    color: #808080;
+    line-height: 1.4;
+  }
+  
+  th, td {
+    font-weight: unset;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
