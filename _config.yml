@@ -17,6 +17,10 @@ permalink: /posts/:title
 theme-dark: false #Set to true to change to dark website theme
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 excerpt_separator:  '<!-- more -->'
+collections:
+  poetry:
+    output: true
+    permalink: /poetry/:title
 defaults:
   - scope:
       path: "_posts"
@@ -33,6 +37,12 @@ defaults:
       path: "assets/pdf"
     values:
       pdf: true
+  - scope:
+      path: "_poetry"
+      type: "poetry"
+    values:
+      poetry: true
+      layout: "poetry"
 
 plugins: [jekyll-paginate,jekyll-admin, kramdown,jekyll-seo-tag,jemoji,jekyll-redirect-from]
 # Build settings

@@ -761,3 +761,33 @@ pre {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
   }
+
+  .poeDate {
+    float: left;
+    text-transform: uppercase;
+    font-family: "Source Sans Pro";
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-indent: 2px;
+    color:#828282;
+  }
+
+  .poeTag {
+    float: right;
+    font-family: "Source Sans Pro";
+    color:#828282;
+  }
+
+  .poeExt{
+    font-family: "Source Sans Pro";
+    color:#828282;
+  }
+
+  .poeLink{
+    color:#DC143C !important;
+    font-size: 1.5rem;
+  }
+  .poeLink:hover{
+    border-bottom: 1px dotted;
+  }

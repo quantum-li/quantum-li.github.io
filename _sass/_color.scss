@@ -45,10 +45,10 @@ body.light {
    * Links
    */
   a {
-    color: $l-link-color !important;
+    color: $l-link-color;
 
     &:visited {
-        color: darken($l-brand-color, 50%);
+        // color: darken($l-brand-color, 50%);
     }
 
     &:hover {
@@ -63,10 +63,10 @@ body.light {
       }
     }
     &.postLink{
-      color: darken($l-link-color, 50%) !important;
+      color: $l-crimson;
 
       &:visited {
-          color: $l-crimson !important;
+          color: $l-crimson;
           border-color: $l-crimson;
       }
     }
