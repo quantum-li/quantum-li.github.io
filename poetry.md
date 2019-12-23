@@ -19,7 +19,7 @@ layout: "default"
     <a class='poeLink' href="{{site.url}}{{site.baseurl}}{{poe.url}}">{{poe.title}}</a>
     </div>
     <div class="poeExt">
-     {{ poe.content }}
+     {{ poe.excerpt }}
     </div>
   </div>
 
