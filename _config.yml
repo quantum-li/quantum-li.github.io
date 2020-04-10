@@ -44,7 +44,9 @@ defaults:
       poetry: true
       layout: "poetry"
 
-plugins: [jekyll-paginate,jekyll-admin, kramdown,jekyll-seo-tag,jemoji,jekyll-redirect-from]
+plugins: [jekyll-paginate,jekyll-admin, kramdown,jekyll-seo-tag,jemoji,jekyll-redirect-from,jekyll-mermaid]
 # Build settings
 markdown: kramdown
 highlighter: rouge
+mermaid:
+  src: '/assets/js/mermaid.min.js'
