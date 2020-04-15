@@ -6,6 +6,7 @@ description: 高性能MySQL摘要
 permalink: "/posts/mysql-distinct-sort-query"
 excerpt: 内容全部源自《高性能MySQL第三版》，取自里面的重点内容摘要。包括MySQL架构、性能、索引、查询优化、高级特性等。
 ---
+<<<<<<< HEAD
 # Schema与数据类型优化
 
 ## 选择优化的数据类型
@@ -33,3 +34,13 @@ TINYINT，SMALLINT，MEDIUMINT，INT，BIGINT。分别使用8，16，24，32，6
 对于DECIMAL列，可以指定小数点前后所允许的最大位数。这会影响列的空间消耗。MySQL 5.0和更高版本将数字打包保存到一个二进制字符 串中（每4个字节存9个数字）。例如，DECIMAL（18,9）小数点两边将各存储9个数字，一共使用9 个字节：小数点前的数字用4个字节，小数点后的数字用4个字节，小数点本身占1个字节。
 
 ## 字符串类型
+=======
+<div class="mermaid">
+graph LR;
+  A-->B
+  B-->C
+  C-->D
+  D-->A
+</div>
+123
+>>>>>>> 54d9535d006693a8e1e1e9e0b02823fac138f1f6
