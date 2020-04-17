@@ -488,8 +488,7 @@ blockquote p{
   margin-top: 2rem;
 }
 .post-title {
-  font-size: 36px;
-
+  font-size: 1.9rem;
   text-align: center;
   font-family: "PT Sans";
   font-weight: 900;
@@ -502,7 +501,6 @@ blockquote p{
   padding-bottom: 3em !important;
   p {
     font-size: 1.5rem;
-    //font-size: 1rem;
   }
   // ul {
   //   font-size: 1rem;
@@ -523,23 +521,17 @@ blockquote p{
     max-height: 20rem;
     object-fit: cover;
   }
+    h1 {
+    font-size: 2rem;
+   }
   h2 {
-    font-size: 32px;
-    @include media-query($on-laptop) {
-      font-size: 28px;
-    }
+    font-size: 1.8rem;
   }
   h3 {
-    font-size: 26px;
-    @include media-query($on-laptop) {
-      font-size: 22px;
-    }
+    font-size: 1.7rem;
   }
   h4 {
-    font-size: 20px;
-    @include media-query($on-laptop) {
-      font-size: 18px;
-    }
+    font-size: 1.6rem;
   }
 }
 .top-line {
