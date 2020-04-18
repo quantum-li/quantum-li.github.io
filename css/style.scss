@@ -127,7 +127,6 @@ li {
  * Headings
  */
 h1, h2, h3, h4, h5, h6 {
-    margin-left: -2rem;
     font-weight: $base-font-weight;
 }
 
@@ -523,15 +522,19 @@ blockquote p{
     object-fit: cover;
   }
     h1 {
+    margin-left: -2rem;
     font-size: 2rem;
    }
   h2 {
+    margin-left: -2rem;
     font-size: 1.5rem;
   }
   h3 {
+    margin-left: -2rem;
     font-size: 1.3rem;
   }
   h4 {
+    margin-left: -2rem;
     font-size: 1.2rem;
   }
 }
