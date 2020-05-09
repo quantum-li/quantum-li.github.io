@@ -329,3 +329,7 @@ socket 在读写数据时⽤到的 TCP 缓冲区也可以设置⼤⼩。如果�
 ### 线程安全
 
 在同⼀个群组⾥，我们⽆法让⼀个线程运⾏多个消费者，也⽆法让多个线程安全地共享⼀个消费者。按照规则，⼀个消费者使⽤⼀个线程。如果要在同⼀个消费者群组⾥运⾏多个消费者，需要让每个消费者运⾏在⾃⼰的线程⾥。
+
+！![]diisis'fis'fu重复重复iiuiu'liu'li处理处理()/assets/images/72249544-7f0b-45d9-8bff-645a52cb923e.png
+
+![]tcgottctc'gtc'go跳过跳过iiuiu'liu'li处理处理()/assets/images/f9a985cb-ea43-49aa-b1c5-5ffe481214a0.png
