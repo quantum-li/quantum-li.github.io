@@ -194,4 +194,85 @@ Basically Available（基本可用）、Soft state（软状态）、Eventually c
 
 ## Paxos算法
 
-基于消息传递且高度容错的一致性算法。
+基于消息传递且高度容错的一致性算法。Paxos算法保证在分布式系统内被提出的提案中只有唯一的一个有效且被大部分节点认可和获取。在该算法中有三种参与者角色：Proposer、Acceptor、Learner。该算法面对的问题是所有参与者都以任意的不确定的状态运行，且参与者之间的通信也得不到保证。
+
+### 提案的选定
+
+为了避免Accpetor单点问题，该算法允许过半数的Acceptor同意的提案被选定。其中每个Acceptor最多只能批准一个提案。
+
+### 推导过程
+
+通过反向推导P2c、P2b、P2a、P2，然后通过P2和P1保证一致性。
+
+#### P1：一个Acceptor必须批准它收到的第一个提案
+
+##### 存在的问题
+
+如果多个Proposer提出的提案被多个Acceptor批准，且每个Acceptor都批准了一个不同的提案。或者由于节点故障剩下的节点恰好为偶数。就无法选出提案
+
+![每个Acceptor批准不同的提案](/assets/images/5048cc0a-58c4-498d-b520-58d9898a0f37.png)
+
+![不同的提案被相同数量的Acceptor批准](/assets/images/979c8e05-b4d9-493c-8bd4-73cd3571dfea.png)
+
+##### 解决方案
+
+一个提案需要被半数以上Acceptor批准，所以一个Acceptor可以批准不止一个提案。因此引入一个全局编号M来标识每一个被批准的提案编号。当一个编号M0，值为V0的提案被半数以上Acceptor批准后可以被选定。
+
+#### P2：如果编号为M0、值为V0的提案被选定，那么所有被选定的提案，如果编号比M0高，其值必须是V0
+
+因为一个提案要被选定，必须至少被一个Acceptor批准
+
+#### P2a：如果编号为M0、值为V0的提案被选定，那么所有被Acceptor批准的提案，如果编号比M0高，其值必须是V0
+
+如果一个提案在某个Acceptor还未收到上一个提案时被选定，会产生一个被批准的值，且编号更高。
+
+![一个提案在某个Acceptor还未收到上一个提案时被选定](/assets/images/5e9d7edc-7657-4bf2-8321-2ffd91ea6bb8.png)
+
+#### P2b：如果一个值为V0提案被选定后，那么之后任何Proposer产生的编号更高的提案值必须为V0
+
+因为M0已经被选定，所以肯定存在一个超过半数的Acceptor集合C，都批准了该提案。
+
+因为任何半数以上的Acceptor集合S，都至少包含集合C中的一个成员，因此保证P2c即可满足P2b
+
+#### P2c：对于被提出的提案Mn和Vn，存在集合S满足S中不存在任何批准过编号小于Mn的提案的Acceptor，或者S中所有Acceptor批准过得编号小于Mn的提案，其中编号最大的提案值也为Vn。
+
+当M0，V0被选定的情况下，证明在P2C的前提下对于所有的[Mn，Vn]，存在Vn=V0。
+
+（太绕，暂且留坑）
+
+### Proposer生成提案
+
+Proposer向Acceptor集合提出Prepare请求提案Mn，等待如下回应：
+
+如果Acceptor没有批准过提案，Acceptor不再批准任何编号小于Mn的提案；否则返回已经批准过得提案中编号最大的提案的值。
+
+如果Proposer收到半数以上Acceptor响应结果，就可以产生Mn，Vn提案。Vn是所有响应中编号最大的值或者新的值（如果Acceptor没有响应过提案）。
+
+确定提案后Proposer再次向否个Acceptor集合发送提案以获得Accept请求。
+
+
+### Acceptor批准提案
+
+Acceptor可以在任何时候响应一个Prepare请求。
+
+在不违背现有承诺的情况下可以响应Accept请求。
+
+### 算法优化
+
+如果一个Acceptor已经响应了Mn的Prepare请求，那么它可以忽略编号小于Mn的Prepare请求。也可以忽略已经批准过得提案的Prepare请求。
+
+### 结果
+
+概括为两个阶段的提交过程
+
+#### 阶段一
+
+Proposer向超过半数的Acceptor集合发送编号Mn的Prepare请求
+
+Acceptor向Proposer反馈已经响应过Prepare请求的编号最大的值，并且不再批准编号小于Mn的提案
+
+#### 阶段二
+
+如果Proposer收到半数以上的Acceptor响应，那么它可以发出Mn，Vn的提案的Accept请求。Vn的值是响应中编号最大的值或者任意值（如果Acceptor没有响应过提案）。
+
+如果Acceptor尚未对编号大于Mn的Prepare请求作出响应，那么它可以通过Mn的Accept请求
