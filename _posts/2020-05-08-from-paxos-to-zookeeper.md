@@ -196,7 +196,7 @@ Basically Available（基本可用）、Soft state（软状态）、Eventually c
 
 基于消息传递且高度容错的一致性算法。解决了无限期等待问题和“脑裂”问题。Paxos算法保证在分布式系统内被提出的提案中只有唯一的一个有效且被大部分节点认可和获取。在该算法中有三种参与者角色：Proposer、Acceptor、Learner。该算法面对的问题是所有参与者都以任意的不确定的状态运行，且参与者之间的通信也得不到保证。
 
-可跳过推导过程直接进入结果-> [Paxos算法的两个阶段](/posts/2020-05-08-from-paxos-to-zookeeper#结果)
+可跳过推导过程直接进入结果-> [Paxos算法的两个阶段](/posts/from-paxos-to-zookeeper#结果)
 
 ### 提案的选定
 
