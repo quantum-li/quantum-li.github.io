@@ -194,7 +194,9 @@ Basically Available（基本可用）、Soft state（软状态）、Eventually c
 
 ## Paxos算法
 
-基于消息传递且高度容错的一致性算法。Paxos算法保证在分布式系统内被提出的提案中只有唯一的一个有效且被大部分节点认可和获取。在该算法中有三种参与者角色：Proposer、Acceptor、Learner。该算法面对的问题是所有参与者都以任意的不确定的状态运行，且参与者之间的通信也得不到保证。
+基于消息传递且高度容错的一致性算法。解决了无限期等待问题和“脑裂”问题。Paxos算法保证在分布式系统内被提出的提案中只有唯一的一个有效且被大部分节点认可和获取。在该算法中有三种参与者角色：Proposer、Acceptor、Learner。该算法面对的问题是所有参与者都以任意的不确定的状态运行，且参与者之间的通信也得不到保证。
+
+可跳过推导过程直接进入结果-> [Paxos算法的两个阶段](/posts/2020-05-08-from-paxos-to-zookeeper#结果)
 
 ### 提案的选定
 
@@ -276,3 +278,27 @@ Acceptor向Proposer反馈已经响应过Prepare请求的编号最大的值，并
 如果Proposer收到半数以上的Acceptor响应，那么它可以发出Mn，Vn的提案的Accept请求。Vn的值是响应中编号最大的值或者任意值（如果Acceptor没有响应过提案）。
 
 如果Acceptor尚未对编号大于Mn的Prepare请求作出响应，那么它可以通过Mn的Accept请求
+
+### 获取提案
+
+选定一个提案后，需要Learner来获取提案，有如下三种方案：
+
+1. Acceptor每批准一个提案就发送给所有Learner，但是需要通信的次数太多
+2. 所有Acceptor都把批准的提案发给特定的主Learner，由主Learner通知其他Learner。但是主Learner可能会故障
+3. Acceptor将批准的提案发送给特定的Learner集合，由Learner集合向外同步。
+
+### 通过选取主Proposer保证算法的活性
+
+Paxos算法存在的漏洞是当所有Proposer轮流提出新的提案时，没有提案可以被批准。所以需要选择一个主Proposer负责提出提案。
+
+# Paxos的工程实践
+
+Paxos只是一套理论上算法思想，在遇到真正的工程实践当中还需要遇到非常多的该思想中没有涉及的问题。
+
+## Chubby
+
+分布式锁服务，GFS和Big Table使用来解决分布式协作，选主等。Chubby以Paxos算法为基础。
+
+## Hypertable
+
+主要目的构建分布式海量数据的高并发数据库。所以其功能和吞吐量并不占优势
