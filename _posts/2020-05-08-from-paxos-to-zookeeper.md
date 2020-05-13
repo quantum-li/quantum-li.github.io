@@ -318,3 +318,35 @@ ZooKeeper是一个分布式数据一致性解决方案，分布式应用可以�
 + 单一视图，客户端在zk集群的任何服务器看到的数据模型一致
 + 可靠性，一旦zk处理了一个请求，那么请求将永久的应用
 + 实时性，这里的实时性是指zk仅保证在一定时间内，客户端最终一定能获取最新状态。
+
+ZK使用ZNode数据节点在内存中维护像文件系统目录一样的名字空间。ZK的全量数据存储在内存中。
+
+### ZK基本概念
+
+三种角色：Leader、Follower、Observer。Leader可以提供读和写服务，Follower和Observer只能提供读服务，Observer不参与选举和写操作的“过半写成功”策略。
+
+会话（Session）会话开始于生命周期的建立，结束于连接的断开且超过sessionTimeout时限。
+
+数据节点（Znode）分为持久节点和临时节点。节点中数据由版本维护
+
+ACL（Access Control Lists）权限控制。CREATE创建子节点权限、READ读取节点数据和子列表权限、WRITE更新节点数据权限、DELETE删除子节点权限、ADMIN设置节点ACL权限。
+
+## ZAB协议
+
+所有事物请求由Leader处理，Leader将一个请求以Proposal（提议）的方式发送给Follower，如果得到过半数的正确响应，Leader会再次发送Commit消息以要求Follower提交协议。
+
+### 协议介绍
+
+ZAB协议包括两种基本模式：崩溃恢复和消息广播。同一时刻只能处于一种模式中。
+
+#### 消息广播
+
+![消息广播](/assets/images/b2cee297-6434-46d1-9689-a3983ddb750c.png)
+
+ZAB的二阶段提交过程移除了中断逻辑，所以ZK引入崩溃恢复模式来解决Leader崩溃导致的数据不一致问题。
+
+#### 崩溃恢复
+
+崩溃涉及到需要确保Leader已经提交出去Commit的事务执行和丢弃只在Leader上提出的事务。所以ZK需要重新选取拥有集群中ZXID最大的事务Proposal的机器。
+
+#### 数据同步
