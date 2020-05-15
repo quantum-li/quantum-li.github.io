@@ -452,4 +452,18 @@ Kafka需要生产者维护消息的重试处理。
 
 客户端API有侵入性，而Connect API对数据源和数据池没有侵入性
 
-连接器决定需要运行多少个任务，按照任务拆分数据复制，传递给worker进程启动和配置任务。
+连接器决定需要运行多少个任务，按照任务拆分数据复制，传递给worker进程启动和配置任务。worker 进程是连接器和任务的“容器”。转换器用来在源和目标连接器转换数据格式。源连接器会向Kafak发送源端的偏移。
+
+# 跨集群数据镜像
+
+Kafka内置跨集群复制工具MirrorMaker
+
+## 多集群架构
+
+![Hub和Spoke架构](/assets/images/c2850715-14a8-47be-b78b-b936de9a4a4c.png)
+
+![⼀个⾸领对应⼀个跟随者](/assets/images/0d70d915-1fe1-4ec3-89e9-3ff886778c4b.png)
+
+![双活架构](/assets/images/912ccb14-8f41-4e10-864a-224a239b62a3.png)
+
+![主备架构](/assets/images/5555e53e-80a5-4974-a037-e3b0e90d8696.png)
