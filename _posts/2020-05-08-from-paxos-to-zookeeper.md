@@ -350,3 +350,35 @@ ZAB的二阶段提交过程移除了中断逻辑，所以ZK引入崩溃恢复模
 崩溃涉及到需要确保Leader已经提交出去Commit的事务执行和丢弃只在Leader上提出的事务。所以ZK需要重新选取拥有集群中ZXID最大的事务Proposal的机器。
 
 #### 数据同步
+
+Leader为每个Follower准备一个队列，然后将没有同步的Proposal发送给Follower随后发送Commit。当Follower同步完成后Leader才会将其加入到可用Follower列表
+
+对于需要回滚的事务，因为用于低epoch值的Follower不会成为Leader，因此当它加入到Leader后，Leader会将自己记录的最后被提交的事务和该Follower上的事务进行对比，根据ZXID值回滚到一个确实已经被集群通过的事务节点。
+
+### 深入ZAB协议
+
+整个ZAB协议主要包括消息广播和崩溃恢复两个过程，进一步细分为发现、同步、广播三个阶段。组成ZAB协议的每一个分布式进程会循环的执行这三个阶段，称之为一个主进程周期。
+
+#### 发现
+
+Follower将自己最后接受的事务的epoch值发给准Leader，准Leader在接收到过半的Follower的epoch消息后会选取其中最大的值加一，然后发送给Follower。如果Follower检测当前的所有epoch都小于新epoch就会恢复ACK（包含原最大epoch和历史事务集合）。然后Follower会从ACK消息中选取一个原epoch最大，且历史事务ZXID最大的Follower作为初始化集合。
+
+#### 同步
+
+Leader会将新epoch和初始化集合发送给Follower。如果Follower发现自己的最大epoch等于新epoch，就会接受所有新epoch的事务并ACK。Leader接收过半ACK后发送Commit消息。完成此阶段后准Leader成为真正的Leader
+
+#### 广播
+
+开始接收客户端请求。Leader把接收到的新请求以新epoch和递增的ZXID发送给Follower，Follower返回ACK。Leader发送Commit。
+
+![算法示意图](/assets/images/770d9565-59cb-4800-830a-228514b46383.png)
+
+在ZAB协议中，每一个进程都可能处于以下三个状态之一：LOOKING、FOLLOWING、LEADING。
+
+### ZAB与Paxos区别和联系
+
++ 两者都存在Leader角色负责协调Follower角色运行
++ 每一个决策都需要超过半数的ACK才会执行
++ 两个协议都存在一个值用来表示Leader的周期（epoch，Paxos中叫Ballot）
+
+ZAB协议主要用于构建一个高可用的分布式数据主备系统，而Paxos用于构建一个分布式一致性状态机系统。
