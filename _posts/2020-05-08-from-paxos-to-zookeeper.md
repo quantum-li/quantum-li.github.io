@@ -385,7 +385,7 @@ ZAB协议主要用于构建一个高可用的分布式数据主备系统，而Pa
 
 # 客户端
 
-官方客户端、ZkClient、Curator，使用场景有事件监听、Master选举、分布式锁、分布式计算器、分布式Barrier。
+官方客户端、ZkClient、Curator，使用场景有事件监听(NodeCache，PathChildrenCache)、Master选举(LeaderSelector)、分布式锁(InterProcessLock)、分布式计算器(DistributedAtomicInteger)、分布式Barrier(DistributedBarrier)。
 
 # ZK的使用场景
 
