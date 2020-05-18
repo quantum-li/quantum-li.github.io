@@ -457,3 +457,10 @@ FIFO队列：
 Barrier屏障：
 
 ![Barrier:分布式屏障](/assets/images/e44a8c47-2e1e-4526-9003-c864aa89dd48.png)
+
+## ZK在大型分布式系统中的应用
+
+在Hadoop用于实现HA，在YARN用于现ResourceManager的HA、状态存储，在HBASE中用于系统容错、RootRegion管理、Region状态管理、SplitLog任务管理、Replication管理，在Kafka中用于Broker注册、Topic注册、生产者/消费者负载均衡、绑定分区与消费者、记录Offset。
+
+还有消息中间件Metamorphosis、RPC服务状态：Dubbo、基于MySQL Binlog的增量订阅和消费组件：Canal、分布式数据库同步系统Otter、实时计算引擎JStorm
+
