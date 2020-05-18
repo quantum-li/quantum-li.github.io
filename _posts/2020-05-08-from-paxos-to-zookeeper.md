@@ -393,22 +393,67 @@ ZAB协议主要用于构建一个高可用的分布式数据主备系统，而Pa
 
 也叫配置中心，配置存储在数据节点，集群机器读取数据节点并订阅监听
 
+![配置管理节点示意图](/assets/images/fa92bb0d-c4fa-4a17-8d7e-ab054f23fd97.png)
+
 ## 负载均衡
+
+在ZK创建域名节点，存储解析数据
 
 使用ZK做负载均衡需要的组件：
 
 + Register 负责域名的动态注册，客户端上线后会把自己的域名和ip端口发给Register
 + Dispatcher 负责域名解析，客户端发送解析请求，通过负载均衡策略返回解析结果
-+ 
++ Scanner 巡检客户端的状态，探测服务可用性，移除不可用客户端
++ SDK 提供接入服务
++ Monitor 监控自身状态
++ Controller 统一管理入口或页面
+
+![DDNS节点示意图](/assets/images/049c2dbc-b526-48d3-af48-2a266a28342a.png)
 
 ## 命名服务
 
+在分布式环境中全局唯一的名字用以标识机器、服务、对象等资源。相比uuid长度可控、语义明确。
+
+在ZK中使用顺序节点的方式命名得到顺序的全局唯一标识。
+
+![全局唯一ID节点示意图](/assets/images/42db8c0e-627f-4031-94a9-22c655ad9cbf.png)
+
 ## 分布式协调/通知
+
+ZK的Watcher注册和异步通知机制，能够很好地实现分布式环境不同机器的协调与通知，从而实现对数据变更的处理：心跳检测、进度汇报、系统调度。
+
+![MySQL数据复制服务业务热备节点示意图](/assets/images/fc991ebb-34ff-4935-ae31-263df9985bc5.png)
+
+![MySQL数据复制服务业务冷备节点示意图](/assets/images/ed12ecee-dedd-476d-8f6b-735869196029.png)
+
+![MySQL数据复制服务冷备流程图](/assets/images/e167fd4c-161b-4491-a658-947a2b07e01d.png)
 
 ## 集群管理
 
 ## Master选举
 
+ZK同一个临时节点只有一个客户端能够创建成功，创建成功的节点成为Master，其他节点注册节点变更的Watcher，来监听主节点的状态。
+
 ## 分布式锁
 
+排它锁：
+
+![排它锁流程示意图](/assets/images/7c77c6ab-9f5e-4595-9256-7db460a5b935.png)
+
+共享锁：
+
+![共享锁流程示意图](/assets/images/60b3776a-35e0-421c-bd1b-78056d2789b8.png)
+
+为了减少共享锁通知影响范围，改进后流程如下
+
+![改进后的共享锁流程示意图](/assets/images/91fc8c9b-0aa5-47ff-b512-d08a752ffbb0.png)
+
 ## 分布式队列
+
+FIFO队列：
+
+![FIFO队列](/assets/images/3658a58d-4c53-4c19-89fd-a4233030fa9c.png)
+
+Barrier屏障：
+
+![Barrier:分布式屏障](/assets/images/e44a8c47-2e1e-4526-9003-c864aa89dd48.png)
