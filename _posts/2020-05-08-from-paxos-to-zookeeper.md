@@ -521,10 +521,22 @@ EventThread是ZK客户端专门处理服务端通知事件的线程，根据通�
 
 ### ACL——保障数据的安全
 
+ZK的ACL权限控制包含权限模式(Scheme)，授权对象(ID)，权限(Permission)，使用scheme:id:permission标识。
+
+权限模式有IP、Digest（用户名密码）、World（对所有用户开放）、Super（需要再ZK启动时开启）
+
+授权对象，IP的授权对象是一个ip地址或者ip段，Digest授权对象是一个用户密码，World的授权对象只有anyone所有用户，Super的授权对象也是一个用户名密码。
+
+权限分为CREATE(C)、DELETE(D)、READ(R)、WRITE(W)、ADMIN(A)。
+
+用户可以通过实现org.apache.zookeeper.server.auth.AuthenticationProvider实现自己的权限控制器。
+
 ## 序列化与协议
 
 使用Jute进序列化
 
 ### 通信协议
+
+![协议格式](/assets/images/7c7e1858-237f-4ac2-9913-a95d88bf20ac.png)
 
 ## 客户端
