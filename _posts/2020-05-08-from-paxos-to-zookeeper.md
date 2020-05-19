@@ -489,7 +489,7 @@ ZK中的事务是指能够改变ZK服务器状态的操作，包括节点创建�
 
 version、cversion、aversion，说明见Stat。
 
-使用version字段做乐观锁的写入校验
+使用version字段做乐观锁的写入校验。在ZK的PrepRequestProcessor处理器类中，处理每一个数据更新请求时都会进行版本检查。从setDataRequest获取当前请求版本的version，同时从数据记录nodeRecord获取数据的最新版本currentVersion。如果请求的version等于-1说明客户端不要求使用乐观锁，可以忽略版本对比。否则如果两者版本不一致会抛出BadVersionException。
 
 ### Watcher——数据变更的通知
 
