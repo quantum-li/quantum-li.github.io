@@ -575,3 +575,22 @@ ZK客户端主要有以下几个核心组件组成：
 
 ### 服务器地址列表
 
+ConnectStringParser解析器对连接串解析chrootPath，并保存解析后的地址列表。
+
+Chroot是客户端隔离命名空间，在连接串中可以通过在最后一个地址后面加路径 *ip:port,ip:port/path* 来指定。之后该客户端的所有操作都会映射到该路径下。
+
+ConnectStringParser把连接串封装成InetSocketAddress对象保存在ConnectStringParser.serverAddress队列中。并进一步封装到实现了HostProvider接口的StaticHostProvider类中。
+
+StaticHostProvider会在初始化时使用Collections.shuffle把列表打散组成链表，并循环使用，类似于RoundRobin调度策略。
+
+可以自己实现HostProvider，以满足配置文件方式，动态变更地址，同机房优先等策略。
+
+### ClientCnxn：网络IO
+
+协议层封装类Packet，outgoingQueue、pendingQueue。以及底层通信接口ClientCnxnSocket。请求发送完毕后会将Packet保存到pendingQueue队列以便等待响应后处理。
+
+响应分为三种，一个是客户端未初始化时的响应会被序列化成ConnectResponse对象，一个是会话周期内的事件响应会被序列化成WatcherEvent对象，还有就是常规客户端操作请求的响应，会被序列化成Response对象从pendingQueue取出Packet来做处理。
+
+SendThread除了负责请求发送和响应接受还负责维护生命周期，定时发送心跳。
+
+EventThread负责事件处理，通过waitingEvents队列里面的对象是Watcher或AsyncCallback分别调用process或processResult方法触发回调。
