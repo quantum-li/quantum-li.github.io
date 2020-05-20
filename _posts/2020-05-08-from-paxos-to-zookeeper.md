@@ -521,7 +521,7 @@ EventThread是ZK客户端专门处理服务端通知事件的线程，根据通�
 
 ### ACL——保障数据的安全
 
-ZK的ACL权限控制包含权限模式(Scheme)，授权对象(ID)，权限(Permission)，使用scheme:id:permission标识。
+ZK的ACL权限控制包含权限模式(Scheme)，授权对象(ID)，权限(Permission)，使用scheme&#58;id&#58;permission标识。
 
 权限模式有IP、Digest（用户名密码）、World（对所有用户开放）、Super（需要再ZK启动时开启）
 
