@@ -633,3 +633,10 @@ Session是ZK中的会话实体，代表了一个客户端会话。
 + sessionWithTimeout：ConcurrentHashMap<Long,Integer> 结构，用sessionID管理超时时间。会被定期持久化到快照文件。
 + sessionSets：HashMap<Long,SessionSet>结构，根据下次会话超时时间点归档会话。用于分桶策略。
   
+##### 创建连接
+
+大体分为处理ConnectRequest请求、会话创建、处理器链路处理和会话响应。
+
+### 会话管理
+
+
