@@ -521,7 +521,7 @@ EventThread是ZK客户端专门处理服务端通知事件的线程，根据通�
 
 ### ACL——保障数据的安全
 
-ZK的ACL权限控制包含权限模式(Scheme)，授权对象(ID)，权限(Permission)，使用scheme&#58;id&#58;permission标识。
+ZK的ACL权限控制包含权限模式(Scheme)，授权对象(ID)，权限(Permission)，使用scheme：id：permission标识。
 
 权限模式有IP、Digest（用户名密码）、World（对所有用户开放）、Super（需要再ZK启动时开启）
 
@@ -611,7 +611,7 @@ Session是ZK中的会话实体，代表了一个客户端会话。
 
 会话ID，用来标识一个会话，每次会话创建时ZK分配一个全局唯一的id。
 
-生成方法是当前时间戳 **$lt;$lt;24** (将高位1移出防止负数出现)然后 **$gt;$gt;$gt;8** ，与myid文件配置的id值左 **$lt;$lt;56**后进行 **|** 操作。高8位确定所在机器，后56位使用时间进行随机。
+生成方法是当前时间戳 *<<24* (将高位1移出防止负数出现)然后 *>>8* ，与myid文件配置的id值 *<<56* 后进行 *|* 操作。高8位确定所在机器，后56位使用时间进行随机。
 
 ##### TimeOut
 
@@ -624,3 +624,12 @@ Session是ZK中的会话实体，代表了一个客户端会话。
 ##### isClosing
 
 标记会话是否已经关闭，服务器检测到会话失效会关闭会话，确保不在处理来自该会话的请求
+
+#### SessionTracker
+
+会话管理器，每一个会话在其内部都保留三份：
+
++ sessionsById: HashMap<Long,SessionImpl> 结构，使用sessionID管理Session。
++ sessionWithTimeout：ConcurrentHashMap<Long,Integer> 结构，用sessionID管理超时时间。会被定期持久化到快照文件。
++ sessionSets：HashMap<Long,SessionSet>结构，根据下次会话超时时间点归档会话。用于分桶策略。
+  
