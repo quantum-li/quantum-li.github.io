@@ -540,3 +540,38 @@ ZK的ACL权限控制包含权限模式(Scheme)，授权对象(ID)，权限(Permi
 ![协议格式](/assets/images/7c7e1858-237f-4ac2-9913-a95d88bf20ac.png)
 
 ## 客户端
+
+ZK客户端主要有以下几个核心组件组成：
+
++ ZooKeeper实例：客户端入口
++ ClientWatchManager：客户端Watcher管理器
++ HostProvider：客户端地址列表管理器
++ ClientCnxn：内部包含两个核心线程SendThread和EventThread。前者是一个IO线程负责客户端和服务端之间的网络通信，后者负责对服务端事件做处理
+
+### 一次会话的创建过程
+
+#### 初始化阶段
+
+1. 初始化ZooKeeper对象，同时会创建一个ClientWatchManager。
+2. 设置会话默认Watcher，如果再构造方法传入一个Watcher对象的话。
+3. 构造ZooKeeper服务器地址列表管理器HostProvider，并把保存构造方法传入的地址。
+4. 创建并初始化网络连接器ClientCnxn，同时初始化请求发送队列outgoingQueue和服务端响应队列pendingQueue。和IO处理器ClientCnxnSocket
+5. 初始化负责网络IO的SendThread和处理客户端事件的EventThread。EventThread中有一个waitingEvents队列存放待处理事件。
+
+#### 会话创建阶段
+
+6. 启动SendThread和EventThread
+7. 随机获取一个服务器地址并创建TCP长连接
+8. 构造一个包装成Packet的ConnectRequest对象放入outgoingQueue，并由ClientCnxnSocket取出序列化发送到服务端。
+
+#### 响应处理阶段
+
+9. 接受服务端响应，并判断当前客户端状态是否初始化，如果没初始化说明是会话创建请求的响应，交由readConnectResult方法处理。
+10. ClientCnxnSocket反序列化响应得到ConnetResponse对象，并获取服务端分配的sessionId。
+11. 通知SendThread线程更新客户端状态；通知HostProvider连接服务器成功。
+12. 生成SyncConnected-Node事件传给EventThread线程。
+13. EventThread从ClientWatcherManager找出Watcher放入EventThread的waitingEvents队列。
+14. EventThread从waitingEvents队列取出Watcher对象调用process方法。
+
+### 服务器地址列表
+
