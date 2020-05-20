@@ -594,3 +594,33 @@ StaticHostProvider会在初始化时使用Collections.shuffle把列表打散组�
 SendThread除了负责请求发送和响应接受还负责维护生命周期，定时发送心跳。
 
 EventThread负责事件处理，通过waitingEvents队列里面的对象是Watcher或AsyncCallback分别调用process或processResult方法触发回调。
+
+## 会话
+
+### 会话状态
+
+会话建立之后，会话会在以下状态之间切换：CONNECTING/CONNECTED/RECONNECTING/RECONNECTED/CLOSE。
+
+### 会话创建
+
+#### Session
+
+Session是ZK中的会话实体，代表了一个客户端会话。
+
+##### sessionID
+
+会话ID，用来标识一个会话，每次会话创建时ZK分配一个全局唯一的id。
+
+生成方法是当前时间戳 **$lt;$lt;24** (将高位1移出防止负数出现)然后 **$gt;$gt;$gt;8** ，与myid文件配置的id值左 **$lt;$lt;56**后进行 **|** 操作。高8位确定所在机器，后56位使用时间进行随机。
+
+##### TimeOut
+
+会话超时时间
+
+##### TickTime
+
+为了对会话实行分桶策略管理，高效实现会话的超时检查与清理，ZK为每个会话标记会话下次超时的时间点。long型，接近当前时间+TimeOut时间
+
+##### isClosing
+
+标记会话是否已经关闭，服务器检测到会话失效会关闭会话，确保不在处理来自该会话的请求
