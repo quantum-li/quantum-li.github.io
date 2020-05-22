@@ -17,4 +17,8 @@ excerpt: 每个Java开发者都知道字节码是在JRE上执行的，JRE中最�
 
  JCP(Java Community Process)是一套制定Java技术规范的机制，通过制定和审查JSR(Java Specification Requests)推送Java技术规范的发展。
 
- J2SE 1.3引入HotSpot虚拟机；
+ J2SE 1.3引入HotSpot虚拟机；Java 7提供G1收集器。
+
+ ## 动手编译虚拟机
+
+ 
