@@ -639,4 +639,136 @@ Session是ZK中的会话实体，代表了一个客户端会话。
 
 ### 会话管理
 
+#### 分桶策略
+
+使用分桶策略管理会话，把下次超时时间点相邻的会话分配在同一区块中。这是一个近似值，向后取ExpirationInterval的整数倍。
+
+#### 会话激活
+
+接受客户端心跳检测，校验会话是否关闭，计算下一次超时时间点，移动会话到下一次时间点的区块。
+
+心跳检测发生在客户端发送任何请求；或者如果客户端sessionTime/3时间内没有通信需求会发起一个PING请求。
+
+#### 会话超时检查
+
+SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进行批量清理。
+
+### 会话清理
+
+1. 因为会话清理需要时间，所以先标记会话状态为已关闭。
+2. 提交“会话关闭”请求给PrepRequestProcessor处理器进行处理，以使操作在整个集群中生效。
+3. 清理该会话的临时节点。根据sessionID获取临时节点列表L0，如果会话关闭之前到来了节点删除请求，把请求节点从L0中移除；如果到来的是节点创建请求，把请求节点添加到L0中。
+4. 把节点删除请求发送到事务变更队列outstandingChanges
+5. 由FinalRequestProcessor删除临时节点
+6. 从sessionsById、sessionWithTimeOut和sessionSets中移除会话
+7. 从NIOServerCnxnFactory中找到对应会话的NIOServerCnxn并关闭
+
+### 重连
+
+连接断开CONNECTION_LOSS，客户端会接收到None-Desconnected通知。
+会话失效SESSION_EXPIRED，超时时间外重连。
+会话转移SESSION_MOVED，客户端重连后连接了不同的服务端。当多个客户端使用相同的sessionId/sessionPasswd创建会话时会被认为发生了会话转移。
+
+## 服务器启动
+
+### 单机版启动
+
+大体分为配置文件解析、初始化数据管理器、初始化网络管理器、数据恢复和对外服务。
+
+![单机版启动流程](/assets/images/1594f1a8-f881-4f22-affd-281fd9e6c67b.png)
+
+#### 预启动
+
+1. 所有模式启动都是以QuorumPeerMain作为启动类
+2. 解析配置文件zoo.cfg
+3. 创建并启动历史文件清理器DatadirCleanupManager
+4. 判断是集群模式还是单机模式，如果是单机模式交给ZooKeeperServerMain启动
+5. 再次进行配置文件解析
+6. 创建服务器实例zookeeper.server.ZooKeeperServer
+
+#### 初始化
+
+1. 创建服务器统计器ServerStats
+2. 创建数据管理器FileTxnSnapLog，上层服务器和底层数据存储之间的中间层。
+3. 设置服务器tickTime和超时时间
+4. 创建、初始化、启动ServerCnxnFactory
+5. 恢复本地数据
+6. 创建、启动会话管理器SessionTracker
+7. 初始化ZK的请求处理链，责任链模式，PrepRequestProcessor、SyncRequestProcessor、FinalRequestProcessor
+8. 注册JMX服务
+9. 注册ZooKeeper服务器实例，把初始化完毕的ZooKeeper服务器实例注册给ServerCnxnFactory
+
+### 集群版启动
+
+![集群版启动](/assets/images/6d725bd5-1feb-44d9-b4b3-314cde363bd3.png)
+
+#### 预启动
+
+1. 由QuorumPeerMain作为启动类
+2. 解析配置文件
+3. 创建文件清理器
+4. 判断当前模式，如果配置了多个服务器地址以集群模式启动
+
+#### 初始化
+
+1. 创建、初始化ServerCnxnFactory
+2. 创建数据管理器
+3. 创建QuorumPeer实例，Quorum是ZooKeeper服务器实例的托管者，检测当前服务器状态和进行Leader选举。
+4. 创建内存数据库ZKDatabase
+5. 初始化QuorumPeer
+6. 恢复本地数据
+7. 启动ServerCnxnFactory主线程
+
+#### Leader选举
+
+1. 初始化选举，初始化过程中每个服务器给自己投票。
+2. 注册JMX服务
+3. 检测当前服务器状态
+4. Leader选举，如果所有ZXID都一样，那么SID最大的称为Leader
+
+#### Leader和Follower启动期交互
+
+![启动期交互](/assets/images/f0191750-6e52-4ec9-b97a-eb4564643cb1.png)
+
+1. 创建Leader服务器和Follower服务器
+2. Leader服务器启动Follower接收器LearnerCnxAcceptor
+3. Learner服务器和Leader建立连接
+4. Leader服务器创建LearnerHandler，每个Handler实例对应一个Leader与Learner的连接。
+5. Learner把自己的信息发送给Leader完成注册
+6. Leader解析Learner信息，计算新的epoch
+7. 发送Leader状态并等待响应
+8. 数据同步
+9. 启动Leader和Learner服务器。
+
+#### Leader和Follower的启动
+
+1. 创建并启动会话管理器
+2. 初始化ZooKeeper请求处理链
+3. 注册JMX服务
+
+## Leader选举
+
+### 概述
+
+#### 服务器启动时期的选举
+
+1. 每个Server发出一个(myid,ZXID)的投票发送给集群中的其它机器。
+2. 接收到投票后判断有效性是否是本轮投票或是否来自LOOKING状态服务器
+3. 根据myid和ZXID处理投票，并发出自己认为该成为Leader的机器的投票（选ZXID大的，如果一样选SID大的）。
+4. 统计投票，判断是否有过半的机器接收到相同的投票信息。选出Leader
+5. 改变服务器为响应的状态FOLLOWING或LEADING
+
+#### 运行期选举
+
+只有Leader挂了才会触发重新选举
+
+1. 余下的非Observer服务器改变状态为LOOKING
+2. 发出(myid,ZXID)的投票发送给集群中的其他机器
+3. 接受投票并处理
+4. 统计投票
+5. 改变服务器状态
+
+### Leader选举算法的分析
+
+哪台服务器数据越新，ZXID就越大，所以先比较ZXID，如果ZXID一样选SID最大。然后发送给所有机器，并统计结果是否有大于一半的机器。
 
