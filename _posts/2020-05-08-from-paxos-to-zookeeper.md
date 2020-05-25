@@ -772,3 +772,39 @@ SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进
 
 哪台服务器数据越新，ZXID就越大，所以先比较ZXID，如果ZXID一样选SID最大。然后发送给所有机器，并统计结果是否有大于一半的机器。
 
+### Leader选举实现细节
+
+#### 服务器状态
+
++ LOOKING
++ FOLLOWING
++ LEADING
++ OBSERVING
+
+#### QuorumCnxManager:网络IO
+
+负责各台服务器之间的Leader选举过程中的网络管理器其中维护了一系列的队列
+
++ recvQueue：用于存放从其他服务器接收到的消息的队列
++ queueSendMap：按照每台机器的SID进行分组的Map，用来保存待发送的消息队列。
++ sendWorkerMap：发送器集合，每个SendWorker消息发送器都对应一台远程ZooKeeper服务器，负责消息发送。按照SID进行分组。
++ lastMessageSent：为每个SID保留最近发送过的一个消息
+
+#### 建立连接
+
+为了能够进行投票，ZooKeeper集群所有机器建立两两连接。QuorumCnxManager在启动的时候创建一个ServerSocker监听Leader选举端口，并接收来自其他服务器的创建连接请求。ZK只允许SID大的服务器主动连接，如果接收到的SID小，则断开连接。如果建立起连接就根据远程服务器SID创建SendWorker和RecvWorker。
+
+#### 消息接收与发送
+
+每个RecvWorker不断的从TCP连接中读取消息保存到recvQueue中。
+
+每个SendWorker不断的从发送队列取消息发送，并放入到lastMessageSent中。以后如果SendWorker发现当前远程服务器发送队列为空就从lastMessageSent中取出最近发送过的消息再次发送，之所以这样做是防止接收方接收不到消息并且ZK可以对重复消息进行正确处理，所以重复投递。
+
+#### FastLeaderElection：选举算法核心部分
+
+##### 选票管理
+
+在QuorumCnxManager中
+
++ sendqueue：待发送选票发送队列
++ recvqueue：接收到的外部选票的接收队列
