@@ -803,9 +803,70 @@ sed命令操作文件流程：
 
 script参数指定了应用于流数据上的单个命令。如果需要用多个命令，要么使用-e选项在 命令行中指定，要么使用-f选项在单独的文件中指定。
 
-## gawk
+从管道获取输入流
+
+``` shell
+echo "This is a test" | sed 's/test/big test/'
+```
+
+在命令行使用多个编辑器命令
+
+``` shell
+sed -e 's/brown/green/; s/dog/cat/' data1.txt
+
+sed -e '
+> s/brown/green/
+> s/fox/elephant/
+> s/dog/cat/' data1.txt
+```
+
+从文件中读取编辑器命令
+
+``` shell
+cat script1.sed
+s/brown/green/
+s/fox/elephant/
+s/dog/cat/
+
+sed -f script1.sed data1.txt
+```
+
+# gawk
 
 gawk options program file
+
++ 定义变量来保存数据
++ 使用算术和字符串操作符来处理数据
++ 使用结构化编程概念（比如if-then语句和循环）来为数据处理增加处理逻辑
++ 通过提取数据文件中的数据元素，将其重新排列或格式化，生成格式化报告
+
+可用选项
+
+| 选项 | 描述 |
+| -F fs | 指定行中划分数据字段的字段分隔符 |
+| -f file | 从指定的文件中读取程序 |
+| -v var=value | 定义gawk程序中的一个变量及其默认值 |
+| -mf N | 指定要处理的数据文件中的最大字段数 |
+| -mr N | 指定数据文件中的最大数据行数 |
+| -W keyword | 指定gawk的兼容模式或警告等级 |
+
+从命令行读取程序脚本
+
+``` shell
+gawk '(print "Hello World!"}'
+```
+
+使用数据字段变量，它会自动给一行中的每个数据元素分配一个变量。在文本行中，每个数据字段都是通过字段分隔符划分的。默认的字段分隔符是任意的空白字符。
+
++ $0代表整个文本行
++ $1代表文本行中的第1个数据字段
++ $n代表文本行中的第n个数据字段
+
+如果你要读取采用了其他字段分隔符的文件，可以用-F选项指定。
+
+``` shell
+gawk -F: '{print $1}' /etc/passwd
+```
 
 # shell中的特殊环境变量
 
