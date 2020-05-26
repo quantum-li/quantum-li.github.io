@@ -808,3 +808,99 @@ SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进
 
 + sendqueue：待发送选票发送队列
 + recvqueue：接收到的外部选票的接收队列
++ WorkerReciever：选票接收器，不断的从QuorumCnxManager中取出其他服务器发送来的消息并转换成一个选票保存到recvqueue中。如果发现外部票轮次小于当前服务器或者当前服务器不是LOOKING状态就会丢弃并发出自己的选票。
++ WorkerSender：不断的从sendqueue获取待发送选票并传给QuorumCnxManager
+
+![选举流程示意图](/assets/images/38b48ef4-264d-4175-9b11-0e0e7c8cfce2.png)
+
+1. 自增选票轮次
+2. 初始化选票
+3. 发送初始化选票
+4. 接受外部选票
+5. 判断选票轮，次如果外部大于自己更新自己轮次清空已收到选票使用初始化选票PK
+6. 如果轮次一致进行选票PK
+7. 变更投票
+8. 选票归档
+9. 统计选票
+10. 更新服务器状态，更新为LEADING或FOLLOWING或OBSERVING
+
+## 各服务器角色介绍
+
+### Leader
+
++ 事务请求的唯一调度和处理者，保证集群事务处理的顺序性
++ 集群内部服务器的调度者
+
+### 请求处理链
+
+使用责任链模式处理每一个客户端请求。
+
+![处理链](/assets/images/3b4e6604-9d7c-49ab-88d0-7b897ac16d5e.png)
+
+#### PrepRequestProcessor
+
+对于增删改节点，创建对话等事务请求，会进行一系列预处理：创建请求事务头、事务体、会话检查、ACL检查等
+
+#### ProposalRequestProcessor
+
+投票处理器，对于事务请求，除了流转给CommitProcessor还会创建投票并发起一次投票。并交给SyncRequestProcessor进行日志记录
+
+#### SyncRequestProcessor
+
+事务日志记录处理器，将事务记录到日志文件并触发快照
+
+#### AckRequestProcessor
+
+Leader特有负责在SyncRequestProcessor处理器完成事务记录后向投票收集器发送ACK反馈通知收集器完成了对该事务的记录（本地反馈）
+
+#### CommitProcessor
+
+事务提交处理器，对于非事务请求该处理器直接交给下一级处理，对于事务请求会等待投票结果可以被提交
+
+#### ToBeCommitProcessor
+
+内部有一个toBeApplied队列用来存储CommitProcessor处理过可提交的提议，然后逐个交给FinalRequestProcessor处理完后再从toBeApplied中移除
+
+#### FinalRequestProcessor
+
+真正请求执行者
+
+#### LearnerHandler
+
+为每一个Follower和Observer建立一个TCP长链接和一个LearnerHandler，负责与Follower和Observer的通信
+
+### Follower
+
++ 处理客户端非事务请求，转发事务请求给Leader
++ 参与事务投票
++ 参与Leader选举
+
+![Follower责任链](/assets/images/d694c9c0-4caa-4a09-9ecb-874a31c0abcd.png)
+
+#### FollopwerRequestProcessor
+
+识别是否是事务请求，如果是事务请求就转发给Leader
+
+#### SendAckRequestProcessor
+
+进行事务记录并向Leader发送ACK反馈表明自己完成了事务记录。（向Leader反馈）
+
+### Observer
+
+处理请求但不参与事务投票和选举投票
+
+![Oblerver处理链](/assets/images/2b8baed5-572d-4769-9c38-42a215b1e8c2.png)
+
+### 集群间消息通信
+
+ZK的消息类型分为四类：数据同步型，服务器初始化型，请求处理型，会话管理型
+
+#### 数据同步型
+
+![同步过程消息类型](/assets/images/fc2483d5-6872-49f3-8d6c-8b04eed12f17.png)
+
+#### 服务器初始化型
+
+![服务器初始化消息类型1](/assets/images/b4b51829-9915-45ca-b1e1-55afe64470ea.png)
+
+![服务器初始化消息类型2](/assets/images/c3481fe1-8581-41e3-9271-3efc4bff8e7d.png)
