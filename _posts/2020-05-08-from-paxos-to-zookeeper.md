@@ -1051,4 +1051,25 @@ SyncRequestProcessor处理器的记录事务日志过程。
 
 ### 内存数据
 
+ZK的数据模型是一棵树，存储了节点路径，节点数据，ACL信息等数据。
+
+![DataTree和DataNode数据结构](/assets/images/15d18aa4-3b8e-48dd-b755-c9f3164dd5ed.png)
+
+DataTree内部用ConcurrentHashMap<String,DataNode>存储所有节点，同时还用ConcurrentHashMap<Long,HashSet<String>>存储临时节点
+
+#### ZKDatabase
+
+真正的数据库实现，负责管理ZK的所有会话、DataTree存储和事务日志。会定时向磁盘dump快照。启动时会通过事务日志和快照文件恢复成一个完整的内存数据库。
+
+### 事务日志
+
+#### 文件存储
+
+配置中的dataDir用于存储事务日志文件，也可单独设置dataLogDir。事务日志文件大小一致一般为64M。文件名是log.XXXX，其中XXX是日志第一条记录的ZXID的十六进制。
+
+可以帮助快速定位事务操作所在的日志，也可以根据后缀的ZXID知道当前Leader周期。
+
+日志文件可以通过org.apache.zookeeper.Server.LogFormatter解析展示。**Java LogFormatter log.XXXX**
+
+#### 日志写入
 
