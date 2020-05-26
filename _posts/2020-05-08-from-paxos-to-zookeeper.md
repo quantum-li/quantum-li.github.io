@@ -904,3 +904,151 @@ ZK的消息类型分为四类：数据同步型，服务器初始化型，请求
 ![服务器初始化消息类型1](/assets/images/b4b51829-9915-45ca-b1e1-55afe64470ea.png)
 
 ![服务器初始化消息类型2](/assets/images/c3481fe1-8581-41e3-9271-3efc4bff8e7d.png)
+
+#### 请求处理型
+
+![请求处理消息类型1](/assets/images/58ad0761-78a0-4237-8389-18c3c06f0d6d.png)
+![请求处理消息类型2](/assets/images/f9c68d46-d6ee-418a-ba94-d1c5b6583f17.png)
+
+#### 会话管理型
+
+![会话管理消息类型](/assets/images/34fbb230-393a-45a7-9402-6062da9eb4bd.png)
+
+## 请求处理
+
+### 会话创建请求
+
+![会话创建请求流程示意图](/assets/images/34fbb230-393a-45a7-9402-6062da9eb4bd.png)
+
+#### 请求接收
+
+1. IO层接收来自客户端的请求，每一个会话由一个NIOServerCnxn负责
+2. 判断是否是会话创建请求，如果NIOServerCnxn没被初始化说明是创建会话
+3. 反序列化ConnectRequest请求
+4. 判断是否是ReadOnly客户端，如果服务器以ReadOnly模式启动，只会接收ReadOnly型客户端的请求
+5. 检查客户端ZXID，如果客户端ZXID大于服务端ZXID就不接收会话创建请求
+6. 协商sessionTimeout，根据配置的tickTime，服务器会限制于2倍tickTIme 到 20倍ticeTime
+7. 判断是否需要重新创建会话，如果客户端请求包含sessionID，认为是重连，服务端会重新打开会话。
+
+#### 会话创建
+
+8. 为客户端生成sessionID，根据全局唯一的基准sessionID递增。
+9. 注册会话，向SessionTracker注册会话
+10. 激活会话，为会话安排一个分桶区块
+11. 生成会话秘钥，作为会话在集群不同机器转移的凭证
+
+#### 预处理
+
+12. 将请求交给PrepRequestProcessor处理器处理
+13. 创建请求事务头和请求事务体
+14. 再次注册于激活会话，目的处理非Leader服务器转发过来的会话创建请求，重复注册是安全的。
+
+#### 事务处理
+
+15. 将请求交给ProposalRequestProcessor处理器
+
+#### Sync流程
+
+SyncRequestProcessor处理器的记录事务日志过程。
+
+#### Proposal流程
+
+1. 发起投票
+2. 生成提议
+3. 广播提议
+4. 收集投票，Follower服务器接收到Leader的提议后会进入Sync流程进行事务日志记录，记录成功后会想Leader发送ACK消息。过半的ACK认为提议通过
+5. 将请求放入toBeApplied队列
+6. 广播COMMIT消息，Leader向Follower发送ZXID，而向Observer发送INFORM信息包含当前提议内容
+
+#### Commit流程
+
+1. 将请求交给CommitProcessor
+2. 处理queuedRequests队列请求
+3. 标记nextPending，目的是确保事务请求顺序性和便于CommitProcessor处理器检测当前集群中是否正在进行事务请求投票
+4. 等待投票结果
+5. 投票通过，将请求放入committedRequests队列
+6. 提交请求，对比nextPending和committedRequests队列中第一个请求是否一致，将请求放入toProcess队列，然后交付给FinalRequestProcessor处理
+
+#### 事务应用
+
+16. 交付给FinalRequestProcessor处理器，检查outstandingChanges队列请求的有效性，如果这些请求落后于当前的请求，就从outstandingChanges中移除
+17. 事务应用，之前已经将请求记录到了事务日志中，现在将请求应用到内存数据库中
+18. 将事务请求放入commitProposal队列
+
+#### 会话响应
+
+19. 统计处理，统计花费的时间，和客户端连接的lastZXID、lastOP(最后一次的操作)和lastLatency(最后一次请求花费的时间)等信息。
+20. 创建响应ConnectResponse
+21. 序列化ConnectResponse
+22. IO层发送响应给客户端
+
+### SetData请求
+
+![SetData流程图](/assets/images/0c00aaa8-cfd7-4edd-81f5-4ba9bc3448e0.png)
+
+#### 预处理
+
+1. IO层接收来自客户端的请求
+2. 判断是否是会话创建请求
+3. 把请求交给PrepRequestProcessor处理器
+4. 创建请求事务头
+5. 会话检查，检查改会话是否超时
+6. 反序列化请求，并创建ChangeRecord记录放入outstandingChanges队列
+7. ACL检查
+8. 数据版本检查
+9. 创建请求事务体SetDataTxn
+10. 保存事务操作到outstandingChanges队列
+
+#### 事务处理
+
+由ProposalRequestProcessor处理器发起，通过Sync、Proposal、Commit流程完成
+
+#### 事务应用
+
+11. 交付给FinalRequestProcessor处理器
+12. 事务应用，把请求事务头和事务体交给内存数据库ZKDatabase进行事务应用，并返回ProcessTxnResult对象。
+13. 将事务请求放入commitProposal队列
+
+#### 请求响应
+
+14. 统计处理
+15. 创建响应体SetDataResponse
+16. 创建响应头
+17. 序列化
+18. IO层发送给客户端
+
+### 事务请求转发
+
+对于Follower和Observer服务器，如果第一个请求处理器FollowerRequestProcessor或ObserverRequestProcessor发现是事务请求，会将该客户端请求以REQUEST消息形式发送给Leader，Leader解析出原始请求提交到自己的处理链进行事务处理
+
+### GetData请求
+
+![GetData请求流程](/assets/images/14c141e2-1239-4d69-9fd4-bcafd633b5e4.png)
+
+#### 预处理
+
+1. IO层接收来自客户端的请求
+2. 判断是否是会话创建请求
+3. 将请求交给PrepRequestProcessor处理
+4. 会话检查
+
+#### 非事务处理
+
+5. 反序列化GetDataRequest请求
+6. 获取数据节点
+7. ACL检查
+8. 获取数据内容和stat，注册Watcher
+
+#### 请求响应
+
+9. 创建响应体GetDataResonse
+10. 创建响应头
+11. 统计处理
+12. 序列化
+13. IO层发送给客户端
+
+## 数据与存储
+
+### 内存数据
+
+
