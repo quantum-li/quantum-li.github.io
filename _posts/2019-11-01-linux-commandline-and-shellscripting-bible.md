@@ -868,6 +868,36 @@ gawk '(print "Hello World!"}'
 gawk -F: '{print $1}' /etc/passwd
 ```
 
+在程序脚本中使用多个命令，只要在命令之间放个分号即可。
+
+``` shell
+echo "My name is Rich" | gawk '{$4="Christine"; print $0}'
+My name is Christine
+```
+
+从文件中读取程序
+
+``` shell
+$ cat script3.gawk
+{
+text = "'s home directory is "
+print $1 text $6
+}
+$ gawk -F: -f script3.gawk /etc/passwd
+```
+
+在处理数据前运行脚本，在读取数据前执行BEGIN关键字后指定的程序脚本。
+
+``` shell
+gawk 'BEGIN {print "The data3 File Contents:"} {print $0}' data3.txt
+```
+
+在处理数据后运行脚本，END关键字允许你指定一个程序脚本，gawk会在读完数据后执行它。
+
+``` shell
+gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of File"}' data3.txt
+```
+
 # shell中的特殊环境变量
 
 | 变更 | 说明 |
