@@ -831,6 +831,212 @@ s/dog/cat/
 sed -f script1.sed data1.txt
 ```
 
+替换命令 *s/pattern/repac* 默认只替换第一个匹配。s命令有替换标记。 *s/pattern/repac/flags* ：
+
++ 数字，表明替换第几处匹配
++ g，全局替换
++ p，打印替换前文本
++ w file，将替换的结果写到文件中
+
+由于正斜线通常用作字符串分隔符，当它出现在模式文本中时选择其他字符来作为替换命令中的字符串分隔符:
+
+``` shell
+sed 's!/bin/bash!/bin/csh!' /etc/passwd
+```
+默认情况下，在sed编辑器中使用的命令会作用于文本数据的所有行。如果只想将命令作用于特定行或某些行，则必须用行寻址。以数字形式表示行区间或用文本模式来过滤出行。
+
+两种形式都使用相同的格式来指定地址:
+
+``` shell
+[address]command 
+```
+
+也可以将特定地址的多个命令分组:
+
+``` shell
+address {
+command1
+command2
+command3 
+}
+```
+
+指定行号
+
+``` shell
+sed '2s/dog/cat/' data1.txt
+```
+
+行地址区间
+
+``` shell
+sed '2,3s/dog/cat/' data1.txt
+```
+
+某行开始的所有行
+
+``` shell
+sed '2,$s/dog/cat/' data1.txt
+```
+ 
+使用文本模式过滤器， */pattern/command*
+
+``` shell
+> grep Samantha /etc/passwd 
+Samantha:x:502:502::/home/Samantha:/bin/bash
+> sed '/Samantha/s/bash/csh/' /etc/passwd
+```
+
+命令组合
+
+``` shell
+sed '3,${
+> s/fox/elephant/
+> s/dog/cat/
+> }' data1.txt
+```
+
+删除行命令 *d* 
+
+``` shell
+sed '3d' data6.txt
+sed '2,3d' data6.txt
+sed '3,$d' data6.txt
+sed '/pattern/d' data6.txt
+```
+也可以使用两个文本模式来删除某个区间内的行，你指定的第一个模式会“打开”行删除功能，第二个模式会“关闭”行删除功能。sed编辑器会删除两个指定行之间的所有行(包括指定的行)。注意每一次匹配都会toggle打开和关闭
+
+``` shell
+>cat data.txt
+1
+2
+3
+4
+>sed '/1/,/3/d' data.txt
+4
+```
+
+插入文本命令 *i* ,附加文本命令 *a*，修改行命令 *c*，字符转换命令 *y：[address]y/inchars/outchars/*
+
+``` shell
+> echo "Test Line 2" | sed 'i\Test Line 1'
+Test Line 1
+Test Line 2
+> echo "Test Line 2" | sed 'a\Test Line 1' 
+Test Line 2
+Test Line 1
+> sed '3i\new line' data6.txt  #将一个新行插入到数据流第三行前。
+> sed '$a\new line' data6.txt  #将一个新行插入到文件尾。
+```
+
+``` shell
+> sed '3c\This is a changed line of text.' data6.txt 
+This is line number 1.
+This is line number 2.
+This is a changed line of text.
+This is line number 4.
+
+修改行时如果指定的是区间，会整个替换区间内容而不是替换每行。
+
+> sed '/number 3/c\This is a changed line of text.' data6.txt 
+This is line number 1.
+This is line number 2.
+This is a changed line of text.
+This is line number 4.
+```
+
+转换命令会对inchars和outchars值进行一对一的映射。如果inchars和outchars的长度不同，则sed编辑器会产生一条错误消息。而且转换命令是一个全局命令，不能指定区间。
+
+``` shell
+> cat data.txt
+This is line number 1.
+This is line number 2.
+This is line number 3.
+This is line number 4.
+This is line number 1 again.
+> sed 'y/123/789/' data.txt 
+This is line number 7.
+This is line number 8.
+This is line number 9.
+This is line number 4.
+This is line number 7 again.
+```
+
+打印命令 p命令用来打印文本行; 等号(=)命令用来打印行号;l(小写的L)命令用来列出行。
+
+``` shell
+> echo "this is a test" | sed 'p' 
+this is a test
+this is a test
+> sed -n '/number 3/p' data.txt 
+This is line number 3.
+> sed -n '2,3p' data.txt 
+This is line number 2. 
+This is line number 3.
+```
+
+与替换或修改命令一起使用。可以创建一个脚本在修改行之前显示该行。
+
+``` shell
+> sed -n '/3/{p; s/line/test/p;}' data6.txt
+This is line number 3. 
+This is test number 3.
+```
+
+打印行号
+
+``` shell
+> sed '=' data.txt
+1
+The quick brown fox jumps over the lazy dog. 
+2
+The quick brown fox jumps over the lazy dog. 
+3
+The quick brown fox jumps over the lazy dog.
+
+> sed -n '/number 4/{=; p;}' data.txt
+4
+This is line number 4.
+```
+
+列出(list)命令(l)可以打印数据流中的文本和不可打印的ASCII字符。
+
+``` shell
+> cat data.txt
+This line contains tabs. $
+> sed -n 'l' data.txt 
+This\tline\tcontains\ttabs.$
+```
+
+使用w命令写入文件
+
+``` shell
+> sed '1,2w test.txt' data.txt 
+> sed -n '/pattern/w test.txt' data.txt
+```
+
+读取命令 *r:[address]r filename* 。filename参数指定了数据文件的绝对路径或相对路径。你在读取命令中使用地址区间，只
+能指定单独一个行号或文本模式地址。sed编辑器会将文件中的文本插入到指定地址后。
+
+``` shell
+> cat data1.txt
+data1 line.
+> sed '3r data1.txt' data2.txt 
+data2 line1.
+data2 line2.
+data2 line3.
+data1 line.
+> sed '/line2/r data1.txt' data2.txt
+> sed '$r data1.txt' data2.txt
+```
+
+和删除命令配合使用会产生替换效果。
+
+``` shell
+> sed '/line2/{r data1.txt; d;}' data2.txt
+```
+
+
 # gawk
 
 gawk options program file
