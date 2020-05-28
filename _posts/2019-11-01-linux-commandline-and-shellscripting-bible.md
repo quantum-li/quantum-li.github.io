@@ -1036,6 +1036,66 @@ data1 line.
 > sed '/line2/{r data1.txt; d;}' data2.txt
 ```
 
+使用sed对跨多行的数据执行特定操作。如果你想匹配的文本跨了多行，每行各包含其中一部分语句，需要使用多行文本命令。
+
++ N：将数据流中的下一行加进来创建一个多行组（multiline group）来处理。
++ D：删除多行组中的一行。
++ P：打印多行组中的一行。
+
+单行的next命令 *n* ，会告诉sed编辑器移动到数据流中的下一文本行。
+
+``` shell
+> cat data1.txt
+This is the header line.
+
+This is a data line.
+
+This is the last line.
+> sed '/header/{n ; d}' data1.txt
+This is the header line.
+This is a data line.
+
+This is the last line.
+```
+
+多行版本的next命令 *N* 会将下一行文本添加到模式空间中已有的文本后，注意会包含换行符。这样的作用是将数据流中的两个文本行合并到同一个模式空间中。
+
+但是 *N* 命令只会执行到倒数第二行然后和最后一行合并操作，不会再继续操作第一行。如果最后一行有需要匹配的文本就需要注意命令的顺序：
+
+``` shell
+> sed '{s/System Administrator/Desktop User/; N; s/System\nAdministrator/Desktop\nUser/}' data.txt
+On Tuesday, the Linux Desktop
+User's group meeting will be held.
+All Desktop Users should attend.
+```
+
+当 *N* 和 *d* 一起使用时，会删除模式空间中的两行。当 *N* 和 *D* 一起使用时，会删除模式空间中的第一行。
+
+``` shell
+> cat data.txt
+
+This is the header line.
+This is a data line.
+
+This is the last line.
+> sed '/^$/{N ; /header/D}' data.txt
+This is the header line.
+This is a data line.
+
+This is the last line.
+```
+
+当 *N* 和 *p* 一起使用时，会打印模式空间中的两行。当 *N* 和 *P* 一起使用时，会打印模式空间中的第一行。
+
+模式空间（pattern space）是一块活跃的缓冲区，在sed编辑器执行命令时它会保存待检查的文本。但它并不是sed编辑器保存文本的唯一空间。sed编辑器有另一块称作保持空间（hold space）的缓冲区域。在处理模式空间中的某些行时，可以用保持空间来临时保存一些行。保持空间的命令：
+
++ h，将模式空间复制到保持空间
++ H，将模式空间附加到保持空间
++ g，将保持空间复制到模式空间
++ G，将保持空间附加到模式空间
++ x，交换模式空间和保持空间的内容
+
+可以使用 *!* 命令用来排除地址或地址区间。
 
 # gawk
 
