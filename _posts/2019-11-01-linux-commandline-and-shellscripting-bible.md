@@ -1097,6 +1097,112 @@ This is the last line.
 
 可以使用 *!* 命令用来排除地址或地址区间。
 
+``` shell
+> sed -n '/header/!p' data2.txt
+This is the first data line.
+This is the second data line.
+This is the last line.
+```
+
+普通p命令只打印data2文件中包含单词header的那行。加了感叹号之后，情况就相反了：除了包含单词header那一行外，文件中其他所有的行都被打印出来了。
+
+通常，sed编辑器会从脚本的顶部开始，一直执行到脚本的结尾。sed编辑器提供了一个方法来改变命令脚本的执行流程，其结果与结构化编程类似。
+
+分支（branch）命令b的格式如下： *[address]b [label]* ,address参数决定了哪些行的数据会触发分支命令。label参数定义了要跳转到的位置。如果没有加label参数，跳转命令会跳转到 *脚本的结尾* 。
+
+``` shell
+> cat data.txt
+This is the header line.
+This is the first data line.
+This is the second data line.
+This is the last line.
+> sed '{2,3b ; s/This is/Is this/ ; s/line./test?/}' data.txt
+Is this the header test?
+This is the first data line.
+This is the second data line.
+Is this the last test?
+```
+
+要指定标签，将它加到b命令后即可。使用标签允许你跳过地址匹配处的命令，但仍然执行脚本中的其他命令。
+
+``` shell
+> sed '{/first/b jump1 ; s/This is the/No jump on/
+> :jump1
+> s/This is the/Jump here on/}' data.txt
+No jump on header line
+Jump here on first data line
+No jump on second data line
+No jump on last line
+```
+
+也可以跳转到脚本中靠前面的标签上，这样就达到了循环的效果。
+
+``` shell
+> echo "This, is, a, test, to, remove, commas." | sed -n '{
+> :start
+> s/,//1p
+> b start
+> }'
+This is, a, test, to, remove, commas.
+This is a, test, to, remove, commas.
+This is a test, to, remove, commas.
+This is a test to, remove, commas.
+This is a test to remove, commas.
+This is a test to remove commas.
+```
+
+但是这个脚本永远不会结束，因此需要为分支命令指定一个地址模式来查找
+
+``` shell
+> echo "This, is, a, test, to, remove, commas." | sed -n '{
+> :start
+> s/,//1p
+> /,/b start
+> }'
+```
+
+测试（test）命令（t）也可以用来改变sed编辑器脚本的执行流程。测试命令会根据替换命令的结果跳转到某个标签，而不是根据地址进行跳转。如果替换命令成功匹配并替换了一个模式，测试命令就会跳转到指定的标签。如果替换命令未能匹配指定的模式，测试命令就不会跳转。
+
+``` shell
+> sed '{
+> s/first/matched/
+> t
+> s/This is the/No match on/
+> }' data2.txt
+No match on header line
+This is the matched data line
+No match on second data line
+No match on last line
+```
+第一个替换命令会查找模式文本first。如果匹配了行中的模式，它就会替换文本，而且测试命令会跳过后面的替换命令。如果第一个替换命令未能匹配模式，第二个替换命令就会被执行。
+
+*&* 符号可以用来代表替换命令中的匹配的模式。不管模式匹配的是什么样的文本，你都可以在替代模式中使用&符号来使用这段文本。
+
+``` shell
+> echo "The cat sleeps in his hat." | sed 's/.at/"&"/g'
+The "cat" sleeps in his "hat".
+```
+&符号会提取匹配替换命令中指定模式的整个字符串。sed编辑器用圆括号来定义替换模式中的子模式。你可以在替代模式中使用特殊字符来引用每个子模式。替代字符由反斜线和数字组成。数字表明子模式的位置。sed编辑器会给第一个子模式分配字符\1，给第二个子模式分配字符\2，依此类推。当在替换命令中使用圆括号时，必须用转义字符将它们标示为分组字符而不是普通的圆括号。这跟转义其他特殊字符正好相反。
+
+``` shell
+> echo "The System Administrator manual" | sed '
+> s/\(System\) Administrator/\1 User/'
+The System User manual
+
+> echo "That furry cat is pretty" | sed 's/furry \(.at\)/\1/'
+That cat is pretty
+>
+
+> echo "1234567" | sed '{
+> :start
+> s/\(.*[0-9]\)\([0-9]\{3\}\)/\1,\2/p
+> t start
+> }'
+1234,567    # 注意！之所以这里从后往前匹配是因为使用了 .* ,它是贪婪模式，会尽量匹配更多的字符！
+1,234,567
+1,234,567
+```
+
 # gawk
 
 gawk options program file
@@ -1163,6 +1269,16 @@ gawk 'BEGIN {print "The data3 File Contents:"} {print $0}' data3.txt
 ``` shell
 gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of File"}' data3.txt
 ```
+
+内建变量
+
+| 变量 | 描述 |
+| FIELDWIDTHS | 由空格分隔的一列数字，定义了每个数据字段确切宽度 |
+| FS | 输入字段分隔符 |
+| RS | 输入记录分隔符 |
+| OFS | 输出字段分隔符 |
+| ORS | 输出记录分隔符 |
+
 
 # shell中的特殊环境变量
 
