@@ -797,6 +797,7 @@ sed命令操作文件流程：
 可用选项：
 
 | 选项 | 描述 |
+| --- | --- |
 | -e script | 在处理输入时，将script中指定的命令添加到已有的命令中 |
 | -f file | 在处理输入时，将file中指定的命令添加到已有的命令中 |
 | -n | 不产生命令输出，使用print命令来完成输出 |
@@ -861,6 +862,8 @@ command3
 }
 ```
 
+## 区间操作
+
 指定行号
 
 ``` shell
@@ -887,7 +890,7 @@ Samantha:x:502:502::/home/Samantha:/bin/bash
 > sed '/Samantha/s/bash/csh/' /etc/passwd
 ```
 
-命令组合
+## 命令组合
 
 ``` shell
 sed '3,${
@@ -1036,6 +1039,8 @@ data1 line.
 > sed '/line2/{r data1.txt; d;}' data2.txt
 ```
 
+## 操作多行
+
 使用sed对跨多行的数据执行特定操作。如果你想匹配的文本跨了多行，每行各包含其中一部分语句，需要使用多行文本命令。
 
 + N：将数据流中的下一行加进来创建一个多行组（multiline group）来处理。
@@ -1087,6 +1092,8 @@ This is the last line.
 
 当 *N* 和 *p* 一起使用时，会打印模式空间中的两行。当 *N* 和 *P* 一起使用时，会打印模式空间中的第一行。
 
+## 模式空间和保持空间
+
 模式空间（pattern space）是一块活跃的缓冲区，在sed编辑器执行命令时它会保存待检查的文本。但它并不是sed编辑器保存文本的唯一空间。sed编辑器有另一块称作保持空间（hold space）的缓冲区域。在处理模式空间中的某些行时，可以用保持空间来临时保存一些行。保持空间的命令：
 
 + h，将模式空间复制到保持空间
@@ -1105,6 +1112,8 @@ This is the last line.
 ```
 
 普通p命令只打印data2文件中包含单词header的那行。加了感叹号之后，情况就相反了：除了包含单词header那一行外，文件中其他所有的行都被打印出来了。
+
+## 分支流程
 
 通常，sed编辑器会从脚本的顶部开始，一直执行到脚本的结尾。sed编辑器提供了一个方法来改变命令脚本的执行流程，其结果与结构化编程类似。
 
@@ -1176,12 +1185,15 @@ No match on last line
 ```
 第一个替换命令会查找模式文本first。如果匹配了行中的模式，它就会替换文本，而且测试命令会跳过后面的替换命令。如果第一个替换命令未能匹配模式，第二个替换命令就会被执行。
 
+## 匹配模式
+
 *&* 符号可以用来代表替换命令中的匹配的模式。不管模式匹配的是什么样的文本，你都可以在替代模式中使用&符号来使用这段文本。
 
 ``` shell
 > echo "The cat sleeps in his hat." | sed 's/.at/"&"/g'
 The "cat" sleeps in his "hat".
 ```
+
 &符号会提取匹配替换命令中指定模式的整个字符串。sed编辑器用圆括号来定义替换模式中的子模式。你可以在替代模式中使用特殊字符来引用每个子模式。替代字符由反斜线和数字组成。数字表明子模式的位置。sed编辑器会给第一个子模式分配字符\1，给第二个子模式分配字符\2，依此类推。当在替换命令中使用圆括号时，必须用转义字符将它们标示为分组字符而不是普通的圆括号。这跟转义其他特殊字符正好相反。
 
 ``` shell
@@ -1215,6 +1227,7 @@ gawk options program file
 可用选项
 
 | 选项 | 描述 |
+| --- | --- |
 | -F fs | 指定行中划分数据字段的字段分隔符 |
 | -f file | 从指定的文件中读取程序 |
 | -v var=value | 定义gawk程序中的一个变量及其默认值 |
@@ -1270,19 +1283,449 @@ gawk 'BEGIN {print "The data3 File Contents:"} {print $0}' data3.txt
 gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of File"}' data3.txt
 ```
 
+## 使用变量
+
 内建变量
 
 | 变量 | 描述 |
+| --- | --- |
 | FIELDWIDTHS | 由空格分隔的一列数字，定义了每个数据字段确切宽度 |
 | FS | 输入字段分隔符 |
 | RS | 输入记录分隔符 |
 | OFS | 输出字段分隔符 |
 | ORS | 输出记录分隔符 |
 
+数据变量
+
+| 变量 | 描述 |
+| --- | --- |
+| ARGC | 当前命令行参数个数 |
+| ARGIND | 当前文件在ARGV中的位置 |
+| ARGV | 包含命令行参数的数组 |
+| CONVFMT | 数字的转换格式（参见printf语句），默认值为%.6 g |
+| ENVIRON | 当前shell环境变量及其值组成的关联数组 |
+| ERRNO | 当读取或关闭输入文件发生错误时的系统错误号 |
+| FILENAME | 用作gawk输入数据的数据文件的文件名 |
+| FNR | 当前数据文件中的数据行数 |
+| IGNORECASE | 设成非零值时，忽略gawk命令中出现的字符串的字符大小写 |
+| NF | 数据文件中的字段总数 |
+| NR | 已处理的输入记录数 |
+| OFMT | 数字的输出格式，默认值为%.6 g |
+| RLENGTH | 由match函数所匹配的子字符串的长度 |
+| RSTART | 由match函数所匹配的子字符串的起始位置 |
+
+自定义变量
+
+``` shell
+> gawk '
+> BEGIN{
+> testing="This is a test"
+> print testing
+> testing=45
+> print testing
+> }'
+This is a test
+45
+```
+
+在命令行上给变量赋值
+
+``` shell
+> cat script1
+BEGIN{FS=","}
+{print $n}
+> gawk -f script1 n=2 data1
+data12
+data22
+data32
+```
+使用命令行参数来定义变量值会有一个问题。在你设置了变量后，这个值在代码的BEGIN部分不可用。可以用-v命令行参数来解决这个问题。它允许你在BEGIN代码之前设定变量。在命令行上，-v命令行参数必须放在脚本代码之前。
+
+``` shell
+> gawk -v n=3 -f script2 data1
+The starting value is 3
+data13
+data23
+data33
+```
+
+## 使用数组
+
+gawk中的数组不是使用数字引用成员。
+
+``` shell
+> gawk 'BEGIN{
+> capital["Illinois"] = "Springfield"
+> print capital["Illinois"]
+> }'
+Springfield
+
+> gawk 'BEGIN{
+> var[1] = 34
+> var[2] = 3
+> total = var[1] + var[2]
+> print total
+> }'
+37
+```
+
+遍历数组元素
+
+``` shell
+> gawk 'BEGIN{
+> var["a"] = 1
+> var["g"] = 2
+> var["m"] = 3
+> var["u"] = 4
+> for (test in var)
+> {
+> print "Index:",test," - Value:",var[test]
+> }
+> }'
+Index: u - Value: 4
+Index: m - Value: 3
+Index: a - Value: 1
+Index: g - Value: 2
+```
+
+删除数组元素
+
+``` shell
+> gawk 'BEGIN{
+> var["a"] = 1
+> var["g"] = 2
+> for (test in var)
+> {
+> print "Index:",test," - Value:",var[test]
+> }
+> delete var["g"]
+> print "---"
+> for (test in var)
+> print "Index:",test," - Value:",var[test]
+> }'
+Index: a - Value: 1
+Index: g - Value: 2
+---
+Index: a - Value: 1
+```
+
+## 模式匹配
+
+使用模式匹配时正则表达式必须出现在它要控制的程序脚本的左花括号前。
+
+``` shell
+> gawk 'BEGIN{FS=","} /11/{print $1}' data
+data11
+```
+
+匹配操作符（matching operator）允许将正则表达式限定在记录中的特定数据字段。匹配操作符是波浪线（~）。可以指定匹配操作符、数据字段变量以及要匹配的正则表达式。
+
+``` shell
+> gawk 'BEGIN{FS=","} $2 ~ /^data2/{print $0}' data
+data21,data22,data23,data24,data25
+```
+
+你也可以用!符号来排除正则表达式的匹配。
+
+``` shell
+> gawk –F: '$1 !~ /rich/{print $1,$NF}' /etc/passwd
+root /bin/bash
+daemon /bin/sh
+bin /bin/sh
+sys /bin/sh
+```
+## 数学表达式
+
+除了正则表达式，你也可以在匹配模式中用数学表达式。这个功能在匹配数据字段中的数字值时非常方便。举个例子，如果你想显示所有属于root用户组（组ID为0）的系统用户，可以用这个脚本。
+
+``` shell
+> gawk -F: '$4 == 0{print $1}' /etc/passwd
+root
+sync
+shutdown
+halt
+operator
+```
+
+可以使用任何常见的数学比较表达式。
+
++ x == y：值x等于y。
++ x <= y：值x小于等于y。
++ x < y：值x小于y。
++ x >= y：值x大于等于y。
++ x > y：值x大于y。
+
+## 结构化命令
+
+if 语句
+
+``` shell
+> gawk '{if ($1 > 20) print $1}' data
+
+> gawk '{if ($1 > 20) print $1 * 2; else print $1 / 2}' data
+
+> gawk '{
+> if ($1 > 20)
+> {
+> x = $1 * 2
+> print x
+> } else
+> {
+> x = $1 / 2
+> print x
+> }}' data
+```
+
+while 语句，while语句支持使用break和continue语句。
+
+``` shell
+> gawk '{
+> total = 0
+> i = 1
+> while (i < 4)
+> {
+> total += $i
+> if (i == 2)
+> break
+> i++
+> }
+> avg = total / 2
+> print "The average of the first two data elements is:",avg
+> }' data
+```
+
+do-while语句
+
+``` shell
+> gawk '{
+> total = 0
+> i = 1
+> do
+> {
+> total += $i
+> i++
+> } while (total < 150)
+> print total }' data
+```
+
+for 语句
+
+``` shell
+> gawk '{
+> total = 0
+> for (i = 1; i < 4; i++)
+> {
+> total += $i
+> }
+> avg = total / 3
+> print "Average:",avg
+> }' data5
+```
+
+## 格式化打印
+
+*printf "format string", var1, var2 . . .* 
+
+格式化指定符
+
+| 控制字母 | 描述 |
+| --- | --- |
+| c | 将一个数作为ASCII字符显示 |
+| d | 显示一个整数值 |
+| i | 显示一个整数值（跟d一样） |
+| e | 用科学计数法显示一个数 |
+| f | 显示一个浮点值 |
+| g | 用科学计数法或浮点数显示（选择较短的格式） |
+| o | 显示一个八进制值 |
+| s | 显示一个文本字符串 |
+| x | 显示一个十六进制值 |
+| X | 显示一个十六进制值，但用大写字母A~F |
+
+``` shell
+> gawk 'BEGIN{
+> x = 10 * 100
+> printf "The answer is: %e\n", x
+> }'
+The answer is: 1.000000e+03
+```
+
+除了控制字母外，还有3种修饰符可以用来进一步控制输出。
++ width：指定了输出字段最小宽度的数字值。如果输出短于这个值，printf会将文本右对齐，并用空格进行填充。如果输出比指定的宽度还要长，则按照实际的长度输出。
++ prec：这是一个数字值，指定了浮点数中小数点后面位数，或者文本字符串中显示的最大字符数。
++ -（减号）：指明在向格式化空间中放入数据时采用左对齐而不是右对齐。
+
+``` shell
+> gawk 'BEGIN{FS="\n"; RS=""} {printf "%-16s %s\n", $1, $4}' data2
+Riley Mullen   (312)555-1234
+Frank Williams (317)555-9876
+Haley Snell    (313)555-4938
+
+# 可以使用%5.1f格式指定符来强制printf命令将浮点值近似到小数点后一位。
+> gawk '{printf "%5.1f\n",128.33}' data
+128.3
+```
+
+## 函数
+
+数学函数
+
+| 函 数 | 描 述 |
+| --- | --- |
+| atan2(x, y) | x/y的反正切，x和y以弧度为单位 |
+| cos(x) | x的余弦，x以弧度为单位 |
+| exp(x) | x的指数函数 |
+| int(x) | x的整数部分，取靠近零一侧的值 |
+| log(x) | x的自然对数 |
+| rand( ) | 比0大比1小的随机浮点值 |
+| sin(x) | x的正弦，x以弧度为单位 |
+| sqrt(x) | x的平方根 |
+| srand(x) | 为计算随机数指定一个种子值 |
+
+位操作
+
+| 函数 | 描述 |
+| --- | --- |
+| and(v1, v2) | 执行值v1和v2的按位与运算。 |
+| compl(val) | 执行val的补运算。 |
+| lshift(val, count) | 将值val左移count位。 |
+| or(v1, v2) | 执行值v1和v2的按位或运算。 |
+| rshift(val, count) | 将值val右移count位。 |
+| xor(v1, v2) | 执行值v1和v2的按位异或运算。 |
+
+字符串函数
+
+| 函数 | 描述 |
+| --- | --- |
+| asort(s [,d]) | 将数组s按数据元素值排序。索引值会被替换成表示新的排序顺序的连续数字。另外，如果指定了d，则排序后的数组会存储在数组d中 |
+| asorti(s [,d]) | 将数组s按索引值排序。生成的数组会将索引值作为数据元素值，用连续数字索引来表明排序顺序。另外如果指定了d，排序后的数组会存储在数组d中 |
+| gensub(r, s, h [, t]) | 查找变量$0或目标字符串t（如果提供了的话）来匹配正则表达式r。如果h是一个以g或G开头的字符串，就用s替换掉匹配的文本。如果h是一个数字，它表示要替换掉第h处r匹配的地方 |
+| gsub(r, s [,t]) | 查找变量$0或目标字符串t（如果提供了的话）来匹配正则表达式r。如果找到了，就全部替换成字符串s |
+| index(s, t) | 返回字符串t在字符串s中的索引值，如果没找到的话返回0 |
+| length([s]) | 返回字符串s的长度；如果没有指定的话，返回$0的长度 |
+| match(s, r [,a]) | 返回字符串s中正则表达式r出现位置的索引。如果指定了数组a，它会存储s中匹配正则表达式的那部分 |
+| split(s, a [,r]) |  将s用FS字符或正则表达式r（如果指定了的话）分开放到数组a中。返回字段的总数 |
+| sprintf(format,variables) | 用提供的format和variables返回一个类似于printf输出的字符串 |
+| sub(r, s [,t]) |  在变量$0或目标字符串t中查找正则表达式r的匹配。如果找到了，就用字符串s替换掉第一处匹配 |
+| substr(s, i [,n])  | 返回s中从索引值i开始的n个字符组成的子字符串。如果未提供n，则返回s剩下的部分 |
+| tolower(s) |  将s中的所有字符转换成小写 |
+| toupper(s)  | 将s中的所有字符转换成大写 |
+
+``` shell
+> gawk 'BEGIN{
+> var["a"] = 1
+> var["g"] = 2
+> var["m"] = 3
+> var["u"] = 4
+> asort(var, test)
+> for (i in test)
+> print "Index:",i," - value:",test[i]
+> }'
+Index: 4 - value: 4
+Index: 1 - value: 1
+Index: 2 - value: 2
+Index: 3 - value: 3
+
+> gawk 'BEGIN{ FS=","}{
+> split($0, var)
+> print var[1], var[5]
+> }' data1
+data11 data15
+data21 data25
+data31 data35
+```
+
+时间函数
+
+| 函 数 | 描 述 |
+| --- | --- |
+| mktime(datespec) | 将一个按YYYY MM DD HH MM SS [DST]格式指定的日期转换成时间戳值 |
+| strftime(format [,timestamp]) | 将当前时间的时间戳或timestamp（如果提供了的话）转化格式化日期（采用shell函数date()的格式） |
+| systime( ) |  返回当前时间的时间戳 |
+
+自定义函数，在定义函数时，它必须出现在所有代码块之前（包括BEGIN代码块）。
+
+``` shell
+> gawk '
+> function myprint()
+> {
+> printf "%-16s - %s\n", $1, $4
+> }
+> BEGIN{FS="\n"; RS=""}
+> {
+> myprint()
+> }' data2
+Riley Mullen - (312)555-1234
+Frank Williams - (317)555-9876
+Haley Snell - (313)555-4938
+```
+
+创建函数库
+
+``` shell
+> cat funclib
+function myprint()
+{
+printf "%-16s - %s\n", $1, $4
+}
+function myrand(limit)
+{
+return int(limit * rand())
+}
+function printthird()
+{
+print $3
+}
+```
+
+funclib文件含有三个函数定义。需要使用-f命令行参数来使用它们。很遗憾，不能将-f命令行参数和内联gawk脚本放到一起使用，不过可以在同一个命令行中使用多个-f参数。因此，要使用库，只要创建一个含有你的gawk程序的文件，然后在命令行上同时指定库文件和程序文件就行了。
+
+``` shell
+> cat script4
+BEGIN{ FS="\n"; RS=""}
+{
+myprint()
+}
+> gawk -f funclib -f script4 data
+Riley Mullen - (312)555-1234
+Frank Williams - (317)555-9876
+Haley Snell - (313)555-4938
+```
+
+gawk 高级使用案例
+
+``` shell
+> cat scores.txt
+Rich Blum,team1,100,115,95
+Barbara Blum,team1,110,115,100
+Christine Bresnahan,team2,120,115,118
+Tim Bresnahan,team2,125,112,116
+
+> cat bowling.sh
+#!/bin/bash
+for team in $(gawk –F, '{print $2}' scores.txt | uniq)
+do
+gawk –v team=$team 'BEGIN{FS=","; total=0}
+{
+if ($2==team)
+{
+total += $3 + $4 + $5;
+}
+}
+END {
+avg = total / 6;
+print "Total for", team, "is", total, ",the average is",avg
+}' scores.txt
+done
+
+> ./bowling.sh
+Total for team1 is 635, the average is 105.833
+Total for team2 is 706, the average is 117.667
+```
 
 # shell中的特殊环境变量
 
 | 变更 | 说明 |
+| --- | --- | 
 | `$$` | Shell本身的PID（ProcessID）|
 | |这个变量经常用来构造一个"unique"的临时文件名，通常比调用`mktemp`来得简单 |
 | `$!` | Shell最后运行的后台Process的PID |
@@ -1303,6 +1746,7 @@ gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of Fil
 ## 参数替换和扩展
 
 | 表达式 | 含义 |
+| --- | --- |
 | `${var}` | 变量`var`的值, 与`$var`相同 |
 | `${var-DEFAULT}` | 如果`var`没有被声明, 那么就以`$DEFAULT`作为其值 * |
 | `${var:-DEFAULT}` | 如果`var`没有被声明, 或者其值为空, 那么就以`$DEFAULT`作为其值 * |
@@ -1318,6 +1762,7 @@ gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of Fil
 ## 字符串操作
 
 | 表达式 | 含义 |
+| --- | --- |
 | `${#string}` | `$string`的长度 |
 | `${string:position}` | 在`$string`中, 从位置`$position`开始提取子串 |
 | `${string:position:length}` | 在`$string`中, 从位置`$position`开始提取长度为`$length`的子串 |
@@ -1344,6 +1789,7 @@ gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of Fil
 ## 括号
 
 | **中括号** | |
+| --- | --- |
 | `if[ CONDITION ]` | 测试结构 |
 | `if[[ CONDITION ]]` | 扩展的测试结构 |
 | `Array[1]=element1` | 数组初始化 |
