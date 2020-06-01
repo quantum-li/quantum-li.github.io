@@ -1073,3 +1073,69 @@ DataTree内部用ConcurrentHashMap<String,DataNode>存储所有节点，同时�
 
 #### 日志写入
 
+日志写入由FileTxnLog负责。写入过程如下：
+
+1. 确定是否有事务日志可写
+2. 确定事务日志文件是否需要扩容。日志文件会会使用0填充进行预分配，当剩余空间不足4KB时重新分配64MB。
+3. 事务序列化。
+4. 生成Checksum。用来校验日志文件的完整性和准确性。
+5. 写入事务日志文件流。
+6. 事务日志刷入磁盘。
+
+#### 日志截断
+
+当非Leader机器上记录的事务ID大于Leader时，Leader会发送TRUNC命令给这台机器让其进行日志截断。随后该机器会删除非Leader机器事务ID的文件。
+
+### 事务快照
+
+#### 文件存储
+
+ZK会定期往dataDir目录创建当前时刻的全量内存数据内容。快照文件也是使用ZXID的十六进制作为后缀。快照文件不会预分配文件空间。
+
+#### 存储格式
+
+可以使用快照工具查看快照内容 org.apache.zookeeper.server.SnapshotFormatter。java SnapshotFormatter snapshot.XXXXX。
+
+#### 数据快照
+
+FileSnap负责维护数据快照接口。可以使用snapCount参数配置每次快照间的事务操作次数。
+
+1. 确定是否需要进行数据快照
+2. 重新创建新的事务日志
+3. 创建数据快照异步线程
+4. 获取全量数据和会话信息
+5. 生成快照数据文件名
+6. 数据序列化
+
+### 初始化
+
+ZK启动时进行数据初始化将磁盘上的数据加载到ZooKeeper内存中。
+
+![数据初始化过程](/assets/images/d0cd4ca8-5dbf-4b1e-a8a9-74438fc47213.png)
+
+主要包括从快照文件加载快照数据和根据实物日志进行数据订正两个过程
+
+1. 初始化FileTxnSnapLog，内部又分为FileTxnLog和FileSnap
+2. 初始化ZKDatabase
+3. 创建PlayBackListener监听器，在ZK数据恢复后期，会有一个数据订正的过程。接收事务时回调此监听器。
+4. 处理快照文件，首先从快照文件加载数据到内存。先获取100个快照文件，从最新的开始进行文件正确性校验，直到找到一个数据正确的文件进行加载。
+5. 获取最新的ZXID，处理事务日志，应用事务并回调PlayBackListener。
+5. 再次获取最新的ZXID，
+6. 校验epoch，把从文件恢复的epoch与currentEpoch和acceptedEpoch文件进行校验。
+
+#### PlayBackListener
+
+将事务转存到ZKDatabase.committedLog中使集群服务器间进行快速的数据同步。
+
+### 数据同步
+
+Learner服务器向Leader同步没有提交过的事务请求。
+
+#### 获取Learner状态
+
+注册Learner最后阶段，Learner向Leader发送一个ACKEPOCH数据包，Leader解析出该Learner的currentEpoch和lastZxid。
+
+#### 数据同步初始化
+
+
+5. 
