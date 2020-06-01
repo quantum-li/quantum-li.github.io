@@ -1139,4 +1139,12 @@ Learner服务器向Leader同步没有提交过的事务请求。
 
 Leader从数据库中提取出提议缓存队列，获取peerLastZxid：该Learner服务器最后的ZXID；minCommittedLog：Leader缓存队列最小ZXID；maxCommittedLog：Leader缓存队列最大ZXID。集群同步通常分为四类，差异化同步（DIFF），先回滚再差异化（TRUNC+DIFF）、仅回滚同步（TRUNC），全量（SNAP)。
 
-当peerLastZxid介于minCommittedLog和maxCommitedLog之间
+当peerLastZxid介于minCommittedLog和maxCommitedLog之间时，使用DIFF同步。
+
+当peerLastZxid介于minCommitedLog和maxCommitedLog之间，但是已经不再同意epoch，并且peerLastZxid没有被同步，使用TRUNC+DIFF同步
+
+当peerLastZxid大于maxCommitedLog时，使用TRUNC同步。
+
+当peerLastZxid小于minCommitedLog时，使用SNAP同步。
+
+Leader
