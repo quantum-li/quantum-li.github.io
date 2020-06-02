@@ -1162,3 +1162,10 @@ Leader服务器上没有提议缓存队列，peerLastZxid不等于lastProcessedZ
 + dataLogDir，存储日志文件位置
 + initLimit，Leader服务器等待Follower启动并完成同步的时间
 + syncLimit，Leader和Follower心跳检测的最大超时时间
++ snapCount，多少次事务操作之后进行快照
++ preAllocSize，事务文件预分配大小
++ minSessionTimeout/maxSettionTimeout，对客户端设置的超时时间做限制，如果客户端设置的超时不在这个范围会强制为该范围。
++ maxClientCnxns，单台client到单台server的最大连接数
++ jute.maxbuffer，每个ZNode最大数据量大小
++ clientPortAddress，针对多网卡机器，该参数为每个ip指定不同端口
++ server.id=host:port:port，id为SID，第一个port为Follower与Leader的通信端口，第二个port为Leader选举通信
