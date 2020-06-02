@@ -1147,4 +1147,18 @@ Leader从数据库中提取出提议缓存队列，获取peerLastZxid：该Learn
 
 当peerLastZxid小于minCommitedLog时，使用SNAP同步。
 
-Leader
+Leader服务器上没有提议缓存队列，peerLastZxid不等于lastProcessedZxid。使用SNAP同步
+
+# ZooKeeper运维
+
+## 配置详解
+
+### 基本配置
+
+![基本配置](/assets/images/579ced83-bd18-4da1-b2d9-9f44c663c9af.png)
+
+### 高级配置
+
++ dataLogDir，存储日志文件位置
++ initLimit，Leader服务器等待Follower启动并完成同步的时间
++ syncLimit，Leader和Follower心跳检测的最大超时时间
