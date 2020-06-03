@@ -1169,3 +1169,80 @@ Leader服务器上没有提议缓存队列，peerLastZxid不等于lastProcessedZ
 + jute.maxbuffer，每个ZNode最大数据量大小
 + clientPortAddress，针对多网卡机器，该参数为每个ip指定不同端口
 + server.id=host:port:port，id为SID，第一个port为Follower与Leader的通信端口，第二个port为Leader选举通信
++ autopurge.snapRetainCount，保留的快照文件数量，最小值3
++ autopurge.purgeInterval，单位是小时，0或-1不定时清理
++ fsync.warningthresholdms，配置进行事务日志的fsync操作耗时的报警阈值，如果报警会打印在输出日志中
++ forceSync，yes/no,配置是否在事务提交的时候刷盘
++ globalOutstandingLimit，最大请求堆积数量
++ leaderServes，yes/no,是否允许Leader接受客户端请求
++ SkipAcl，是否允许跳过ACK权限检查
++ cnxTimeout，选主的过程中，服务器之间创建连接的超时时间
+
+## 四字命令
+
+使用telnet登陆使用
+
+### conf
+
+查看基本配置信息，端口，日志文件目录，tickTime等
+
+### cons
+
+输出这台服务器上所有客户端连接信息
+
+### crst
+
+重置服务器上客户端连接的统计信息
+
+### dump
+
+查看当前集群所有会话信息，包括会话ID，会话的临时节点等。在Leader上执行还能看到会话的超时时间。
+
+### envi
+
+查看ZK服务器运行时的环境信息，包括os.version、java.version、user.home等
+
+### ruok
+
+查看当前ZK服务器是否正在运行
+
+### stat
+
+查看ZK运行时状态，包括ZK版本、打包信息和角色、集群节点个数等
+
+### srvr
+
+同stat，但不输出客户端连接信息
+
+### srst
+
+重置所有服务器统计信息
+
+### wchs
+
+查看当前服务器上管理的Watcher的概要信息
+
+### wchc
+
+查看当前服务器上管理的Watcher的详细信息
+
+### wchp
+
+以节点路径为单位分组的当前服务器上管理的Watcher的详细信息
+
+### mntr
+
+比stat更详细的统计信息，包括请求处理延迟情况，服务器内存数据库大小和数据同步情况
+
+# 运维
+
+开启JMX后可以使用JConsole对ZK进行监控
+
+## 监控
+
+TaoKeeper监控，从实时监控和数据统计两方面监控。实时监控包括可用性监控和集群读写TPS监控。
+
+## 高可用集群
+
+
+
