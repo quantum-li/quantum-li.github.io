@@ -130,9 +130,9 @@ Basically Available（基本可用）、Soft state（软状态）、Eventually c
 3. 反馈事务回滚结果，参与者完成回滚向协调者发送Ack消息
 4. 中断事务，协调者收到所有Ack消息后完成事务中断
 
-![2PC事务提交](/assets/images/994291e1-a6d5-4cbd-93bd-e942b8528ac5.png)
+![2PC事务提交](/assets/images/from-paxos-to-zookeeper/994291e1-a6d5-4cbd-93bd-e942b8528ac5.png)
 
-![2PC事务中断](/assets/images/f318aacc-57b2-44ab-bcfc-5d066b979125.png)
+![2PC事务中断](/assets/images/from-paxos-to-zookeeper/f318aacc-57b2-44ab-bcfc-5d066b979125.png)
 
 优点：原理简单，实现方便
 
@@ -147,7 +147,7 @@ Basically Available（基本可用）、Soft state（软状态）、Eventually c
 
 将3PC的提交事务请求过程一分为二，CanCommit、PreCommit、do Commit三个阶段。
 
-![3PC协议流程](/assets/images/1d96cc75-9cb4-4f05-af23-5264e7dab6bd.png)
+![3PC协议流程](/assets/images/from-paxos-to-zookeeper/1d96cc75-9cb4-4f05-af23-5264e7dab6bd.png)
 
 ### 阶段一：CanCommit
 
@@ -212,9 +212,9 @@ Basically Available（基本可用）、Soft state（软状态）、Eventually c
 
 如果多个Proposer提出的提案被多个Acceptor批准，且每个Acceptor都批准了一个不同的提案。或者由于节点故障剩下的节点恰好为偶数。就无法选出提案
 
-![每个Acceptor批准不同的提案](/assets/images/5048cc0a-58c4-498d-b520-58d9898a0f37.png)
+![每个Acceptor批准不同的提案](/assets/images/from-paxos-to-zookeeper/5048cc0a-58c4-498d-b520-58d9898a0f37.png)
 
-![不同的提案被相同数量的Acceptor批准](/assets/images/979c8e05-b4d9-493c-8bd4-73cd3571dfea.png)
+![不同的提案被相同数量的Acceptor批准](/assets/images/from-paxos-to-zookeeper/979c8e05-b4d9-493c-8bd4-73cd3571dfea.png)
 
 ##### 解决方案
 
@@ -228,7 +228,7 @@ Basically Available（基本可用）、Soft state（软状态）、Eventually c
 
 如果一个提案在某个Acceptor还未收到上一个提案时被选定，会产生一个被批准的值，且编号更高。
 
-![一个提案在某个Acceptor还未收到上一个提案时被选定](/assets/images/5e9d7edc-7657-4bf2-8321-2ffd91ea6bb8.png)
+![一个提案在某个Acceptor还未收到上一个提案时被选定](/assets/images/from-paxos-to-zookeeper/5e9d7edc-7657-4bf2-8321-2ffd91ea6bb8.png)
 
 #### P2b：如果一个值为V0提案被选定后，那么之后任何Proposer产生的编号更高的提案值必须为V0
 
@@ -341,7 +341,7 @@ ZAB协议包括两种基本模式：崩溃恢复和消息广播。同一时刻�
 
 #### 消息广播
 
-![消息广播](/assets/images/b2cee297-6434-46d1-9689-a3983ddb750c.png)
+![消息广播](/assets/images/from-paxos-to-zookeeper/b2cee297-6434-46d1-9689-a3983ddb750c.png)
 
 ZAB的二阶段提交过程移除了中断逻辑，所以ZK引入崩溃恢复模式来解决Leader崩溃导致的数据不一致问题。
 
@@ -371,7 +371,7 @@ Leader会将新epoch和初始化集合发送给Follower。如果Follower发现�
 
 开始接收客户端请求。Leader把接收到的新请求以新epoch和递增的ZXID发送给Follower，Follower返回ACK。Leader发送Commit。
 
-![算法示意图](/assets/images/770d9565-59cb-4800-830a-228514b46383.png)
+![算法示意图](/assets/images/from-paxos-to-zookeeper/770d9565-59cb-4800-830a-228514b46383.png)
 
 在ZAB协议中，每一个进程都可能处于以下三个状态之一：LOOKING、FOLLOWING、LEADING。
 
@@ -393,7 +393,7 @@ ZAB协议主要用于构建一个高可用的分布式数据主备系统，而Pa
 
 也叫配置中心，配置存储在数据节点，集群机器读取数据节点并订阅监听
 
-![配置管理节点示意图](/assets/images/fa92bb0d-c4fa-4a17-8d7e-ab054f23fd97.png)
+![配置管理节点示意图](/assets/images/from-paxos-to-zookeeper/fa92bb0d-c4fa-4a17-8d7e-ab054f23fd97.png)
 
 ## 负载均衡
 
@@ -408,7 +408,7 @@ ZAB协议主要用于构建一个高可用的分布式数据主备系统，而Pa
 + Monitor 监控自身状态
 + Controller 统一管理入口或页面
 
-![DDNS节点示意图](/assets/images/049c2dbc-b526-48d3-af48-2a266a28342a.png)
+![DDNS节点示意图](/assets/images/from-paxos-to-zookeeper/049c2dbc-b526-48d3-af48-2a266a28342a.png)
 
 ## 命名服务
 
@@ -416,17 +416,17 @@ ZAB协议主要用于构建一个高可用的分布式数据主备系统，而Pa
 
 在ZK中使用顺序节点的方式命名得到顺序的全局唯一标识。
 
-![全局唯一ID节点示意图](/assets/images/42db8c0e-627f-4031-94a9-22c655ad9cbf.png)
+![全局唯一ID节点示意图](/assets/images/from-paxos-to-zookeeper/42db8c0e-627f-4031-94a9-22c655ad9cbf.png)
 
 ## 分布式协调/通知
 
 ZK的Watcher注册和异步通知机制，能够很好地实现分布式环境不同机器的协调与通知，从而实现对数据变更的处理：心跳检测、进度汇报、系统调度。
 
-![MySQL数据复制服务业务热备节点示意图](/assets/images/fc991ebb-34ff-4935-ae31-263df9985bc5.png)
+![MySQL数据复制服务业务热备节点示意图](/assets/images/from-paxos-to-zookeeper/fc991ebb-34ff-4935-ae31-263df9985bc5.png)
 
-![MySQL数据复制服务业务冷备节点示意图](/assets/images/ed12ecee-dedd-476d-8f6b-735869196029.png)
+![MySQL数据复制服务业务冷备节点示意图](/assets/images/from-paxos-to-zookeeper/ed12ecee-dedd-476d-8f6b-735869196029.png)
 
-![MySQL数据复制服务冷备流程图](/assets/images/e167fd4c-161b-4491-a658-947a2b07e01d.png)
+![MySQL数据复制服务冷备流程图](/assets/images/from-paxos-to-zookeeper/e167fd4c-161b-4491-a658-947a2b07e01d.png)
 
 ## 集群管理
 
@@ -438,25 +438,25 @@ ZK同一个临时节点只有一个客户端能够创建成功，创建成功的
 
 排它锁：
 
-![排它锁流程示意图](/assets/images/7c77c6ab-9f5e-4595-9256-7db460a5b935.png)
+![排它锁流程示意图](/assets/images/from-paxos-to-zookeeper/7c77c6ab-9f5e-4595-9256-7db460a5b935.png)
 
 共享锁：
 
-![共享锁流程示意图](/assets/images/60b3776a-35e0-421c-bd1b-78056d2789b8.png)
+![共享锁流程示意图](/assets/images/from-paxos-to-zookeeper/60b3776a-35e0-421c-bd1b-78056d2789b8.png)
 
 为了减少共享锁通知影响范围，改进后流程如下
 
-![改进后的共享锁流程示意图](/assets/images/91fc8c9b-0aa5-47ff-b512-d08a752ffbb0.png)
+![改进后的共享锁流程示意图](/assets/images/from-paxos-to-zookeeper/91fc8c9b-0aa5-47ff-b512-d08a752ffbb0.png)
 
 ## 分布式队列
 
 FIFO队列：
 
-![FIFO队列](/assets/images/3658a58d-4c53-4c19-89fd-a4233030fa9c.png)
+![FIFO队列](/assets/images/from-paxos-to-zookeeper/3658a58d-4c53-4c19-89fd-a4233030fa9c.png)
 
 Barrier屏障：
 
-![Barrier:分布式屏障](/assets/images/e44a8c47-2e1e-4526-9003-c864aa89dd48.png)
+![Barrier:分布式屏障](/assets/images/from-paxos-to-zookeeper/e44a8c47-2e1e-4526-9003-c864aa89dd48.png)
 
 ## ZK在大型分布式系统中的应用
 
@@ -483,7 +483,7 @@ ZK中的事务是指能够改变ZK服务器状态的操作，包括节点创建�
 
 状态信息:
 
-![Stat对象状态属性说明](/assets/images/b3b8303f-c978-40e1-ab1d-7cff7c94d458.png)
+![Stat对象状态属性说明](/assets/images/from-paxos-to-zookeeper/b3b8303f-c978-40e1-ab1d-7cff7c94d458.png)
 
 ### 版本——保证分布式数据原子性操作
 
@@ -495,7 +495,7 @@ version、cversion、aversion，说明见Stat。
 
 #### Watcher事件
 
-![Watcher通知状态与事件类型](/assets/images/3a62800e-0e49-4fcb-b45b-84bb982248d7.png)
+![Watcher通知状态与事件类型](/assets/images/from-paxos-to-zookeeper/3a62800e-0e49-4fcb-b45b-84bb982248d7.png)
 
 #### 工作机制
 
@@ -503,9 +503,9 @@ version、cversion、aversion，说明见Stat。
 
 接口类Watcher标识一个标准的事件处理器，定义了事件通知的状态KeeperState和事件类型EventType，还有回调方法process(WatchedEvent event)。服务端生成WatchedEvent，调用getWapper方法把自己包装成WatcherEvent类用于网络传输。客户端将WatcherEvent反序列化成WatchedEvent。
 
-![WatchedEvent类图](/assets/images/c56813bf-0014-432c-b2f7-f34ace480cdf.png)
+![WatchedEvent类图](/assets/images/from-paxos-to-zookeeper/c56813bf-0014-432c-b2f7-f34ace480cdf.png)
 
-![WatcherEvent类图](/assets/images/dbacf947-7151-4690-a400-b471d819fee5.png)
+![WatcherEvent类图](/assets/images/from-paxos-to-zookeeper/dbacf947-7151-4690-a400-b471d819fee5.png)
 
 客户端可以在创建ZooKeeper对象时指定默认Watcher，也可以通过getData、getChildren、exist三个接口注册Watcher。注册Watcher后客户端会将当前请求request标记为有Watcher监听，然后封装一个WatchRegistration对象保存数据节点和Watcher对应关系。ClientCnxn会把WatchRegistration封装到最小通信协议单元Packet中放入发送队列等待发送。完成发送后客户端的SendThread线程的readResponse方法负责接收响应，finishPacket方法从Packet中的WatchRegistration对象取出Watcher注册到ZKWatchManager中，保存在Map<String,Set<Watcher>> dataWatches字段中，该字段保存了数据节点路径到Watcher对象的映射。
 
@@ -537,7 +537,7 @@ ZK的ACL权限控制包含权限模式(Scheme)，授权对象(ID)，权限(Permi
 
 ### 通信协议
 
-![协议格式](/assets/images/7c7e1858-237f-4ac2-9913-a95d88bf20ac.png)
+![协议格式](/assets/images/from-paxos-to-zookeeper/7c7e1858-237f-4ac2-9913-a95d88bf20ac.png)
 
 ## 客户端
 
@@ -675,7 +675,7 @@ SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进
 
 大体分为配置文件解析、初始化数据管理器、初始化网络管理器、数据恢复和对外服务。
 
-![单机版启动流程](/assets/images/1594f1a8-f881-4f22-affd-281fd9e6c67b.png)
+![单机版启动流程](/assets/images/from-paxos-to-zookeeper/1594f1a8-f881-4f22-affd-281fd9e6c67b.png)
 
 #### 预启动
 
@@ -700,7 +700,7 @@ SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进
 
 ### 集群版启动
 
-![集群版启动](/assets/images/6d725bd5-1feb-44d9-b4b3-314cde363bd3.png)
+![集群版启动](/assets/images/from-paxos-to-zookeeper/6d725bd5-1feb-44d9-b4b3-314cde363bd3.png)
 
 #### 预启动
 
@@ -728,7 +728,7 @@ SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进
 
 #### Leader和Follower启动期交互
 
-![启动期交互](/assets/images/f0191750-6e52-4ec9-b97a-eb4564643cb1.png)
+![启动期交互](/assets/images/from-paxos-to-zookeeper/f0191750-6e52-4ec9-b97a-eb4564643cb1.png)
 
 1. 创建Leader服务器和Follower服务器
 2. Leader服务器启动Follower接收器LearnerCnxAcceptor
@@ -811,7 +811,7 @@ SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进
 + WorkerReciever：选票接收器，不断的从QuorumCnxManager中取出其他服务器发送来的消息并转换成一个选票保存到recvqueue中。如果发现外部票轮次小于当前服务器或者当前服务器不是LOOKING状态就会丢弃并发出自己的选票。
 + WorkerSender：不断的从sendqueue获取待发送选票并传给QuorumCnxManager
 
-![选举流程示意图](/assets/images/38b48ef4-264d-4175-9b11-0e0e7c8cfce2.png)
+![选举流程示意图](/assets/images/from-paxos-to-zookeeper/38b48ef4-264d-4175-9b11-0e0e7c8cfce2.png)
 
 1. 自增选票轮次
 2. 初始化选票
@@ -835,7 +835,7 @@ SessionTracker中有一个单独的线程逐个对会话桶中剩下的会话进
 
 使用责任链模式处理每一个客户端请求。
 
-![处理链](/assets/images/3b4e6604-9d7c-49ab-88d0-7b897ac16d5e.png)
+![处理链](/assets/images/from-paxos-to-zookeeper/3b4e6604-9d7c-49ab-88d0-7b897ac16d5e.png)
 
 #### PrepRequestProcessor
 
@@ -875,7 +875,7 @@ Leader特有负责在SyncRequestProcessor处理器完成事务记录后向投票
 + 参与事务投票
 + 参与Leader选举
 
-![Follower责任链](/assets/images/d694c9c0-4caa-4a09-9ecb-874a31c0abcd.png)
+![Follower责任链](/assets/images/from-paxos-to-zookeeper/d694c9c0-4caa-4a09-9ecb-874a31c0abcd.png)
 
 #### FollopwerRequestProcessor
 
@@ -889,7 +889,7 @@ Leader特有负责在SyncRequestProcessor处理器完成事务记录后向投票
 
 处理请求但不参与事务投票和选举投票
 
-![Oblerver处理链](/assets/images/2b8baed5-572d-4769-9c38-42a215b1e8c2.png)
+![Oblerver处理链](/assets/images/from-paxos-to-zookeeper/2b8baed5-572d-4769-9c38-42a215b1e8c2.png)
 
 ### 集群间消息通信
 
@@ -897,28 +897,28 @@ ZK的消息类型分为四类：数据同步型，服务器初始化型，请求
 
 #### 数据同步型
 
-![同步过程消息类型](/assets/images/fc2483d5-6872-49f3-8d6c-8b04eed12f17.png)
+![同步过程消息类型](/assets/images/from-paxos-to-zookeeper/fc2483d5-6872-49f3-8d6c-8b04eed12f17.png)
 
 #### 服务器初始化型
 
-![服务器初始化消息类型1](/assets/images/b4b51829-9915-45ca-b1e1-55afe64470ea.png)
+![服务器初始化消息类型1](/assets/images/from-paxos-to-zookeeper/b4b51829-9915-45ca-b1e1-55afe64470ea.png)
 
-![服务器初始化消息类型2](/assets/images/c3481fe1-8581-41e3-9271-3efc4bff8e7d.png)
+![服务器初始化消息类型2](/assets/images/from-paxos-to-zookeeper/c3481fe1-8581-41e3-9271-3efc4bff8e7d.png)
 
 #### 请求处理型
 
-![请求处理消息类型1](/assets/images/58ad0761-78a0-4237-8389-18c3c06f0d6d.png)
-![请求处理消息类型2](/assets/images/f9c68d46-d6ee-418a-ba94-d1c5b6583f17.png)
+![请求处理消息类型1](/assets/images/from-paxos-to-zookeeper/58ad0761-78a0-4237-8389-18c3c06f0d6d.png)
+![请求处理消息类型2](/assets/images/from-paxos-to-zookeeper/f9c68d46-d6ee-418a-ba94-d1c5b6583f17.png)
 
 #### 会话管理型
 
-![会话管理消息类型](/assets/images/34fbb230-393a-45a7-9402-6062da9eb4bd.png)
+![会话管理消息类型](/assets/images/from-paxos-to-zookeeper/34fbb230-393a-45a7-9402-6062da9eb4bd.png)
 
 ## 请求处理
 
 ### 会话创建请求
 
-![会话创建请求流程示意图](/assets/images/34fbb230-393a-45a7-9402-6062da9eb4bd.png)
+![会话创建请求流程示意图](/assets/images/from-paxos-to-zookeeper/1da1452a-68b6-43a2-91f8-bf0909be5534.png)
 
 #### 请求接收
 
@@ -984,7 +984,7 @@ SyncRequestProcessor处理器的记录事务日志过程。
 
 ### SetData请求
 
-![SetData流程图](/assets/images/0c00aaa8-cfd7-4edd-81f5-4ba9bc3448e0.png)
+![SetData流程图](/assets/images/from-paxos-to-zookeeper/0c00aaa8-cfd7-4edd-81f5-4ba9bc3448e0.png)
 
 #### 预处理
 
@@ -1023,7 +1023,7 @@ SyncRequestProcessor处理器的记录事务日志过程。
 
 ### GetData请求
 
-![GetData请求流程](/assets/images/14c141e2-1239-4d69-9fd4-bcafd633b5e4.png)
+![GetData请求流程](/assets/images/from-paxos-to-zookeeper/14c141e2-1239-4d69-9fd4-bcafd633b5e4.png)
 
 #### 预处理
 
@@ -1053,7 +1053,7 @@ SyncRequestProcessor处理器的记录事务日志过程。
 
 ZK的数据模型是一棵树，存储了节点路径，节点数据，ACL信息等数据。
 
-![DataTree和DataNode数据结构](/assets/images/15d18aa4-3b8e-48dd-b755-c9f3164dd5ed.png)
+![DataTree和DataNode数据结构](/assets/images/from-paxos-to-zookeeper/15d18aa4-3b8e-48dd-b755-c9f3164dd5ed.png)
 
 DataTree内部用ConcurrentHashMap<String,DataNode>存储所有节点，同时还用ConcurrentHashMap<Long,HashSet<String>>存储临时节点
 
@@ -1111,7 +1111,7 @@ FileSnap负责维护数据快照接口。可以使用snapCount参数配置每次
 
 ZK启动时进行数据初始化将磁盘上的数据加载到ZooKeeper内存中。
 
-![数据初始化过程](/assets/images/d0cd4ca8-5dbf-4b1e-a8a9-74438fc47213.png)
+![数据初始化过程](/assets/images/from-paxos-to-zookeeper/d0cd4ca8-5dbf-4b1e-a8a9-74438fc47213.png)
 
 主要包括从快照文件加载快照数据和根据实物日志进行数据订正两个过程
 
@@ -1155,7 +1155,7 @@ Leader服务器上没有提议缓存队列，peerLastZxid不等于lastProcessedZ
 
 ### 基本配置
 
-![基本配置](/assets/images/579ced83-bd18-4da1-b2d9-9f44c663c9af.png)
+![基本配置](/assets/images/from-paxos-to-zookeeper/579ced83-bd18-4da1-b2d9-9f44c663c9af.png)
 
 ### 高级配置
 

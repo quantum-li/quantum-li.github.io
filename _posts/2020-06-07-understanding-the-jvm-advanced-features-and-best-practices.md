@@ -18,7 +18,7 @@ excerpt: 序员可以把主要精力放在具体业务逻辑，而不是放在�
 
 这些区域有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而一直存在，有些区域是依赖用户线程的启动和结束而建立和销毁。
 
-![Java虚拟机运行时数据区](/assets/images/2c4c9d28-3e69-4d0e-94c6-2e3e71cf6f2b.png)
+![Java虚拟机运行时数据区](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/2c4c9d28-3e69-4d0e-94c6-2e3e71cf6f2b.png)
 
 ### 程序计数器
 
@@ -96,7 +96,7 @@ Java程序设计语言、Java虚拟机、Java类库三部分统称为JDK。JCP�
 + Java类库API
 + 第三方Java类库
 
-![Java技术体系](/assets/images/8f3089a1-3bad-4e66-ab81-b72bbc725839.png)
+![Java技术体系](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/8f3089a1-3bad-4e66-ab81-b72bbc725839.png)
 
 # Java虚拟机家族
 

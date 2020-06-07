@@ -13,7 +13,7 @@ excerpt: 计算机网络第六版知识摘要，物理层、链路层、网络�
 * 报文交换 -整个报文转发
 * 分组交换 -报文分组转发
 
-![数据交换](/assets/images/7c4c5e4c-0dd3-460a-b08d-b02befe73c33.png)
+![数据交换](/assets/images/computer-networks-6/7c4c5e4c-0dd3-460a-b08d-b02befe73c33.png)
 
 ## 网络类别
 
@@ -62,7 +62,7 @@ b/s   Mb/s
 五层结构知识为了介绍原理，实际应用是tcp/ip
 OSI参考模型把对等层次之间的数据单位称为该层的 协议数据单元PDU
 
-![七层模型/五层模型](/assets/images/23cfb9fb-c0e3-4245-8dec-c49617d4b40b.png)
+![七层模型/五层模型](/assets/images/computer-networks-6/23cfb9fb-c0e3-4245-8dec-c49617d4b40b.png)
 
 ### TCP/IP体系结构
 
@@ -83,7 +83,7 @@ OSI参考模型把对等层次之间的数据单位称为该层的 协议数据�
 
 常用编码方式
 
-![常用编码方式](/assets/images/33f92662-89e8-411b-a227-d19062574301.png)
+![常用编码方式](/assets/images/computer-networks-6/33f92662-89e8-411b-a227-d19062574301.png)
 
 信道的极限信息传输速率符合香农公式
 
@@ -91,7 +91,7 @@ OSI参考模型把对等层次之间的数据单位称为该层的 协议数据�
 
 数据链路层协议数据单元 桢
 
-![字节填充](/assets/images/ca04ca11-1b03-42df-b4c0-a7147c4a042b.png)
+![字节填充](/assets/images/computer-networks-6/ca04ca11-1b03-42df-b4c0-a7147c4a042b.png)
 
 ## 点对点协议PPP
 
@@ -108,11 +108,11 @@ IP是TCP/IP体系中两个最主要的协议之一，IP配套使用的还有地�
 * 网络层使用的中间设备叫路由器
 * 网络层以上使用的中间设备叫网关
 
-![ip地址中网络号字段和主机号字段](/assets/images/2f855ae1-038a-4943-a396-8172326ba453.png)
+![ip地址中网络号字段和主机号字段](/assets/images/computer-networks-6/2f855ae1-038a-4943-a396-8172326ba453.png)
 
-![点分十进制法](/assets/images/a91223cf-15f2-4561-ad3a-399b63c4f374.png)
+![点分十进制法](/assets/images/computer-networks-6/a91223cf-15f2-4561-ad3a-399b63c4f374.png)
 
-![ip地址与硬件地址的区别](/assets/images/62a2fb75-7c4b-497f-9e2a-99c992d674ea.png)
+![ip地址与硬件地址的区别](/assets/images/computer-networks-6/62a2fb75-7c4b-497f-9e2a-99c992d674ea.png)
  
 # 运输层
 
@@ -149,7 +149,7 @@ IP是TCP/IP体系中两个最主要的协议之一，IP配套使用的还有地�
 
 #### 连续ARQ滑动窗口
 
-![滑动窗口](/assets/images/f46d5d62-80eb-4b1c-879e-ad8e2526658c.png)
+![滑动窗口](/assets/images/computer-networks-6/f46d5d62-80eb-4b1c-879e-ad8e2526658c.png)
 
 发送缓冲区发送端会有一个自定义大小的滑动窗口，窗口内的数据可以未经确认就发送。窗口内任一位置都可能收到接收方确认，但只有当最久的被确认后窗口才可以前移。
 
@@ -206,7 +206,7 @@ tcp是面向连接传送tcp报文的协议。经历三个阶段 连接建立，�
 5. A收到确认后再向B发送确认，`ACK=1 seq=x+1  ack=y+1` 。此时，这个报文段叫ACK报文段。TCP规定ACK报文段可以携带数据，但如果不携带数据则不消耗序列号。连接建立，A进程进入`ESTABLISHED`（已建立连接）状态。
 6. B收到A确认，进入`ESTABLISHED`状态。
 
-![三次握手](/assets/images/976d1674-b1ea-474f-9ea3-0e6c5722f53e.png)
+![三次握手](/assets/images/computer-networks-6/976d1674-b1ea-474f-9ea3-0e6c5722f53e.png)
 
 为什么要有三次握手：防止已失效的连接请求报文段又传送到了B。所谓的已失效报文段是指A发起连接请求，该请求未收到确认。如果没有三次握手，然后A又重传连接建立。但是如果A发出的第一个请求没有丢失 而是滞留了延误到达B，B认为A发起连接于是向A发送确认报文段并建立连接，然后浪费资源等待A发送数据，但此时A并无法建立连接也不会发送数据。所以需要第三次握手确认。
 
@@ -224,11 +224,11 @@ tcp是面向连接传送tcp报文的协议。经历三个阶段 连接建立，�
 
 A要等待计时器结束后才释放是因为，1，保证A发送的最后一个ACK报文段能够到达B。因为最后一个A发送给B的报文段有可能丢失，如果B没有收到A确认报文段会重传FIN+ACK连接关闭报文段，如果A再次收到FIN+ACK报文段会重置时间等待。2，A发送最后一个ACK后再经过2MSL基本可以确认本连接持续时间内所有报文段从网络中消失（或丢弃或已被消费），下一次新的连接不会出现旧的滞留报文段。
 
-![TCP连接释放过程](/assets/images/a86ae8ec-12fe-4c37-a934-4097093ed627.png)
+![TCP连接释放过程](/assets/images/computer-networks-6/a86ae8ec-12fe-4c37-a934-4097093ed627.png)
 
 TCP有限状态机（了解）
 
-![有限状态机](/assets/images/83d2f086-50e7-44ca-94d6-f13e7dadef45.png)
+![有限状态机](/assets/images/computer-networks-6/83d2f086-50e7-44ca-94d6-f13e7dadef45.png)
 
 除等待计时器外TCP还有一个保活计时器，假设A出故障无法释放连接，那么服务器就会等待两个小时，两个小时后每隔75分钟发送一个探测报文段，连续10个探测报文段无响应服务器关闭连接。
 
@@ -245,7 +245,7 @@ TCP有限状态机（了解）
 HTTP是面向事务的应用层协议：一系列的信息交换是一个不可分割的整体，要么所有的信息交换都完成，要么一次交换都不进行。
 HTTP协议无状态。HTTP/1.1使用了持续连接。
 
-![HTTP报文结构](/assets/images/73605724-f3a8-410c-9d0b-39683278c9dc.png)
+![HTTP报文结构](/assets/images/computer-networks-6/73605724-f3a8-410c-9d0b-39683278c9dc.png)
 
 ## 简单邮件传输协议SMTP
 
@@ -268,7 +268,7 @@ HTTP协议无状态。HTTP/1.1使用了持续连接。
 5. 当客户端调用socket后，就调用connect与服务器进行连接。
 6. 双方调用send发送recv接收数据。
 
-![系统调用顺序](/assets/images/6e1b8226-7a1f-4242-9df7-414f47ae658e.png)
+![系统调用顺序](/assets/images/computer-networks-6/6e1b8226-7a1f-4242-9df7-414f47ae658e.png)
 
 # 网络安全
 
