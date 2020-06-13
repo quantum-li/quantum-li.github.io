@@ -380,6 +380,33 @@ Parallel Scavenge老年代版本，基于标记整理算法。可以和Parallel 
 
 ### CMS 收集器
 
+基于标记清理算法的关注定顿时间的收集器。整个过程分为四步：initial mark/concurrent mark/remark/concurrent sweep。
+
+其中初始标记、重新标记需要STW。初始标记仅仅只是标记一下GC Roots能直接关联到的对象，速度很快;并发标记阶段就是从GC Roots的直接关联对象开始遍历整个对象图的过程，这个过程耗时较长但是不需要停顿用户线程，可以与垃圾收集线程一起并发运行;而重新标记阶段则是为了修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间通常会比初始标记阶段稍长一些，但也远比并发标记阶段的时间短;最后是并发清除阶段，清理删除掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的。
+
+![CMS收集器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/50fdf46f-02aa-4530-a2ef-d6e0bdcd9cd9.png)
+
+在并发阶段虽然不会导致用户线程停顿，但会占用处理器资源，处理器核心越少影响越大。
+
+无法处理并发标记和清理过程中用户线程新产生的浮动垃圾。因为是与用户线程并发运行，还需要预留出空间，所以当老年代空间使用占比达到一定阈值后才会激活（-XX: CMSInitiatingOccupancyFraction）。而因为预留内存不足而导致并发失败会启用Serial Old收集器来工作。
+
+因为是基于标记清理算法，所以会产生空间碎片。当不能分配大对象时会触发Full GC。*-XX: +UseCMS-CompactAtFullCollection*  参数可以配置在FullGC时开启碎片整理，由于碎片整理需要停顿时间变长，所以提供 *-XX： CMSFullGCsBeforeCompaction* （JDK9中已废弃）配置多少次FullGC后，下一次FullGC进行碎片整理。
+
+### Garbage First
+
+G1收集器是里程碑式成果。基于Region的内存布局形式的局部收集设计。JDK 9开始G1替换Parallel Scavenge+Parallel Old。G1不再应用于分代，而是面向堆内存中的任何部分来组成Collection Set（CSet）。进行回收的衡量标准是哪块内存中存放的垃圾数量最多，回收收益最大。这就是Mixwd GC模式。
+
+G1中的Ragion划分，每个Region都可以扮演新生代Eden、Survivor、或者老年代。收集器能够对扮演不同角色的Region采用不同策略。Region中有一类叫Humongous区域专门用来存放大对象，大对象表示超过了一个Region容量一半的对象。每个Region大小可以通过 *-XX: G1HeapRegionSize* 设定，1M-32M。如果一个对象超过了一个Region大小会被存放在N个连续的Humongous Region中。
+
+虽然G1仍然保留新生代和老年代概念，但是这两个空间不再固定，而是一系列Region的动态集合。根据每个Region回收获得的空间大小及所需时间，维护一个回收优先级列表，优先处理回收性价比最高的Region。这也是“Garbage First”名字的由来。
+
+![G1收集器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/c81076a4-3799-410c-adab-e9a3dc7f8c21.png)
+
+
+
+
+
+
 
 
 
