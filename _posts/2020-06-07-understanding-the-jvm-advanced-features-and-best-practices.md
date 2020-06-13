@@ -337,14 +337,48 @@ HotSpot虚拟机通过Write Barrier维护卡表状态。这个写屏障和低延
 
 以上两种解决方案都是通过写屏障实现的。在HotSpot中，CMS基于增量更新做并发标记，G1、Shenandoah用原始快照实现并发标记。
 
-## 经典垃圾收集器
+## HotSpot中常见垃圾收集器
+
+GC算法是方法论，收集器是具体实现。而且《规范》中也没有规定收集器该如何实现。
+
+![HotSpot虚拟机垃圾收集器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/6262bab4-0127-40cf-b2f6-adb08b155925.png)
+
+JDK 9中取消了Serial+CMS和ParNew+Serial Old组合。
+
+### Serial
+
+单线程工作收集器，Serial线程在进行收集工作时，必须暂停所有用户线程。特点是简单且高效，相比其他收集器，由于GC所占用的额外内存最小，且没有线程交互开销。至今依然是HotSpot在Client模式下默认新生代收集器。可选参数-XX: SurvivorRatio、 -XX: PretenureSizeThreshold、-XX: HandlePromotionFailure等。
+
+![Seria/Serial Old收集器运行示意图](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/5c6cecf7-0d56-4b2f-8ce6-53dc66b56ae7.png)
+
+### ParNew
+
+只是Serial的多线程版本，但是在单核心处理器下由于存在线程交互开销可能还不如Serial收集器。目前只有Serial和ParNew可以与CMS配合，而Parallel Scavenge收集器和CMS除了一个面向低延迟一个面向高吞吐量的目标不一致外，技术上的原因是Parallel Scavenge收集器及后面提到的G1收集器等都没有使用HotSpot中原本设计的垃圾收集器的分代框架，而选择另外独立实现。Serial、 ParNew收集器则共用了这部分的框架代码。ParNew是CMS的默认新生代收集器。因此是CMS巩固了ParNew的地位。JDK 9后被G1取代。可选参数-XX: SurvivorRatio、 -XX: PretenureSizeThreshold、-XX: HandlePromotionFailure等。
+
+![ParNew/Serial Old收集器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/3c9da17f-0c07-47dd-bb72-45b1a1cf0689.png)
+
+### Parallel Scavenge
+
+基于标记复制的新生代收集器。CMS等目标是缩短GC用户线程停顿时间，而Parallel Scavenge目标是吞吐量可控。吞吐量=用户代码时间/(用户代码时间+GC时间)。提供了参数用于控制吞吐量：
+
++ -XX: MaxGCPauseMillis 控制最大停顿时间，大于0的毫秒数。但是停顿时间变小可能会牺牲吞吐量和新生代空间。
++ -XX: GCTimeRatio 设置吞吐量大小，大于0小于100的整数，1/(1+N)。
++ -XX: +UseAdaptiveSizePolicy，根据系统运行情况动态调整新生代大小、Eden与Survivor比例、晋升老年代对象大小等参数。
+
+### Serial Old
+
+标记整理算法的老年代单线程收集器，供Client模式使用。需要说明一下，Parallel Scavenge收集器架构中本身有PS MarkSweep收集器来进行老年代收集，并非直接调用Serial Old收集器，但是这个PS MarkSweep收集器与Serial Old的实现几乎是一样的，所以在官方的许多资料中都是直接以Serial Old代替PS MarkSweep进行讲解。
 
 
+![Serial Old收集器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/a733cb0c-faf0-4f5c-90fd-93f323c99b24.png)
 
+### Parallel Old
 
+Parallel Scavenge老年代版本，基于标记整理算法。可以和Parallel Scanvenge组合。
 
+![Parallel Old收集器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/f7624728-6b23-402f-852d-0f1725feb6e9.png)
 
-
+### CMS 收集器
 
 
 
