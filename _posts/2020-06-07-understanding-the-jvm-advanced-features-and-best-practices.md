@@ -415,9 +415,25 @@ G1的GC过程大致可以分为以下四步：
 + Final Marking，处理并发阶段结束后遗留的SATB记录。需要STW。
 + Live Data Counting and Evacuation，筛选回收阶段更新Region的统计数据并排序，指定回收计划。把计划回收的Region中存活对象复制到空Region，再清理整个Region。需要SWT。
 
+G1之所以不把回收阶段设计为并行，是为了保证简单的实现高吞吐量，而把这个设计延迟到ZGC实现。
+
 ![G1运行示意图](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/3b33f2da-713f-4e35-b017-1643a64ecfe7.png)
 
 *-XX: MaxGCPauseMillis* 默认两百毫秒，如果设置的非常低会导致每次只回收一小部分Region，从而收集速度跟不上分配速度最终引发Full GC。从G1开始垃圾收集器的设计导向由清理干净转变为收集速度能跟得上分配速度。
+
+G1从整体上看是标记整理，局部上看是标记复制。都意味着G1不会产生空间碎片，不容易因为大对象无法找到连续空间而触发GC。
+
+而G1的缺点也是存在的，每个Region都要保存一份RSet而带来的额外内存占用；多了写前屏障来跟踪并发时动态指针变化SATB带来的额外的运行负载。由于G1的对写屏障的复杂操作，不得不把写屏障要做的事放到队列里异步处理。
+
+经验上看小内存CMS优于G1，大内存G1优于CMS。
+
+## 低延迟垃圾收集器
+
+
+
+
+
+
 
 
 
