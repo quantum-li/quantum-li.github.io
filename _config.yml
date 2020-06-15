@@ -12,7 +12,7 @@ description: 一本书有少部分讲的是知识，大部分帮助你理解知�
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://leezw.net" # the base hostname & protocol for your site
 github_username: mzzw
-paginate: 10
+paginate: 50
 permalink: /posts/:title
 theme-dark: false #Set to true to change to dark website theme
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
