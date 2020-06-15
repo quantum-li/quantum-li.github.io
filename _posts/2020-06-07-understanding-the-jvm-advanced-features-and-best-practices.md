@@ -429,6 +429,17 @@ G1从整体上看是标记整理，局部上看是标记复制。都意味着G1�
 
 ## 低延迟垃圾收集器
 
+衡量垃圾收集器的三项最重要的指标是：内存占用（Footprint）、吞吐量（Throughput）、延迟（Latency）。随着计算机硬件的发展内存的增长，吞吐量会更高，但是对延迟会造成负面影响，因此更低的延迟成为了下一代GC的目标。下图是前文中所有GC的停顿情况，浅色标识必须挂起用户线程，深色标识并发工作。
+
+![各收集器并发情况](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/7795a6a6-1be6-4ebf-927c-6ea5034aa0cb.png)
+
+在CMS和G1之前的全部收集器，其工作的所有步骤都会STW;CMS和G1分别使用增量更新和原始快照技术，实现了标记阶段的并发，不会因管理的堆内存变大，要标记的对象变多而导致停顿时间随之增长。但是对于标记阶段之后的处理，仍未得到妥善解决。CMS使用标记清除算法，虽然避免了整理阶段收集器带来的停顿，但是清除算法不论如何优化改进，在设计原理上避免不了空间碎片的产生，随着空间碎片不断淤积最终依然逃不过STW。G1虽然可以按更小的粒度进行回收，从而抑制整理阶段出现时间过长的停顿，但毕竟也还是要暂停的。
+
+而Shenandoah和ZGC， 几乎整个工作过程全部都是并发的，只有初始标记、最终标记这些阶段有短暂的停顿，这部分停顿的时间基本.上是固定的，与堆的容量、堆中对象的数量没有正比例关系。实际上，它们都可以在任意可管理的(譬如现在ZGC只能管理4TB以内的堆)堆容量下，实现垃圾收集的停顿都不超过十毫秒。这两款目前仍处于实验状态的收集器，被官方命名为“低延迟垃圾收集器”(Low-Latency Garbage Collector或者Low-Pause Time Garbage Collector)。
+
+### Shenandoah
+
+由于和Oracle官方实现的下一代功能重合，遭受了Ocacle将其完全排除在了OracleJDK之外，因此只能在OpenJDK中使用。其和G1之间有很多的相似和代码复用，因此G1还从Shenandoah代码合并了多线程Full GC功能。
 
 
 
@@ -477,9 +488,9 @@ Subtrate VM是在Graal VM 0.20版本里新出现的一个极小型的运行时�
 现在，HotSpot 虚拟机能够在编译时指定一系列特性开关，让编译输出的HotSpot虚拟机可以裁剪成不同的功能，譬如支持哪些编译器，支持哪些收集器，是否支持JFR、
 AOT、CDS、NMT等都可以选择。能够实现这些功能特性的组合拆分，反映到源代码不仅仅是条件编译，更关键的是接口与实现的分离。
 
-早期的HotSpot虛拟机为了提供监控、调试等不会在《Java虛 拟机规范》中约定的内部功能和数据，就曾开放过Java虛拟机信息监控接口(Java Vrtual M achine ProflerInterface，JVMPI) 与Java虛 拟机调试接口(Java Vrtual M achine Debug Interface, JVMDI)供运维和性能监控、IDE等外部工具使用。到了JDK 5时期，又抽象出了层次更高的Java虚拟机工具接口(Java Virtual Machine Tool Interface, JVMTI) 来为所有Java虛拟机相关的工具提供本地编程接口集合，到JDK 6时JVMTI就完全整合代替了JVMPI和JVMDI的作用。
+早期的HotSpot虛拟机为了提供监控、调试等不会在《Java虛 拟机规范》中约定的内部功能和数据，就曾开放过Java虛拟机信息监控接口(Java Vrtual Machine ProflerInterface，JVMPI) 与Java虛 拟机调试接口(Java Vrtual Machine Debug Interface, JVMDI)供运维和性能监控、IDE等外部工具使用。到了JDK 5时期，又抽象出了层次更高的Java虚拟机工具接口(Java Virtual Machine Tool Interface, JVMTI) 来为所有Java虛拟机相关的工具提供本地编程接口集合，到JDK 6时JVMTI就完全整合代替了JVMPI和JVMDI的作用。
 
-在JDK 9时期，HotSpot虛拟机开放了Java语言级别的编译器接口B] (Java Vrtual M achine Compiler Interface, JVMCI) ，使得在Java虛拟机外部增加、替换即时编译器成为可能，这个改进实现起来并不费劲，但比起之前JVMPI、JVMDI和JVMTI却是更深层次的开放，它为不侵入HotSpot代码而增加或修改HotSpot虛拟机的固有功能逻辑提供了可行性。Graal编译器就是通过这个接口植入到HotSpot之中。
+在JDK 9时期，HotSpot虛拟机开放了Java语言级别的编译器接口B] (Java Vrtual Machine Compiler Interface, JVMCI) ，使得在Java虛拟机外部增加、替换即时编译器成为可能，这个改进实现起来并不费劲，但比起之前JVMPI、JVMDI和JVMTI却是更深层次的开放，它为不侵入HotSpot代码而增加或修改HotSpot虛拟机的固有功能逻辑提供了可行性。Graal编译器就是通过这个接口植入到HotSpot之中。
 
-到了JDK 10，HotSpot又重构了Java虛拟机的垃圾收集器接口[4] (Java Vrtual M achine Compiler Interface)，统一了其内部各款垃圾收集器的公共行为。有了这个接口，才可能存在日后(今天尚未)某个版本中的CM S收集器退役，和JDK 12中Shenandoah这样由Oracle以外其他厂商领导开发的垃圾收集器进入HotSpot中的事情。如果未来这个接口完全开放的话，甚至有可能会出现其他独立于HotSpot的垃圾收集器实现。
+到了JDK 10，HotSpot又重构了Java虛拟机的垃圾收集器接口[4] (Java Vrtual Machine Compiler Interface)，统一了其内部各款垃圾收集器的公共行为。有了这个接口，才可能存在日后(今天尚未)某个版本中的CM S收集器退役，和JDK 12中Shenandoah这样由Oracle以外其他厂商领导开发的垃圾收集器进入HotSpot中的事情。如果未来这个接口完全开放的话，甚至有可能会出现其他独立于HotSpot的垃圾收集器实现。
 
