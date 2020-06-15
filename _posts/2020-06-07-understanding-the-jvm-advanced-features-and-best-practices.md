@@ -398,12 +398,17 @@ G1收集器是里程碑式成果。基于Region的内存布局形式的局部收
 
 G1中的Ragion划分，每个Region都可以扮演新生代Eden、Survivor、或者老年代。收集器能够对扮演不同角色的Region采用不同策略。Region中有一类叫Humongous区域专门用来存放大对象，大对象表示超过了一个Region容量一半的对象。每个Region大小可以通过 *-XX: G1HeapRegionSize* 设定，1M-32M。如果一个对象超过了一个Region大小会被存放在N个连续的Humongous Region中。
 
-虽然G1仍然保留新生代和老年代概念，但是这两个空间不再固定，而是一系列Region的动态集合。根据每个Region回收获得的空间大小及所需时间，维护一个回收优先级列表，优先处理回收性价比最高的Region。这也是“Garbage First”名字的由来。
+虽然G1仍然保留新生代和老年代概念，但是这两个空间不再固定，而是一系列Region的动态集合。根据每个Region回收获得的空间大小及所需时间，维护一个回收优先级列表，优先处理回收性价比最高的Region。这也是“Garbage First”名字的由来。这种使用Region划分内存空间，和按优先级的区域回收方式，保证了G1在优先的时间内获取更高的效率。
 
 ![G1收集器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/c81076a4-3799-410c-adab-e9a3dc7f8c21.png)
 
+G1处理跨Region的对象引用的方法是，每个Region维护自己的RSet哈希表，Key是其他Region的起始地址，value是Card Page索引号的集合，这些RSet记录其他Region指向自己的指针，并标记这些指针位于哪些Card Page。这是一种双向的Card Page结构，同时记录了向外指针和向内指针。由于Region的数量很多，所以G1要使用大约占堆容量的10%~20%的额外内存。
 
+G1处理与用户线程同步进行GC的方法是，采用原始快照SATB的方式。并且G1为每个Region设计了两个TAMS(Top at Mark Start)的指针，把Region中的一部分指针以上的空间用来并发回收过程中的新对象分配，G1会认为在这个地址以上的对象被隐式标记过默认存活。但是如果内存回收速度赶不上内存分配速度，G1会STW。
 
+G1为了满足 *-XX: MaxGCPauseMillis* 用户期望停顿时间，是以衰减均值的方式。在GC过程中记录每个Region的回收耗时、Dirty Card数量等成本并得出统计信息。然后通过这些信息预测从哪些Region开始回收才能满足期望值。衰减平均值比普通的平均值更能代表最近时间的平均状态。
+
+G1的GC过程大致
 
 
 
