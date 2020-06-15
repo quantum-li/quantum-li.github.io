@@ -394,7 +394,7 @@ Parallel Scavenge老年代版本，基于标记整理算法。可以和Parallel 
 
 ### Garbage First
 
-G1收集器是里程碑式成果。基于Region的内存布局形式的局部收集设计。JDK 9开始G1替换Parallel Scavenge+Parallel Old。G1不再应用于分代，而是面向堆内存中的任何部分来组成Collection Set（CSet）。进行回收的衡量标准是哪块内存中存放的垃圾数量最多，回收收益最大。这就是Mixwd GC模式。
+G1收集器是里程碑式成果。基于Region的内存布局形式的局部收集设计，在延迟可控的情况下获得尽可能高的吞吐量。JDK 9开始G1替换Parallel Scavenge+Parallel Old。G1不再应用于分代，而是面向堆内存中的任何部分来组成Collection Set（CSet）。进行回收的衡量标准是哪块内存中存放的垃圾数量最多，回收收益最大。这就是Mixwd GC模式。
 
 G1中的Ragion划分，每个Region都可以扮演新生代Eden、Survivor、或者老年代。收集器能够对扮演不同角色的Region采用不同策略。Region中有一类叫Humongous区域专门用来存放大对象，大对象表示超过了一个Region容量一半的对象。每个Region大小可以通过 *-XX: G1HeapRegionSize* 设定，1M-32M。如果一个对象超过了一个Region大小会被存放在N个连续的Humongous Region中。
 
@@ -408,10 +408,16 @@ G1处理与用户线程同步进行GC的方法是，采用原始快照SATB的方
 
 G1为了满足 *-XX: MaxGCPauseMillis* 用户期望停顿时间，是以衰减均值的方式。在GC过程中记录每个Region的回收耗时、Dirty Card数量等成本并得出统计信息。然后通过这些信息预测从哪些Region开始回收才能满足期望值。衰减平均值比普通的平均值更能代表最近时间的平均状态。
 
-G1的GC过程大致
+G1的GC过程大致可以分为以下四步：
 
++ Initial Marking，标记GC Roots能直接关联到的对象，并修改TAMS指针让下一阶段用户线程分配对象时能正确在可用Region中分配。需要STW。
++ Concurrent Marking，从GC Roots开始对堆中对象进行可达性分析，耗时较长但与用户线程并发进行。扫描完成后会再次重新处理SATB记录的引用变动对象。
++ Final Marking，处理并发阶段结束后遗留的SATB记录。需要STW。
++ Live Data Counting and Evacuation，筛选回收阶段更新Region的统计数据并排序，指定回收计划。把计划回收的Region中存活对象复制到空Region，再清理整个Region。需要SWT。
 
+![G1运行示意图](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/3b33f2da-713f-4e35-b017-1643a64ecfe7.png)
 
+*-XX: MaxGCPauseMillis* 默认两百毫秒，如果设置的非常低会导致每次只回收一小部分Region，从而收集速度跟不上分配速度最终引发Full GC。从G1开始垃圾收集器的设计导向由清理干净转变为收集速度能跟得上分配速度。
 
 
 
