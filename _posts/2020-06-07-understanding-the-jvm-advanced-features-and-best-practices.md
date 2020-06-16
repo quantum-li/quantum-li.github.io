@@ -439,7 +439,44 @@ G1从整体上看是标记整理，局部上看是标记复制。都意味着G1�
 
 ### Shenandoah
 
-由于和Oracle官方实现的下一代功能重合，遭受了Ocacle将其完全排除在了OracleJDK之外，因此只能在OpenJDK中使用。其和G1之间有很多的相似和代码复用，因此G1还从Shenandoah代码合并了多线程Full GC功能。
+[OpenJDK WIKI](https://wiki.openjdk.java.net/display/shenandoah/Main "Shenandoah GC")
+
+由于和Oracle官方实现的下一代功能重合，遭受了Ocacle将其完全排除在了OracleJDK之外，因此只能在OpenJDK中使用。其和G1之间有很多的相似和代码复用，因此G1还从Shenandoah代码合并了多线程Full GC功能。G1回收阶段是多线程并行的，但却不能与用户线程并发，而Shenandoah支持并发的整理算法；Shenandoah没有新生代Region或者老年代Region之分；G1中消耗大量内存和计算资源维护的RSet在Shenandoah中改为使用Connection Matrix连接矩阵的全局数据结构来记录跨Region引用关系且降低了伪共享发生的概率。连接矩阵大致结构是一张二维表：
+
+![Shenandoah的Connection Matrix示意图](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/a3a6564d-fc1a-4611-bcd8-1ff694e68a60.png)
+
+Shenandoah工作过程大致分为九个阶段，2.0版本中在初始标记之前还有Initial Partial/Concurrent Partial/Final Partial阶段可以理解为分代收集中的Minor GC的工作。
+
++ Initial Marking初始标记：标记与GC Roots直接关联的对象，需要STW，与堆大小无关，至于GC Roots数量有关。
++ Concurrent Marking并发标记：遍历对象引用图，标记处所有可达对象。时间取决于堆中存活对象数量和图的复杂程度。
++ Final Marking最终标记：处理剩余SATB扫描，并按回收价值统计出Collection Set回收集，需要小段时间的STW。
++ Concurrent Cleanup并发清理：清理Immediate Grabage Region（内部无存活对象的Region）。
++ Concurrent Evacuation：并发回收：Collection Set中存活对象复制到空Region中，通过读屏障和Brooks Pointers转发指针解决旧对象引用问题。时间取决于Collection Set大小
++ Initial Update Reference初始引用更新：此阶段确保所有对象复制操作已经完成。需要短暂STW。
++ Concurrent Update Reference并发引用更新：按照内存物理地址顺序线性找出引用类型，把旧引用改为新引用。时间取决于引用数量多少。
++ Final Update Reference最终引用更新：修正GC Roots中的引用，需要STW，与GC Roots数量有关。
++ Concurrent Cleanup并发清理：回收集中所有Region变为Immediate Garbage Regions，统一回收。
+
+![Shenandoah收集周期](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/af90593b-9508-4c03-9d3d-376077f55112.png)
+
+> GC(3) Pause Init Mark 0.771ms
+GC(3) Concurrent marking 76480M->77212M(102400M) 633.213ms
+GC(3) Pause Final Mark 1.821ms
+GC(3) Concurrent cleanup 77224M->66592M(102400M) 3.112ms
+GC(3) Concurrent evacuation 66592M->75640M(102400M) 405.312ms
+GC(3) Pause Init Update Refs 0.084ms
+GC(3) Concurrent update references  75700M->76424M(102400M) 354.341ms
+GC(3) Pause Final Update Refs 0.409ms
+GC(3) Concurrent cleanup 76244M->56620M(102400M) 12.242ms
+
+Brooks Pointers转发指针用来实现对象移动与用户程序并发。Brooks是一个人名。再次之前的实现需要在被移动对象上设置内存保护陷阱，在异常处理器中把访问转发到新对象。这样会导致频繁的用户态核心态切换。转发指针在原对象结构头添加新引用字段，在正常情况下改引用指向自己。这样间接对象访问可以优化到只有一行汇编即可。
+
+如果收集器和用户线程并发对同一个对象并发写，要保证写操作发生在新对象上。Shenandoah通过CAS保证GC更新转发指针和用户线程更新对象数据只有一个可以成功。Shenandoah为了覆盖全部对象访问操作，同时设置了读写屏障。因为读的操作量级很大，所以在JDK 13中Shenandoah内存屏障模型改为基于引用访问屏障，只拦截引用类型数据的读写。
+
+### ZGC
+
+
+
 
 
 
