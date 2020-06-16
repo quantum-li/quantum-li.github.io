@@ -459,15 +459,15 @@ Shenandoah工作过程大致分为九个阶段，2.0版本中在初始标记之�
 
 ![Shenandoah收集周期](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/af90593b-9508-4c03-9d3d-376077f55112.png)
 
-> GC(3) Pause Init Mark 0.771ms
-GC(3) Concurrent marking 76480M->77212M(102400M) 633.213ms
-GC(3) Pause Final Mark 1.821ms
-GC(3) Concurrent cleanup 77224M->66592M(102400M) 3.112ms
-GC(3) Concurrent evacuation 66592M->75640M(102400M) 405.312ms
-GC(3) Pause Init Update Refs 0.084ms
-GC(3) Concurrent update references  75700M->76424M(102400M) 354.341ms
-GC(3) Pause Final Update Refs 0.409ms
-GC(3) Concurrent cleanup 76244M->56620M(102400M) 12.242ms
+> GC(3) Pause Init Mark 0.771ms  
+GC(3) Concurrent marking 76480M->77212M(102400M) 633.213ms  
+GC(3) Pause Final Mark 1.821ms  
+GC(3) Concurrent cleanup 77224M->66592M(102400M) 3.112ms  
+GC(3) Concurrent evacuation 66592M->75640M(102400M) 405.312ms  
+GC(3) Pause Init Update Refs 0.084ms  
+GC(3) Concurrent update references  75700M->76424M(102400M) 354.341ms  
+GC(3) Pause Final Update Refs 0.409ms  
+GC(3) Concurrent cleanup 76244M->56620M(102400M) 12.242ms  
 
 Brooks Pointers转发指针用来实现对象移动与用户程序并发。Brooks是一个人名。再次之前的实现需要在被移动对象上设置内存保护陷阱，在异常处理器中把访问转发到新对象。这样会导致频繁的用户态核心态切换。转发指针在原对象结构头添加新引用字段，在正常情况下改引用指向自己。这样间接对象访问可以优化到只有一行汇编即可。
 
