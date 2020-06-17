@@ -459,7 +459,8 @@ Shenandoah工作过程大致分为九个阶段，2.0版本中在初始标记之�
 
 ![Shenandoah收集周期](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/af90593b-9508-4c03-9d3d-376077f55112.png)
 
-> GC(3) Pause Init Mark 0.771ms  
+> 
+GC(3) Pause Init Mark 0.771ms  
 GC(3) Concurrent marking 76480M->77212M(102400M) 633.213ms  
 GC(3) Pause Final Mark 1.821ms  
 GC(3) Concurrent cleanup 77224M->66592M(102400M) 3.112ms  
@@ -475,11 +476,19 @@ Brooks Pointers转发指针用来实现对象移动与用户程序并发。Brook
 
 ### ZGC
 
+[OpenJDK WIKI](https://wiki.openjdk.java.net/display/zgc/Main "ZGC")
 
+Oracle亲儿子。目标都是在不影响吞吐量的情况下实现堆大小对停顿时间无影响。PGC->C4->ZGC一脉相承。ZGC基于Region布局，不分代，使用了读屏障、染色指针和内存多重映射等技术实现可并发的标记整理算法。
 
+与G1不同的是，ZGC的Region（Page或ZPage）动态的创建和销毁，动态的容量大小。ZGC的Region分为大中小三类：
 
++ Small Region：固定为2MB，用于存放小于256KB的对象。
++ Medium Region：容量固定为32MB，用于存放大于等于256KB小于4MB的对象。
++ Large Region：大小为2MB的整数倍，用于存放4MB或以上的对象。每个Region只存放一个对象，且内存不会被重新分配。
 
+[ZGC 内存模型](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/603b145f-e0a6-49fb-aa6e-81b54e8c4a0a.png)
 
+Shenandoah使用转发指针和读屏障来实现并发整理，ZGC使用染色指针技术实现了读屏障。在此之前要在对象上存储额外数据都是在对象头中添加字段，例如传统垃圾收集会在对象头中打存活标记，但是这本质上之和引用有关。G1和Shenandoah使用了堆内存1/64大小的BitMap来记录标记，而ZGC的染色指针把标记信息记录类引用对象的指针上，这样可达性分析中只需要遍历指针即可。
 
 
 
