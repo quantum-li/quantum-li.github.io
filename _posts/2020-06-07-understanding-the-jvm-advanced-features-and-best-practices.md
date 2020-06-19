@@ -521,14 +521,79 @@ ZGC的缺陷是，如果并发收集的生命周期过长，比如十几分钟�
 
 在微服务和无服务架构的演进下，对于短周期应用可能不需要垃圾清理，可以使用Epsilon。
 
-
 ## 选择合适的垃圾收集器
 
 ### 收集器的权衡
 
++ 应用是关注吞吐量还是关注及时性
++ 硬件规格
++ JDK发行版本
 
+### JVM及GC日志
 
+JDK 9之前JVM各功能模块的开关分布在不同的参数上，且格式不统一。直到JDK 9才统一日志框架，所有的日志功能配置都统一到了 *-Xlog* 参数上。
 
+## 实战内存分配与回收
+
+### 对象优先在Eden分配
+
+通过设置各分代大小，打印GC日志，查看对象先在Eden中分配，当Eden中内存不足时触发Minor GC，如果Survivor空间不足通过分配担保机制老对象提前转移到老年代。新对象再在Eden中分配。
+
+### 大对象直接进入老年代
+
+对于长字符串和数组，通过配置 *-XX: PretenureSizeThreshold* ，超过阈值的直接进入老年代。
+
+### 长期存活的对象进入老年代
+
+通过配置 *-XX: MaxTenuringThreshold* 存活周期超过阈值的进入老年代。
+
+### 动态对象年龄判定
+
+如果再Survivor空间中相同年龄所有对象的大小总和大于一半，年龄大于等于该年龄的对象将直接进入老年代
+
+### 空间分配担保
+
+在发生Minor GC之前，虚机要检查老年代最大可用连续空间是否大于新生代所有对象总和，如果大于认为这次Minor GC是安全的。如果小于，会查看 *-XX: HandlePromotionFailure* 是否允许担保失败，如果允许，会继续检查老年代连续空间是否大于历次晋升到老年代对象平均大小，如果大于将进行Minor GC。如果小于将进行一次Full GC。
+
+# 性能监控、故障处理
+
+## 概述
+
+给一个系统定位问题的时候，知识、经验是基础，数据是依据，工具是运用知识处理数据的手段。数据包括但不限于异常堆栈、虚拟机运行日志、垃圾收集器日志、线程快照（threaddump/javacore）文件、堆转储文件（heapdump/hprof）等。
+
+## 基础故障处理工具
+
+### jps：JVM进程状况工具
+
+JVM Process Status Tool，可以列出正在运行的虚拟机进程。
+
+### jstat：JVM统计信息监控工具
+
+JVM Statistics Monitoring Tool，可以显示本地或远程进程中的类加载、内存、垃圾收集、即时编译等运行时数据。
+
+### jinfo：Java配置信息工具
+
+Configuration Info for Java，实时查看和调整虚拟机参数。
+
+### jmap：Java内存映像工具
+
+Memory Map for Java，用于生成堆转储快照heapdum/dump文件。查询finalize执行队列、堆和方法区的空间利用率等信息。
+
+### jhat：JVM堆转储快照分析工具
+
+JVM Heap Analysis Tool与jmap搭配使用。很少使用。
+
+### jstack：Java堆栈跟踪工具
+
+Stack Trace for Java，生成JVM当前时刻线程快照。当前每一个线程的方法堆栈集合。
+
+### 可视化工具
+
+JConsole、VisualVM、Java Mission Control（需要和JFR一同使用）。
+
+# 虚拟机执行子系统
+
+## 类文件结构
 
 
 
