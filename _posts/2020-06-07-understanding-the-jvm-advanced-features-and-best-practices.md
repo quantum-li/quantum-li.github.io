@@ -488,7 +488,16 @@ Oracle亲儿子。目标都是在不影响吞吐量的情况下实现堆大小�
 
 ![ZGC 内存模型](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/603b145f-e0a6-49fb-aa6e-81b54e8c4a0a.png)
 
-Shenandoah使用转发指针和读屏障来实现并发整理，ZGC使用染色指针技术实现了读屏障。在此之前要在对象上存储额外数据都是在对象头中添加字段，例如传统垃圾收集会在对象头中打存活标记，但是这本质上之和引用有关。G1和Shenandoah使用了堆内存1/64大小的BitMap来记录标记，而ZGC的染色指针把标记信息记录类引用对象的指针上，这样可达性分析中只需要遍历指针即可。
+Shenandoah使用转发指针和读屏障来实现并发整理，ZGC使用染色指针技术实现了读屏障。在此之前要在对象上存储额外数据都是在对象头中添加字段，例如传统垃圾收集会在对象头中打存活标记，但是这本质上只和引用有关。G1和Shenandoah使用了堆内存1/64大小的BitMap来记录标记，而ZGC的染色指针把标记信息记录类引用对象的指针上，这样可达性分析中只需要遍历指针即可。
+
+在64位的操作系统中，限于硬件的发展和操作系统的使用方式，64位的指针中只会使用低几位用于寻址，高几位并没有使用到。例如在64位linux下只有低46位能用来寻址。而剩下的46位64TB的寻址范围当今还使用不到，所以ZGC在剩下的46位指针中取出高4位用于标记存储信息。因为在46位又拿出了4位用于存储信息，所以ZGC只能使用42位来分配地址，导致堆容量最大4TB。
+
+![ZGC 染色指针](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/d4caf0f9-2e0e-41f3-b3f3-e9bef4d6a129.png)
+
+而由于虽然46位中的高4位被ZGC用来标记，但是对于操作系统，还是要使用整个46位用来寻址。所以ZGC不得不使用标志位来分割虚拟内存空间，通过多重映射把（标志位+实际ZGC堆内地址）带来的空间偏移的多段虚拟内存空间通过mmap映射到同一块物理内存。这样才能正常的对堆中的一个对象进行寻址。
+
+![ZGC 内存映射](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/2b3f1da4-723d-4633-b26e-a8dc76855d8a.png)
+
 
 
 
