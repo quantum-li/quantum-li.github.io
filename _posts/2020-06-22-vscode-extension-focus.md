@@ -1,7 +1,5 @@
 # Focus
 
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/QuanLi.focus.svg)](https://marketplace.visualstudio.com/items?itemName=QuanLi.focus) [![Installs](https://vsmarketplacebadge.apphb.com/installs/QuanLi.focus.svg)](https://marketplace.visualstudio.com/items?itemName=QuanLi.focus) [![Rating](https://vsmarketplacebadge.apphb.com/rating/QuanLi.focus.svg)](https://marketplace.visualstudio.com/items?itemName=QuanLi.focus)
-
 突出显示当前代码行、代码块，帮助你专心于眼前。
 
 ## Features
