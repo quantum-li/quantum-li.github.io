@@ -16,11 +16,11 @@
 * 点进链接或者在vscdoe扩展搜索并安装。
 * 提供了快捷命令和状态栏快捷按钮帮助切换。
 
-![Usage01](images/vscode-extension-focus/usage01.png)
+![Usage01](/assets/images/vscode-extension-focus/usage01.png)
 
-![Usage02](images/vscode-extension-focus/usage02.png)
+![Usage02](/assets/images/vscode-extension-focus/usage02.png)
 
-![Usage03](images/vscode-extension-focus/usage03.png)
+![Usage03](/assets/images/vscode-extension-focus/usage03.png)
 
 
 ## Configuration
