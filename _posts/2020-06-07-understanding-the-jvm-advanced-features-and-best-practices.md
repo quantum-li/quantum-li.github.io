@@ -139,9 +139,9 @@ excerpt: 序员可以把主要精力放在具体业务逻辑，而不是放在�
 |                                                                     | lock:2 |    Marked for GC   |
 |------------------------------------------------------------------------------|--------------------|
 ```
-在64位虚拟机下对象头的class pointer部分和array length会浪费更多的空间，可以使用 *+UseCompressedOops* 开启指针压缩。
+在64位虚拟机下对象头的class pointer部分和array length会浪费更多的空间，可以使用 `+UseCompressedOops` 开启指针压缩。
 
-接下来存储的是继承下来的对象字段和对象自己的字段内容。在内存中的存储顺序受虚拟机分配策略参数和字段定义顺序的影响。如果不开启 *+XX: CompactFields* 则父类字段会在子类字段前面。
+接下来存储的是继承下来的对象字段和对象自己的字段内容。在内存中的存储顺序受虚拟机分配策略参数和字段定义顺序的影响。如果不开启 `+XX: CompactFields` 则父类字段会在子类字段前面。
 
 第三部分是填充数据，由于HotSpot虚拟机GC要求对象起始地址必须是8字节的整数倍。
 
@@ -167,7 +167,7 @@ excerpt: 序员可以把主要精力放在具体业务逻辑，而不是放在�
 
 虚拟机栈和本地方法栈有两种异常，一种是线程请求深度大于JVM允许深度，抛出StackOverFlowError。一种是栈允许动态扩展，但空间大小无法扩展时OutOfMemoryError。
 
-使用 *-Xss* 参数减少栈内存容量，可以导致StackOverflowError。
+使用 `-Xss` 参数减少栈内存容量，可以导致StackOverflowError。
 
 定义大量本地变量，增大方法帧中本地变量表长度，可以导致StackOverflowError。
 
@@ -177,13 +177,13 @@ excerpt: 序员可以把主要精力放在具体业务逻辑，而不是放在�
 
 运行时常量池是方法区一部分。JDK 6之前常量池分配在永久代。JDK7起字符串常量和静态变量放在了堆中，常量池只存引用。JDK8使用元空间替代永久代。
 
-JDK 6之前通过改小 *-XX: MaxPermSize* 可以导致OOM：PermGen space异常。
+JDK 6之前通过改小 `-XX: MaxPermSize` 可以导致OOM：PermGen space异常。
 
 JDK 7之前可以通过不断创建新类，例如动态代理可以导致方法区OOM: PermGen space异常。JDK 8使用元空间替代永久代，而元空间归本地内存不在虚拟机内存。所以只受限于本地内存大小。
 
 ### 本机直接内存溢出
 
-直接内存容量通过 *-XX: MaxDirectMemorySize* 调整，可以通过Unsafe类申请内存。
+直接内存容量通过 `-XX: MaxDirectMemorySize` 调整，可以通过Unsafe类申请内存。
 
 # 垃圾收集器与内存分配策略
 
@@ -323,7 +323,7 @@ HotSpot所使用的是卡精度，称为“卡表(Card Table)”。卡表是记�
 
 HotSpot虚拟机通过Write Barrier维护卡表状态。这个写屏障和低延迟收集器与内存屏障没有任何关系，清做好区分。写屏障可以看做是虚拟机层面对“引用类型变量的复制”这个动作的AOP切面，在引用赋值时以提供程序执行额外动作。赋值前叫Pre-Write Barrier，赋值后叫Post-Write Barrier。应用写屏障后会被织入赋值操作指令流，虽然会产生一些开销，但是相对于扫描整个老年代空间性价比会高。
 
-假设处理器缓存行大小为64字节，一个Card Table元素占1字节，那一个缓存行对应32KB的Card Page大小。但是在多线程赋值操作在这32KB内是会存在并发问题，又叫“伪共享”，会影响性能。因此引入了预先判断的写屏障，先检查Card Table的标记，只有当未标记过，才去更新标记。JDK 7之后可以使用参数 *-XX: +UseCondCardMark* 决定是否开启预判断。
+假设处理器缓存行大小为64字节，一个Card Table元素占1字节，那一个缓存行对应32KB的Card Page大小。但是在多线程赋值操作在这32KB内是会存在并发问题，又叫“伪共享”，会影响性能。因此引入了预先判断的写屏障，先检查Card Table的标记，只有当未标记过，才去更新标记。JDK 7之后可以使用参数 `-XX: +UseCondCardMark` 决定是否开启预判断。
 
 ### 并发的可达性分析
 
@@ -390,13 +390,13 @@ Parallel Scavenge老年代版本，基于标记整理算法。可以和Parallel 
 
 无法处理并发标记和清理过程中用户线程新产生的浮动垃圾。因为是与用户线程并发运行，还需要预留出空间，所以当老年代空间使用占比达到一定阈值后才会激活（-XX: CMSInitiatingOccupancyFraction）。而因为预留内存不足而导致并发失败会启用Serial Old收集器来工作。
 
-因为是基于标记清理算法，所以会产生空间碎片。当不能分配大对象时会触发Full GC。*-XX: +UseCMS-CompactAtFullCollection*  参数可以配置在FullGC时开启碎片整理，由于碎片整理需要停顿时间变长，所以提供 *-XX： CMSFullGCsBeforeCompaction* （JDK9中已废弃）配置多少次FullGC后，下一次FullGC进行碎片整理。
+因为是基于标记清理算法，所以会产生空间碎片。当不能分配大对象时会触发Full GC。`-XX: +UseCMS-CompactAtFullCollection`  参数可以配置在FullGC时开启碎片整理，由于碎片整理需要停顿时间变长，所以提供 `-XX： CMSFullGCsBeforeCompaction` （JDK9中已废弃）配置多少次FullGC后，下一次FullGC进行碎片整理。
 
 ### Garbage First
 
 G1收集器是里程碑式成果。基于Region的内存布局形式的局部收集设计，在延迟可控的情况下获得尽可能高的吞吐量。JDK 9开始G1替换Parallel Scavenge+Parallel Old。G1不再应用于分代，而是面向堆内存中的任何部分来组成Collection Set（CSet）。进行回收的衡量标准是哪块内存中存放的垃圾数量最多，回收收益最大。这就是Mixwd GC模式。
 
-G1中的Ragion划分，每个Region都可以扮演新生代Eden、Survivor、或者老年代。收集器能够对扮演不同角色的Region采用不同策略。Region中有一类叫Humongous区域专门用来存放大对象，大对象表示超过了一个Region容量一半的对象。每个Region大小可以通过 *-XX: G1HeapRegionSize* 设定，1M-32M。如果一个对象超过了一个Region大小会被存放在N个连续的Humongous Region中。
+G1中的Ragion划分，每个Region都可以扮演新生代Eden、Survivor、或者老年代。收集器能够对扮演不同角色的Region采用不同策略。Region中有一类叫Humongous区域专门用来存放大对象，大对象表示超过了一个Region容量一半的对象。每个Region大小可以通过 `-XX: G1HeapRegionSize` 设定，1M-32M。如果一个对象超过了一个Region大小会被存放在N个连续的Humongous Region中。
 
 虽然G1仍然保留新生代和老年代概念，但是这两个空间不再固定，而是一系列Region的动态集合。根据每个Region回收获得的空间大小及所需时间，维护一个回收优先级列表，优先处理回收性价比最高的Region。这也是“Garbage First”名字的由来。这种使用Region划分内存空间，和按优先级的区域回收方式，保证了G1在优先的时间内获取更高的效率。
 
@@ -406,7 +406,7 @@ G1处理跨Region的对象引用的方法是，每个Region维护自己的RSet�
 
 G1处理与用户线程同步进行GC的方法是，采用原始快照SATB的方式。并且G1为每个Region设计了两个TAMS(Top at Mark Start)的指针，把Region中的一部分指针以上的空间用来并发回收过程中的新对象分配，G1会认为在这个地址以上的对象被隐式标记过默认存活。但是如果内存回收速度赶不上内存分配速度，G1会STW。
 
-G1为了满足 *-XX: MaxGCPauseMillis* 用户期望停顿时间，是以衰减均值的方式。在GC过程中记录每个Region的回收耗时、Dirty Card数量等成本并得出统计信息。然后通过这些信息预测从哪些Region开始回收才能满足期望值。衰减平均值比普通的平均值更能代表最近时间的平均状态。
+G1为了满足 `-XX: MaxGCPauseMillis` 用户期望停顿时间，是以衰减均值的方式。在GC过程中记录每个Region的回收耗时、Dirty Card数量等成本并得出统计信息。然后通过这些信息预测从哪些Region开始回收才能满足期望值。衰减平均值比普通的平均值更能代表最近时间的平均状态。
 
 G1的GC过程大致可以分为以下四步：
 
@@ -419,7 +419,7 @@ G1之所以不把回收阶段设计为并行，是为了保证简单的实现高
 
 ![G1运行示意图](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/3b33f2da-713f-4e35-b017-1643a64ecfe7.png)
 
-*-XX: MaxGCPauseMillis* 默认两百毫秒，如果设置的非常低会导致每次只回收一小部分Region，从而收集速度跟不上分配速度最终引发Full GC。从G1开始垃圾收集器的设计导向由清理干净转变为收集速度能跟得上分配速度。
+`-XX: MaxGCPauseMillis` 默认两百毫秒，如果设置的非常低会导致每次只回收一小部分Region，从而收集速度跟不上分配速度最终引发Full GC。从G1开始垃圾收集器的设计导向由清理干净转变为收集速度能跟得上分配速度。
 
 G1从整体上看是标记整理，局部上看是标记复制。都意味着G1不会产生空间碎片，不容易因为大对象无法找到连续空间而触发GC。
 
@@ -531,7 +531,7 @@ ZGC的缺陷是，如果并发收集的生命周期过长，比如十几分钟�
 
 ### JVM及GC日志
 
-JDK 9之前JVM各功能模块的开关分布在不同的参数上，且格式不统一。直到JDK 9才统一日志框架，所有的日志功能配置都统一到了 *-Xlog* 参数上。
+JDK 9之前JVM各功能模块的开关分布在不同的参数上，且格式不统一。直到JDK 9才统一日志框架，所有的日志功能配置都统一到了 `-Xlog` 参数上。
 
 ## 实战内存分配与回收
 
@@ -541,11 +541,11 @@ JDK 9之前JVM各功能模块的开关分布在不同的参数上，且格式不
 
 ### 大对象直接进入老年代
 
-对于长字符串和数组，通过配置 *-XX: PretenureSizeThreshold* ，超过阈值的直接进入老年代。
+对于长字符串和数组，通过配置 `-XX: PretenureSizeThreshold` ，超过阈值的直接进入老年代。
 
 ### 长期存活的对象进入老年代
 
-通过配置 *-XX: MaxTenuringThreshold* 存活周期超过阈值的进入老年代。
+通过配置 `-XX: MaxTenuringThreshold` 存活周期超过阈值的进入老年代。
 
 ### 动态对象年龄判定
 
@@ -553,7 +553,7 @@ JDK 9之前JVM各功能模块的开关分布在不同的参数上，且格式不
 
 ### 空间分配担保
 
-在发生Minor GC之前，虚机要检查老年代最大可用连续空间是否大于新生代所有对象总和，如果大于认为这次Minor GC是安全的。如果小于，会查看 *-XX: HandlePromotionFailure* 是否允许担保失败，如果允许，会继续检查老年代连续空间是否大于历次晋升到老年代对象平均大小，如果大于将进行Minor GC。如果小于将进行一次Full GC。
+在发生Minor GC之前，虚机要检查老年代最大可用连续空间是否大于新生代所有对象总和，如果大于认为这次Minor GC是安全的。如果小于，会查看 `-XX: HandlePromotionFailure` 是否允许担保失败，如果允许，会继续检查老年代连续空间是否大于历次晋升到老年代对象平均大小，如果大于将进行Minor GC。如果小于将进行一次Full GC。
 
 # 性能监控、故障处理
 
@@ -593,7 +593,72 @@ JConsole、VisualVM、Java Mission Control（需要和JFR一同使用）。
 
 # 虚拟机执行子系统
 
-## 类文件结构
+## 为何需要虚拟机
+
+由于各CPU的指令集和操作系统的架构不同，以往的语言需要针对不同的平台编译甚至针对不同的平台编写代码。 而JVM抽象了运行这一层，只需要针对不同的平台编写对应的JVM，及可实现一次编写到处运行。运行在JVM上的文件格式称为字节码，任何语言只要可以输出成JVM识别的字节码Class文件都可以在JVM上运行进而在所有平台上运行。Java只是可以通过编译生成JVM运行的字节码的语言中的一种。java语言有《Java语言规范》，虚拟机有《Java虚拟机规范》。JVM只与Class文件的字节码绑定。所以Java、Kotlin、Groovy、Scala都可以通过对应的编译器生成相同的Class文件字节码在JVM上运行。
+
+## Class 类文件结构
+
+由于Java支持反射和类动态生成，所以任何一个Class文件都对应一个类或接口，但一个类或接口不一定都有对应的Class文件。（package-info.class、module-info.class用于描述）
+
+Class文件是一组以8个字节为基础单位的二进制流，各个数据项紧凑排序。由于不是XML这种描述语言，所以内容格式是被严格限定的。当数据项需要8字节以上空间时，会按照高位在前的方式分割成若干个8字节。
+
+Class文件格式中只有“无符号数”和“表”两种数据类型。无符号数属于基本数据类型，u1/u4/u8分别代表1字节、4字节、8字节的无符号数，无符号数可以用来描述数字、索引引用、数量值、或者UTF-8字符串。
+
+表是又多个无符号数或其他表作为数据项构成的复合数据结构，为了便于区分所有表的命名都以_info结尾。
+
+``` c
+ClassFile {
+  u4              magic;
+  u2              minor_version;
+  u2              major_version;
+  u2              constant_pool_count;
+  cp_info         constant_pool[constant_pool_count-1];
+  u2              access_flags;
+  u2              this_class;
+  u2              super_class;
+  u2              interfaces_count;
+  u2              interfaces[interfaces_count];
+  u2              fields_count;
+  field_info      fields[fields_count];
+  u2              methods_count;
+  method_info     methods[methods_count];
+  u2              attributes_count;
+  attribute_info  attributes[attributes_count];
+}
+
+```
+
+## magic
+
+独立于扩展名之外用于标识文件类型的任意编码，Java使用 `0xCAFEBABE` 来标识出Class文件。
+
+## minor_version 和 major_version
+
+`minor_version` 是次版本号 `major_version` 是主版本号。高版本向下兼容，但是《规范》规定JVM不能执行高于版本号的Class文件。
+
+## constant_pool
+
+常量池在Class文件中非常重要，`cp_info` 前面的 `u2` 存储常量池的容量。索引位 `0` 用来表达“不引用任何一个常量池项目”。所以实际常量池中数量等于容量-1。注意Class文件中只有常量池的索引是从1开始的。
+
+常量池中主要存放两大类常量：字面量和符号引用。字面量如Java中的文本字符串、被声明为final的常量等。符号引用如包、类或接口的全限定名、字段或方法的名称和描述符、方法句柄和方法类型。
+
+基于JVM的语言的编译并不像C++编译有连接过程，而是在JVM加载Class文件时动态连接。所以C++编译完每一个方法，字段在内存中的位置就已知了。而Class文件中不会保存方法、字段最终在内存中的布局，这些符号引用不经过JVM运行时转换的话是没有内存地址的，也就无法被使用。当JVM在类加载时获得符号引用，在类创建时或运行时解析到具体内存地址中。
+
+常量池的数据类型有十几种，各自都有自己的数据结构，但是他们都有一个共有属性 `tag`。`tag` 是标志位，标记是哪一种数据结构，现有的数据结构见附录。由于Class文件中方法字段都需要引用 `CONSTANT_Utf8_info` 常量来描述名称，所以该常量的最大长度也就是65535即方法和字段名的最大长度。
+
+我们可以使用 `javap` 来输出解析好的Class文件字节码。
+
+## access_flags
+
+访问标识，表示是类还是接口，是否public，是否abstract，如果是类的话是否是final等。一共有16个标识位可以使用，目前只使用到了9个。
+
+现有标识见附录。
+
+## this_class && super_class && interfaces_count && interfaces[]
+
+
+
 
 
 
@@ -648,3 +713,40 @@ AOT、CDS、NMT等都可以选择。能够实现这些功能特性的组合拆�
 
 到了JDK 10，HotSpot又重构了Java虛拟机的垃圾收集器接口[4] (Java Vrtual Machine Compiler Interface)，统一了其内部各款垃圾收集器的公共行为。有了这个接口，才可能存在日后(今天尚未)某个版本中的CM S收集器退役，和JDK 12中Shenandoah这样由Oracle以外其他厂商领导开发的垃圾收集器进入HotSpot中的事情。如果未来这个接口完全开放的话，甚至有可能会出现其他独立于HotSpot的垃圾收集器实现。
 
+
+# 附录
+
+## 常量池数据类型
+
+| 类 型 | 标 志 | 描 述 | 
+| --- | --- | --- |
+| CONSTANT_Utf8_info | 1 | UTF-8 编码的字符串 | 
+| CONSTANT_Integer_info | 3 | 整型字面量 | 
+| CONSTANT_Float_info | 4 | 浮点型字面量 | 
+| CONSTANT_Long_info | 5 | 长整型字面量 | 
+| CONSTANT_Double_info | 6 | 双精度浮点型字面量 | 
+| CONSTANT_Class_info | 7 | 类或接口的符号引用 | 
+| CONSTANT_String_info | 8 | 字符串类型字面量 | 
+| CONSTANT_Fieldref_info | 9 | 字段的符号引用 | 
+| CONSTANT_Methodref_info | 10 | 类中方法的符号引用 | 
+| CONSTANT_InterfaceMethodref_info | 11 | 接口中方法的符号引用 | 
+| CONSTANT_NameAndType_info | 12 | 字段或方法的部分符号引用 | 
+| CONSTANT_MethodHandle_info | 15 | 表示方法句柄 | 
+| CONSTANT_MethodType_info | 16 | 标识方法类型 | 
+| CONSTANT_InvokeDynamic_info | 18 | 表示一个动态方法调用点 | 
+| CONSTANT_Module_info | 19 | 表示一个模块 |
+| CONSTANT_Package_info | 20 | 表示一个模块中开放或者导出的包 |
+
+## 访问标识
+
+| 标志名称 | 标志值 | 含义 |
+| --- | --- | --- |
+| ACC_PUBIC | 0x0001 | 是否为 public 类型 |
+| ACC_FINAL | 0x0010 | 是否声明为 final |
+| ACC_SUPER | 0x0020 | JDK1.0.2 之后编译出来的类这个标志都必须为真 |
+| ACC_INTERFACE | 0x0200 | 是否为接口 |
+| ACC_ABSTRACT | 0x0400 | 是否为 abstract 类型 |
+| ACC_SYNTHETIC | 0x1000 | 标记这个类并非由用户代码产生 |
+| ACC_ANNOTATION | 0x2000 | 是否为注解 |
+| ACC_ENUM | 0x4000 | 是否为枚举类型 |
+| ACC_MODULE | 0x8000 | 标识这是一个模块 |
