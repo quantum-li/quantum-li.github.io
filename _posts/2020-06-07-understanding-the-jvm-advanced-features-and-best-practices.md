@@ -629,15 +629,15 @@ ClassFile {
 
 ```
 
-## magic
+### magic
 
 独立于扩展名之外用于标识文件类型的任意编码，Java使用 `0xCAFEBABE` 来标识出Class文件。
 
-## minor_version 和 major_version
+### minor_version 和 major_version
 
 `minor_version` 是次版本号 `major_version` 是主版本号。高版本向下兼容，但是《规范》规定JVM不能执行高于版本号的Class文件。
 
-## constant_pool
+### constant_pool
 
 常量池在Class文件中非常重要，`cp_info` 前面的 `u2` 存储常量池的容量。索引位 `0` 用来表达“不引用任何一个常量池项目”。所以实际常量池中数量等于 `容量-1` 。注意Class文件中只有常量池的索引是从1开始的。
 
@@ -649,17 +649,17 @@ ClassFile {
 
 我们可以使用 `javap` 来输出解析好的Class文件字节码。
 
-## access_flags
+### access_flags
 
 访问标识，表示是类还是接口，是否public，是否abstract，如果是类的话是否是final等。一共有16个标识位可以使用，目前只使用到了9个。
 
 现有标识见附录。
 
-## this_class && super_class && interfaces_count && interfaces[]
+### this_class && super_class && interfaces_count && interfaces[]
 
 `this_class` 代表类全限定名在常量池中的索引。 `super_class` 标识父类全限定名在常量池中的索引。注意 `Object` 类的父类索引为0。 `interface_count` 表示该类实现接口的数量，后面紧跟的是接口集合。上面所有索引指向的都是常量池中的 `CONTANT_Class_info` 类型。而  `CONTANT_Class_info` 的数据类型见附录。
 
-## fields_count && field_info
+### fields_count && field_info
 
 该类中声明的成员变量集合，不包括方法中局部变量。字段包含的修饰符有作用域（public）、实例变量还是类变量（static）、可变性（final）、并发可见性（volatile）、能否被序列化（transient）、字段数据类型（基本类型、对象、数组）、字段名称。 `field_info` 中每一项的字段表数据格式如下
 
@@ -675,7 +675,7 @@ attribute_info  attributes;
 
 用描述符来描述方法时，按照先参数列表、后返回值的严格顺序描述。比如 `void inc()` 描述符为 `()V` ，`int foo(char[] a,int b)` 的表述符为 `([CI)I` 。字段表集合中不会出现父类或父接口中继承来的字段。 随后的 `attributes` 并不是所有的字段都会有数据项，可能 `attributes_count` 为0。
 
-## methods_count && method_info
+### methods_count && method_info
 
 储存方法描述信息的方法表结构如下：
 
@@ -689,9 +689,29 @@ attribute_info  attributes;
 
 方法的访问标识符定义见附录。而方法中的代码，通过编译生成字节码之后会存放在 `attribute_info` 属性表中的名为"Code"的属性里面。如果父类方法在子类中没有被重写，方发表集合中也不会出现父类的方法信息。编译器可能会自动添加类构造器方法"<clinit>()"，或实例构造器方法"<init>()"。《Java虚拟机规范》和《Java语言规范》分别定义了字节码层面的方法特征签名和Java代码层面的方法特征签名。所以字节码层面的特征签名范围会比Java代码的范围大，表现在字节码的方法签名包括返回值和异常表。
 
-## attributes_count && attribute_info
+### attributes_count && attribute_info
 
-任何编译器都可以向属性表中写入自己的属性信息，但是《规范》中只规定了29项所有虚拟机都应该识别的属性。方法的内容字节码就存在这里面的 `Code` 属性中。
+任何编译器都可以向属性表中写入自己的属性信息，但是《规范》中只规定了29项所有虚拟机都应该识别的属性，见附录。方法的内容字节码就存在这里面的 `Code` 属性中。每一个类型详解见附录。
+
+## 字节码指令简介
+
+由于Java语言设计之初是面向网络，需要再网络中传输Class文件。所以放弃了操作数长度对齐，可以省略大量填充符号和Class文件大小。但是在处理超过一个字节的数据时重建数据结构，导致在执行字节码时损失一些性能。比如将一个16位无符号整数使用两个无符号字节存起来，使用时 `(byte1 << 8) | byte2`。
+
+Java虛拟机的指令由一个字节长度的、代表着某种特定操作含义的数字(称为操作码，Opcode)以及跟随其后的零至多个代表此操作所需的参数(称为操作数，Operand) 构成。由于Java虛拟机采用面向操作数栈而不是面向寄存器的架构，所以大多数指令都不包含操作数，只有一个操作码，指令参数都存放在操作数栈中。
+
+### 字节码与数据类型
+
+见附录。
+
+# 虚拟机类加载机制
+
+Java虛拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。与C++这种在编译时进行连接的语言不同，JVM语言的类型加载、连接和初始化都是在程序运行期间完成的，这种会带来性能开销但也会提高灵活性比如动态代理。
+
+## 类加载时机
+
+![类的生命周期](/assets/understanding-the-jvm-advanced-features-and-best-practices/类的生命周期.png)
+
+
 
 
 
@@ -741,11 +761,11 @@ Subtrate VM是在Graal VM 0.20版本里新出现的一个极小型的运行时�
 现在，HotSpot 虚拟机能够在编译时指定一系列特性开关，让编译输出的HotSpot虚拟机可以裁剪成不同的功能，譬如支持哪些编译器，支持哪些收集器，是否支持JFR、
 AOT、CDS、NMT等都可以选择。能够实现这些功能特性的组合拆分，反映到源代码不仅仅是条件编译，更关键的是接口与实现的分离。
 
-早期的HotSpot虛拟机为了提供监控、调试等不会在《Java虛 拟机规范》中约定的内部功能和数据，就曾开放过Java虛拟机信息监控接口(Java Vrtual Machine ProflerInterface，JVMPI) 与Java虛 拟机调试接口(Java Vrtual Machine Debug Interface, JVMDI)供运维和性能监控、IDE等外部工具使用。到了JDK 5时期，又抽象出了层次更高的Java虚拟机工具接口(Java Virtual Machine Tool Interface, JVMTI) 来为所有Java虛拟机相关的工具提供本地编程接口集合，到JDK 6时JVMTI就完全整合代替了JVMPI和JVMDI的作用。
+早期的HotSpot虛拟机为了提供监控、调试等不会在《Java虛拟机规范》中约定的内部功能和数据，就曾开放过Java虛拟机信息监控接口(Java Vrtual Machine ProflerInterface，JVMPI) 与Java虛 拟机调试接口(Java Vrtual Machine Debug Interface, JVMDI)供运维和性能监控、IDE等外部工具使用。到了JDK 5时期，又抽象出了层次更高的Java虚拟机工具接口(Java Virtual Machine Tool Interface, JVMTI) 来为所有Java虛拟机相关的工具提供本地编程接口集合，到JDK 6时JVMTI就完全整合代替了JVMPI和JVMDI的作用。
 
-在JDK 9时期，HotSpot虛拟机开放了Java语言级别的编译器接口B] (Java Vrtual Machine Compiler Interface, JVMCI) ，使得在Java虛拟机外部增加、替换即时编译器成为可能，这个改进实现起来并不费劲，但比起之前JVMPI、JVMDI和JVMTI却是更深层次的开放，它为不侵入HotSpot代码而增加或修改HotSpot虛拟机的固有功能逻辑提供了可行性。Graal编译器就是通过这个接口植入到HotSpot之中。
+在JDK 9时期，HotSpot虛拟机开放了Java语言级别的编译器接口 (Java Vrtual Machine Compiler Interface, JVMCI) ，使得在Java虛拟机外部增加、替换即时编译器成为可能，这个改进实现起来并不费劲，但比起之前JVMPI、JVMDI和JVMTI却是更深层次的开放，它为不侵入HotSpot代码而增加或修改HotSpot虛拟机的固有功能逻辑提供了可行性。Graal编译器就是通过这个接口植入到HotSpot之中。
 
-到了JDK 10，HotSpot又重构了Java虛拟机的垃圾收集器接口[4] (Java Vrtual Machine Compiler Interface)，统一了其内部各款垃圾收集器的公共行为。有了这个接口，才可能存在日后(今天尚未)某个版本中的CM S收集器退役，和JDK 12中Shenandoah这样由Oracle以外其他厂商领导开发的垃圾收集器进入HotSpot中的事情。如果未来这个接口完全开放的话，甚至有可能会出现其他独立于HotSpot的垃圾收集器实现。
+到了JDK 10，HotSpot又重构了Java虛拟机的垃圾收集器接口 (Java Vrtual Machine Compiler Interface)，统一了其内部各款垃圾收集器的公共行为。有了这个接口，才可能存在日后(今天尚未)某个版本中的CM S收集器退役，和JDK 12中Shenandoah这样由Oracle以外其他厂商领导开发的垃圾收集器进入HotSpot中的事情。如果未来这个接口完全开放的话，甚至有可能会出现其他独立于HotSpot的垃圾收集器实现。
 
 
 # 附录
@@ -831,5 +851,28 @@ AOT、CDS、NMT等都可以选择。能够实现这些功能特性的组合拆�
 | ACC_STRICTFP | 0x0800 | 是否为 strictfp | 
 | ACC_SYNTHETIC | 0x1000 | 是否由编译器自动产生 |
 
+## 虚拟机规范预定义属性
 
+| 属性名称 | 使用位置 | 含义 |
+| --- | --- | --- |
+| Code | 方法表中 | Java代码编译成的字节码指令(即：具体的方法逻辑字节码指令) |
+| ConstantValue | 字段表中 | final关键字定义的常量值 |
+| Deprecated | 类中、方法表中、字段表中 | 被声明为deprecated的方法和字段 |
+| Exceptions | 方法表中 | 方法声明的异常 |
+| LocalVariableTable | Code属性中 | 方法的局部变量描述 |
+| LocalVariableTypeTable | 类中 | JDK1.5中新增的属性，它使用特征签名代替描述符，是为了引入泛型语法之后能描述泛型参数化类型而添加 |
+| InnerClasses | 类中 | 内部类列表 |
+| EnclosingMethod | 类中 | 仅当一个类为局部类或者匿名类时，才能拥有这个属性，这个属性用于表示这个类所在的外围方法 |
+| LineNumberTable | Code属性中 | Java源码的行号与字节码指令的对应关系 |
+| StackMapTable | Code属性中 | JDK1.6中新增的属性，供新的类型检查验证器(Type Checker)检查和处理目标方法的局部变量和操作数栈所需要的类型是否匹配 |
+| Signature | 类中、方法表中、字段表中 | JDK1.5新增的属性，这个属性用于支持泛型情况下的方法签名，在Java语言中，任何类、接口、初始化方法或成员的泛型签名如果包含了类型变量(Type Variables)或参数类型(Parameterized Types),则Signature属性会为它记录泛型签名信息。由于Java的泛型采用擦除法实现，在为了避免类型信息被擦除后导致签名混乱，需要这个属性记录泛型中的相关信息 |
+| SourceFile | 类中 | 记录源文件名称 |
+| SourceDebugExtension | 类中 | JDK1.6中新增的属性，SourceDebugExtension用于存储额外的调试信息。如在进行JSP文件调试时，无法通过Java堆栈来定位到JSP文件的行号，JSR-45规范为这些非Java语言编写，却需要编译成字节码运行在Java虚拟机汇中的程序提供了一个进行调试的标准机制，使用SourceDebugExtension就可以存储这些调试信息。 |
+| Synthetic | 类中、方法表中、字段表中 | 标识方法或字段为编译器自动产生的 |
+| RuntimeVisibleAnnotations | 类中、方法表中、字段表中 | JDK1.5中新增的属性，为动态注解提供支持。RuntimeVisibleAnnotations属性，用于指明哪些注解是运行时(实际上运行时就是进行反射调用)可见的。 |
+| RuntimeInvisibleAnnotations | 类中、方法表中、字段表中 | JDK1.5中新增的属性，作用与RuntimeVisibleAnnotations相反用于指明哪些注解是运行时不可见的。 |
+| RuntimeVisibleParameterAnnotations | 方法表中 | JDK1.5中新增的属性，作用与RuntimeVisibleAnnotations类似，只不过作用对象为方法的参数。 |
+| RuntimeInvisibleParameterAnnotations | 方法表中 | JDK1.5中新增的属性，作用与RuntimeInvisibleAnnotations类似，只不过作用对象为方法的参数。 |
+| AnnotationDefault | 方法表中 | JDK1.5中新增的属性，用于记录注解类元素的默认值 |
+| BootstrapMethods | 类中 | JDK1.7新增的属性，用于保存invokedynamic指令引用的引导方法限定符 |
 
