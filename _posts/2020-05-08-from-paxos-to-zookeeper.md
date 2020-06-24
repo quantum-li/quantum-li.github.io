@@ -68,7 +68,7 @@ C-一致性(Consistency)，A-可用性(Availability)，P-分区容错性(Partiti
 
 ##### 分区容错性
 
-分布式系统在遇到任何*网络分区*故障的时候，仍然需要保证对外提供一致性和高可用性服务，除非是整个网络环境的故障。*网络分区*指不同子网络之间出现无法联通的情况，但子网络内正常，导致网络环境被切分成若干孤立区域。
+分布式系统在遇到任何 `网络分区` 故障的时候，仍然需要保证对外提供一致性和高可用性服务，除非是整个网络环境的故障。 `网络分区` 指不同子网络之间出现无法联通的情况，但子网络内正常，导致网络环境被切分成若干孤立区域。
 
 | 放弃其中之一 | 说明 |
 | :---:| :---: |
@@ -577,7 +577,7 @@ ZK客户端主要有以下几个核心组件组成：
 
 ConnectStringParser解析器对连接串解析chrootPath，并保存解析后的地址列表。
 
-Chroot是客户端隔离命名空间，在连接串中可以通过在最后一个地址后面加路径 *ip:port,ip:port/path* 来指定。之后该客户端的所有操作都会映射到该路径下。
+Chroot是客户端隔离命名空间，在连接串中可以通过在最后一个地址后面加路径 `ip:port,ip:port/path` 来指定。之后该客户端的所有操作都会映射到该路径下。
 
 ConnectStringParser把连接串封装成InetSocketAddress对象保存在ConnectStringParser.serverAddress队列中。并进一步封装到实现了HostProvider接口的StaticHostProvider类中。
 
@@ -611,7 +611,7 @@ Session是ZK中的会话实体，代表了一个客户端会话。
 
 会话ID，用来标识一个会话，每次会话创建时ZK分配一个全局唯一的id。
 
-生成方法是当前时间戳 *<<24* (将高位1移出防止负数出现)然后 *>>8* ，与myid文件配置的id值 *<<56* 后进行 *或* 操作。高8位确定所在机器，后56位使用时间进行随机。
+生成方法是当前时间戳 `<<24` (将高位1移出防止负数出现)然后 `>>8` ，与myid文件配置的id值 `<<56` 后进行 `或` 操作。高8位确定所在机器，后56位使用时间进行随机。
 
 ##### TimeOut
 
@@ -1069,7 +1069,7 @@ DataTree内部用ConcurrentHashMap<String,DataNode>存储所有节点，同时�
 
 可以帮助快速定位事务操作所在的日志，也可以根据后缀的ZXID知道当前Leader周期。
 
-日志文件可以通过org.apache.zookeeper.Server.LogFormatter解析展示。**Java LogFormatter log.XXXX**
+日志文件可以通过org.apache.zookeeper.Server.LogFormatter解析展示。`Java LogFormatter log.XXXX`
 
 #### 日志写入
 
