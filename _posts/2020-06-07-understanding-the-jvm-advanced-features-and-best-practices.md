@@ -639,7 +639,7 @@ ClassFile {
 
 ## constant_pool
 
-常量池在Class文件中非常重要，`cp_info` 前面的 `u2` 存储常量池的容量。索引位 `0` 用来表达“不引用任何一个常量池项目”。所以实际常量池中数量等于容量-1。注意Class文件中只有常量池的索引是从1开始的。
+常量池在Class文件中非常重要，`cp_info` 前面的 `u2` 存储常量池的容量。索引位 `0` 用来表达“不引用任何一个常量池项目”。所以实际常量池中数量等于 `容量-1` 。注意Class文件中只有常量池的索引是从1开始的。
 
 常量池中主要存放两大类常量：字面量和符号引用。字面量如Java中的文本字符串、被声明为final的常量等。符号引用如包、类或接口的全限定名、字段或方法的名称和描述符、方法句柄和方法类型。
 
@@ -657,7 +657,41 @@ ClassFile {
 
 ## this_class && super_class && interfaces_count && interfaces[]
 
+`this_class` 代表类全限定名在常量池中的索引。 `super_class` 标识父类全限定名在常量池中的索引。注意 `Object` 类的父类索引为0。 `interface_count` 表示该类实现接口的数量，后面紧跟的是接口集合。上面所有索引指向的都是常量池中的 `CONTANT_Class_info` 类型。而  `CONTANT_Class_info` 的数据类型见附录。
 
+## fields_count && field_info
+
+该类中声明的成员变量集合，不包括方法中局部变量。字段包含的修饰符有作用域（public）、实例变量还是类变量（static）、可变性（final）、并发可见性（volatile）、能否被序列化（transient）、字段数据类型（基本类型、对象、数组）、字段名称。 `field_info` 中每一项的字段表数据格式如下
+
+``` c
+u2              access_flags;
+u2              name_index;
+u2              descriptor_index;
+u2              attributes_count;
+attribute_info  attributes;
+```
+
+字段的访问标识符在标识位的含义见附录。 `name_index` 和 `descriptor_index` 都是对常量池的引用，分别代表字段的简单名称和方法描述符。其中简单名称就为字段名或方法名；而描述符描述了字段的数据类型、方法的参数列表和返回值。描述符中基本数据类型和void都用一个大写字母标识，对象类型用字母 `L` 加对象的全限定名来表示。详见附录。对于数组类型每一个维度使用一个 前置的 `[` 来描述，如二维数组 `java.lang.String[][]` 记录成 `[[Ljava/lang/String;` ， `int[]` 记录成 `[I`。
+
+用描述符来描述方法时，按照先参数列表、后返回值的严格顺序描述。比如 `void inc()` 描述符为 `()V` ，`int foo(char[] a,int b)` 的表述符为 `([CI)I` 。字段表集合中不会出现父类或父接口中继承来的字段。 随后的 `attributes` 并不是所有的字段都会有数据项，可能 `attributes_count` 为0。
+
+## methods_count && method_info
+
+储存方法描述信息的方法表结构如下：
+
+``` c
+u2              access_flags;
+u2              name_index;
+u2              descriptor_index;
+u2              attributes_count;
+attribute_info  attributes;
+```
+
+方法的访问标识符定义见附录。而方法中的代码，通过编译生成字节码之后会存放在 `attribute_info` 属性表中的名为"Code"的属性里面。如果父类方法在子类中没有被重写，方发表集合中也不会出现父类的方法信息。编译器可能会自动添加类构造器方法"<clinit>()"，或实例构造器方法"<init>()"。《Java虚拟机规范》和《Java语言规范》分别定义了字节码层面的方法特征签名和Java代码层面的方法特征签名。所以字节码层面的特征签名范围会比Java代码的范围大，表现在字节码的方法签名包括返回值和异常表。
+
+## attributes_count && attribute_info
+
+任何编译器都可以向属性表中写入自己的属性信息，但是《规范》中只规定了29项所有虚拟机都应该识别的属性。方法的内容字节码就存在这里面的 `Code` 属性中。
 
 
 
@@ -750,3 +784,52 @@ AOT、CDS、NMT等都可以选择。能够实现这些功能特性的组合拆�
 | ACC_ANNOTATION | 0x2000 | 是否为注解 |
 | ACC_ENUM | 0x4000 | 是否为枚举类型 |
 | ACC_MODULE | 0x8000 | 标识这是一个模块 |
+
+## 字段访问标识
+
+| 标志名称 | 标 志 值 | 含 义 |
+| --- | --- | --- |
+| ACC_PUBIC | 0x0001 | 是否为 public |
+| ACC_PRIVATE | 0x0002 | 是否为 private |
+| ACC_PROTECTED | 0x0004 | 是否为 protected | 
+| ACC_STATIC | 0x0008 | 是否为 static |
+| ACC_FINAL | 0x0010 | 是否为 final |
+| ACC_VOLATILE | 0x0040 | 是否为 volatile |
+| ACC_TRANSIENT | 0x0080 | 是否为 transient |
+| ACC_SYNTHETIC | 0x1000 | 是否由编译器自动生成 |
+| ACC_ENUM | 0x4000 | 是否为 enum |
+
+## 字段类型描述符
+
+| 标识字符 | 含义 |
+| --- | --- |
+| B | byte |
+| C | char |
+| D | double |
+| F | float |
+| I | int |
+| J | long |
+| S | short |
+| Z | boolean |
+| V | void |
+| L | 对象类型 |
+
+## 方法访问标识
+
+| 标志名称 | 标 志 值 | 含 义 | 
+| --- | --- | --- |
+| ACC_PUBIC | 0x0001 | 是否为 public | 
+| ACC_PRIVATE | 0x0002 | 是否为 private | 
+| ACC_PROTECTED | 0x0004 | 是否为 protected | 
+| ACC_STATIC | 0x0008 | 是否为 static | 
+| ACC_FINAL | 0x0010 | 是否为 final | 
+| ACC_SYNCHRONIZED | 0x0020 | 是否为 sychronized | 
+| ACC_BRIDGE | 0x0040 | 是否由编译器产生的桥接方法 | 
+| ACC_VARARGS | 0x0080 | 是否接受不定参数 | 
+| ACC_NATIVE | 0x0100 | 是否为 native | 
+| ACC_ABSTRACT | 0x0400 | 是否为 abstract | 
+| ACC_STRICTFP | 0x0800 | 是否为 strictfp | 
+| ACC_SYNTHETIC | 0x1000 | 是否由编译器自动产生 |
+
+
+
