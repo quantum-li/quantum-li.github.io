@@ -2,6 +2,8 @@
 
 突出显示当前代码行、代码块，帮助你专心于眼前。
 
+[Download page](https://marketplace.visualstudio.com/items?itemName=QuanLi.focus)
+
 ## Features
 
 * 高亮当前行。
