@@ -7,6 +7,8 @@ permalink: "/posts/high-performance-mysql"
 excerpt: 内容全部源自《高性能MySQL第三版》，取自里面的重点内容摘要。包括MySQL架构、性能、索引、查询优化、高级特性等。
 ---
 
+[高性能MySQL.第3版.pdf](https://leezw.net/assets/pdf/%E9%AB%98%E6%80%A7%E8%83%BDMySQL.%E7%AC%AC3%E7%89%88.pdf)
+
 # MySQL 架构与历史
 
 MySQL架构可以在多种不同场景中应用，足够灵活。MySQL种架构的设计将查询处理及其他系统任务和数据的存储/提取相分离。这种处理和存储分离的设计可以在使用时根据性能、特性，以及其他需求来选择数据存储的方式。
