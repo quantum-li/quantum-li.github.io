@@ -7,6 +7,8 @@ permalink: "/posts/design-patterns-elements-of-reusable-object-oriented-softwar"
 excerpt: 所有结构良好的面向对象软件体系结构中都包含了许多模式。设计模式可以使系统结构更加精巧、简洁和易于理解。
 ---
 
+[Design Patterns, Elements of Reusable Object-Oriented Software.pdf](https://leezw.net/assets/pdf/Design%20Patterns,%20Elements%20of%20Reusable%20Object-Oriented%20Software.pdf)
+
 # 设计模式
 
 ## 创造型模式
