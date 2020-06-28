@@ -935,6 +935,46 @@ Java虚拟机的执行引擎在执行Java代码的时候有解释执行和编译
 
 ### 基于栈的指令集与基于寄存器的指令集
 
+Javac编译器输出的字节码指令流是一种基于栈的指令集架构，区别于物理硬件直接支持的寄存器指令集架构。寄存器指令集架构依赖硬件，基于栈的指令结构可移植但是会有性能损耗。
+
+# 类加载及子系统的案例与实战
+
+## 案例分析
+
+### Tomcat
+
+作为Web服务器需要满足部署在同一个服务器上的两个Web应用程序所使用的Java类库可以实现相互隔离；部署在同一个服务器上的两个Web应用程序所使用的Java类库可以互相共享；服务器需要尽可能地保证自身的安全不受部署的Web应用程序影响。支持JSP的HotSwap功能。
+
+![Tomcat类加载器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/Tomcat类加载器.png)
+
++ 放置在/common目录中。类库可被Tomcat和所有的Web应用程序共同使用。
++ 放置在/server目录中。类库可被Tomcat使用，对所有的Web应用程序都不可见。
++ 放置在/shared目录中。类库可被所有的Web应用程序共同使用，但对Tomcat 自己不可见。
++ 放置在/WebApp/WEB-INF目录中。类库仅仅可以被该Web应用程序使用，对Tomcat 和其他Web应用不可见
+
+### OSGi
+
+动态模块化系统。
+
++ BundleA:声明发布了packageA,依赖了java.* 的包;
++ Bundle B:声明依赖了packageA和packageC，同时也依赖了java.* 的包;
++ BundleC:声明发布了packageC,依赖了packagcA.
+
+![OSGi类加载器](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/OSGi类加载器.png)
+
++ 以java.* 开头的类，委派给父类加载器加载。
++ 否则，委派列表名单内的类，委派给父类加载器加载。
++ 否则，Import 列表中的类，委派给Export这 个类的Bundle的类加载器加载。
++ 否则，查找当前Bundle的Classpath，使用自己的类加载器加载。
++ 否则，查找是否在自己的Fragment Bundle中， 如果是则委派给Fragment Bundle的类加载器加载。
++ 否则，查找Dynamic Import列表的Bundle，委派给对应Bundle的类加载器加载。
++ 否则，类查找失败。
+
+### 字节码生成技术与动态代理的实现
+
+Javassist、CGLib、ASM、InvocationHandler
+
+# 前端编译与优化
 
 
 
