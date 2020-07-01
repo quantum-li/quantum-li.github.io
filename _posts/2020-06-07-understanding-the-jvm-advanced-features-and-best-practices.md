@@ -1124,12 +1124,80 @@ Java内存模型对于64位的数据类型，允许将没有被volaitle修饰的
 实现线程主要有三种方式:使用内核线程实现(1: 1实现)，使用用户线程实现(1: N实现) ,使用用户线程加轻量级进程混合实现(N: M实现)。
 
 内核线程是直接由操作系统内核支持的线程，这种线程有内核来负责管控。程序一般不会直接使用内核线程，而是使用内核线程的一种高级接口叫轻量级进程(Light
-WeightProcess，LWP)，轻量级进程就是我们通常意义上所讲的线程，每个轻量级进程都由一个内核线程支持
+WeightProcess，LWP)，轻量级进程就是我们通常意义上所讲的线程，每个轻量级进程都由一个内核线程支持。因为是基于内核线程实现，需要再用户态和内核态之间切换，所以线程开销大。
 
 ![轻量级进程与内核线程](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/轻量级进程与内核线程.png)
 
+而用户线程实现指的是完全建立在用户空间的线程库上，不需要在用户态和内核态之间切换，但是线程的所有操作、调度都需要用户程序自己处理。
 
+混合实现，把操作系统支持的轻量级进程作为用户线程与内核线程之间的桥梁。
 
+![用户线程与轻量级线程](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/用户线程与轻量级线程.png)
+
+Java中的线程依赖于虚拟机中的具体实现。HotSpot采用的是内核线程实现方式。
+
+### Java线程调度
+
+线程调度分为协同式和抢占式，协同式有线程自己获取cpu资源并自己释放；抢占式由操作系统分配处理器资源。Java使用的是抢占式线程调度。
+
+### 状态切换
+
+![线程状态切换](/assets/images/understanding-the-jvm-advanced-features-and-best-practices/线程状态切换.png)
+
++ New：创建后尚未启动
++ Runnable：此状态线程有可能在执行，也有可能在等待分配时间片
++ Waiting：只能等待被其他线程显式唤醒
+  + 没有设置timeout的Object::wait()方法
+  + 没有设置timeout的Thread::join()方法
+  + LockSupport::park()方法
++ TimedWaiting：一段时间后自动唤醒
+  + Thread::sleep()
+  + 设置了timeout的Object::wait()
+  + 设置了timeout的Thread::join()
+  + LockSupport::parkNanos()
+  + LockSupport::parkUntil()
++ Blocked：等待获得一个排它锁
++ Terminated：已经终止结束运行。
+
+## Java与协程
+
+Java以Web服务器后端兴起，伴随着Web服务的调用量越来越大，内核模式的线程调度浪费的资源越来越多。协程或者纤程成为未来主角。
+
+# 线程安全与锁优化
+
+## 线程安全
+
+### Java中的线程安全
+
+#### 不可变
+
+#### 绝对线程安全
+
+#### 相对线程安全
+
+#### 线程兼容
+
+#### 线程对立
+
+### 线程安全的实现方法
+
+#### 互斥同步
+
+#### 非阻塞同步
+
+#### 无同步
+
+## 锁优化
+
+### 自旋锁与自适应自旋
+
+### 锁消除
+
+### 锁粗化
+
+### 轻量级锁
+
+### 偏向锁
 
 
 
