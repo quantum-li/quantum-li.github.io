@@ -674,8 +674,18 @@ Policy
 
 ### 效果
 
-+ Strategy类层次为Context定义了一系列的可供重用的算法或行为。继承有助于析取出这些算法中的公共功能。
-+ 将算法封装在独立的Strategy类中使得你可以独立于其Context改变它，使它易于切换、易于理解、易于扩展。
++ Strategy类层次为Context定义了一系列的可供重用的算法或行为。继承有助于析取出这些算法中的公共功能
++ 将算法封装在独立的Strategy类中使得你可以独立于其Context改变它，使它易于切换、易于理解、易于扩展
++ 消除了条件语句
++ 可以选择相同行为的不同实现
++ 客户必须了解不同的Strategy
++ Context可能会创建和初始化一些Strategy用不到的参数
++ 增加了对象的数目
+
+### 实现
+
++ 定义Strategy和Context接口，Strategy和Context接口必须使得ConcreteStrategy能够有效的访问它所需要的Context中的任何数据,反之亦然。
++ 将Strategy作为模板参数
 + 
 
 
