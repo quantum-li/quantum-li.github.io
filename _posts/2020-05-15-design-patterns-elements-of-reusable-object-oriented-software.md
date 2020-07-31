@@ -591,7 +591,92 @@ Singleto: ChangeManager可使用Singleton模式来保证它是唯一的并且是
 
 ### 适用性
 
++ 一个对象的行为取决于它的状态，并且它必须在运行时刻根据状态改变它的行为。
++ 一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。
 
+### 结构
+
+![状态模式结构图](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/状态模式结构图.png)
+
+### 参与者
+
++ Context
+  + 定义客户感兴趣的接口。
+  + 维护一个ConcreteState子类的实例，这个实例定义当前状态。
++ State
+  + 定义一个接口以封装与Context的一个特定状态相关的行为。
++ ConcreteState subclasses
+  + 每一子类实现一个与Context的一个状态相关的行为。
+
+### 协作
+
++ Context将与状态相关的请求委托给当前的ConcreteState对象处理。
++ Context可将自身作为一个参数传递给处理该请求的状态对象。这使得状态对象在必要时可访问Context。
++ Context是客户使用的主要接口。客户可用状态对象来配置一个Context,一旦一个Context配置完毕,它的客户不再需要直接与状态对象打交道。
++ Context或ConcreteState子类都可决定哪个状态是另外哪一个的后继者,以及是在何种条件下进行状态转换。
+
+### 效果
+
++ 它将与特定状态相关的行为局部化，并且将不同状态的行为分割开来
++ 它使得状态转换显示化
++ State对象可被共享
+
+### 实现
+
++ 谁定义状态转换
++ State对象是预创建单例还是随时用随时销毁
+
+### 相关模式
+
++ Flyweight解释了何时以及怎样共享状态对象
++ 状态对象通常是Singleton
+
+## STRATEGY(策略)——对象行为型模式
+
+### 意图
+
+定义一系列的算法,把它们一个个封装起来,并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。
+
+### 别名
+
+Policy
+
+### 动机
+
+使用一些类封装不同的算法，避免把算法硬编码。
+
+### 适用性
+
++ 许多相关的类仅仅是行为有异。“策略”提供了一种用多个行为中的一个行为来配置一个类的方法。
++ 需要使用一个算法的不同变体。
++ 算法使用客户不应该知道的数据。可使用策略模式隐藏数据结构。
++ 一个类定义了多种行为,并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移人它们各自的Strategy类中以代替这些条件语句。
+
+### 结构
+
+![策略模式结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/策略模式结构.png)
+
+### 参与者
+
++ Strategy
+  + 定义所有支持的算法的公共接口。Context使用这个接口来调用某ConcreteStrategy定义的算法。
++ ConcreteStrategy
+  + 以Strategy接口实现某具体算法。
++ Context
+  + 用一个ConcreteStrategy对象来配置。
+  + 维护一个对Strategy对象的引用。
+  + 可定义一个接口来让Stategy访问它的数据。
+
+### 协作
+
++ Strategy和Context相互作用以实现选定的算法。当算法被调用时，Context可以将该算法所需要的所有数据都传递给该Stategy。或者, Context可以将自身作为一个参数传递给Strategy操作。这就让Strategy在需要时可以回调Context。
++ Context将它的客户的请求转发给它的Strategy。客户通常创建并传递一个ConcreteStrategy对象给该Context;这样,客户仅与Context交互。通常有一系列的ConcreteStrategy类可供客户从中选择。
+
+### 效果
+
++ Strategy类层次为Context定义了一系列的可供重用的算法或行为。继承有助于析取出这些算法中的公共功能。
++ 将算法封装在独立的Strategy类中使得你可以独立于其Context改变它，使它易于切换、易于理解、易于扩展。
++ 
 
 
 
