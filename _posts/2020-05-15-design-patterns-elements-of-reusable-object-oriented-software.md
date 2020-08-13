@@ -686,8 +686,29 @@ Policy
 
 + 定义Strategy和Context接口，Strategy和Context接口必须使得ConcreteStrategy能够有效的访问它所需要的Context中的任何数据,反之亦然。
 + 将Strategy作为模板参数
-+ 
++ 3)使Strategy对象成为可选的,提供缺省行为
 
+### 相关模式
+
+Flyweight: Strategy对象经常是很好的轻量级对象
+
+## TEMPLATE METHOD(模板方法)——类行为型模式
+
+### 意图
+
+定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。TemplateMethod使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。
+
+### 适用性
+
++ 一次性实现一个算法的不变部分，并将可变的行为留给子类来实现
++ 各子类中公共的行为应该被提取出来集中到一个公共父类中以避免代码重复
++ 控制子类扩展，模板方法只在特定点调用"hook"操作，这样就只允许在这些点进行扩展
+
+### 结构
+
+![模板方法结构图](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/模板方法结构图.png)
+
+### 参与者
 
 
 
