@@ -68,7 +68,7 @@ Solaris原先是SUN公司研制的类Unix操作系统，在Sun公司被Oracle并
 
 ## Linux
 
-![Linux分支图](/assets/images/operating-system-history/Linux分支图.jpg)
+![Linux分支图](/assets/images/operating-system-history/Linux分支图.svg)
 
 ### Debian系
 
