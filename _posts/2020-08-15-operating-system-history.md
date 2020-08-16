@@ -10,7 +10,11 @@ excerpt: 从大型机之后1964年由贝尔实验室、麻省理工学院及美�
 
 所有内容全部抄自[维基百科](https://zh.wikipedia.org/)，末尾有引用连接。扩展阅读[文件系统](https://zh.wikipedia.org/zh-cn/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F)。
 
+## 操作系统演变
+
 ![操作系统演变](/assets/images/operating-system-history/操作系统演变.svg)
+
+## 操作系统演变简版
 
 ![操作系统演变简版](/assets/images/operating-system-history/操作系统演变简版.svg)
 
@@ -32,7 +36,7 @@ Unix操作系统是在1960年由AT&T公司的贝尔实验室开发出来的，�
 
 ![Linux架构图](/assets/images/operating-system-history/Linux架构图.jpg)
 
-![简化版的WindowsNT抽象架构图](/assets/images/operating-system-history/简化版的Windows NT抽象架构图.jpg)
+![简化版的WindowsNT抽象架构图](/assets/images/operating-system-history/简化版的WindowsNT抽象架构图.jpg)
 
 1964年由贝尔实验室、麻省理工学院及美国通用电气公司所共同参与研发Multics，（多任务信息与计算系统：MULTiplexed Information and Computing System）。由于其进展缓慢贝尔实验室退出转而开发UNIX。
 
