@@ -82,6 +82,58 @@ Factory Method使一个设计可以定制且只略微有一些复杂。其他设
 
 使用Abstract Factory、 Prototype 或Builder的设计甚至比使用Factory Method的那些设计更灵活，但它们也更加复杂。通常，设计以使用Factory Method开始，并且当设计者发现需要更大的灵活性时，设计便会向其他创建型模式演化。当你在设计标准之间进行权衡的时候，了解多个模式可以给你提供更多的选择余地。
 
+## ABSTRACT FACTORY(抽象工厂)——对象创造型模式
+
+### 意图
+
+提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类
+
+### 别名
+
+Kit
+
+### 适用性
+
++ 一个系统要独立于它的产品的创建、组合和表示时
++ 一个系统要由多个产品系列中的一个来配置时
++ 当强调一系列相关的产品对象的设计以便进行联合使用时
++ 当提供一个产品类库，而只想显示它们的接口而不是实现时
+  
+### 结构
+
+![抽象工厂模式结构图](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/抽象工厂模式结构图.png)
+
+### 参与者
+
++ AbstractFactory
+  + 声明一个创建抽象产品对象的操作接口
++ ConcreteFactory
+  + 实现创建具体产品对象的操作
++ AbstractProduct
+  + 为一列产品对象声明一个接口
++ ConcreteProduct
+  + 定义一个将被相应的具体工厂创建的产品对象
+  + 实现AbstractProduct接口
++ Client
+  + 仅适用由AbstractFactory和AbstractProduct类声明的接口
+
+### 协作
+
++ 通常在运行时刻创建一个ConcreteFactroy类的实例。这一具体的工厂创建具有特定实现的产品对象。为创建不同的产品对象，客户应使用不同的具体工厂
++ AbstractFactory将产品对象的创建延迟到它的ConcreteFactory子类
+
+### 效果
+
++ 它分离了具体的类
++ 使得易于交换产品系列
++ 有利于产品一致性
++ 难以支持新种类的产品
+
+
+
+
+
+
 ## 简单工厂模式
 
 简单工厂模式(Simple Factory Pattern)：又称为静态工厂方法(Static Factory Method)模式。
@@ -780,6 +832,17 @@ ConcreteClass靠AbstractClass来实现算法中不变的步骤
 + 通过类层次进行访问，一个迭代器可以通过调用节点对象的特定操作来遍历整个对象结构,同时访问这些对象。但是迭代器不能对具有不同元素类型的对象结构进行操作。
 + 累积状态，当访问者访问对象结构中的每一个元素时，它可能会累积状态。如果没有访问者，这一状态将作为额外的参数传递给进行遍历的操作，或者定义为全局变量。
 + 破坏封装，访问者方法假定ConcreteElement接口的功能足够强，足以让访问者进行它们的工作。结果是，该模式常常迫使你提供访问元素内部状态的公共操作，这可能会破坏它的封装性。
+
+### 实现
+
+每一个对象结构将有一个相关的Visitor类。这个抽象的访问者类为定义对象结构的每一个ConcreteElement类声明一个VisitConcreteElement操作。每一个Visitor上的Visit操作声明它的参数为一个特定的ConcreteElement，以允许该Visitor直接访问ConcreteElement的接口。ConcreteVistor类重定义每一个Visit操作，从而为相应的ConcreteElement类实现与特定访问者相关的行为。
+
++ 谁负责遍历对象结构，一个访问者必须访问这个对象结构的每一个元素。我们可以将遍历的责任放到对象结构中，访问者中，或一个独立的迭代器对象中。通常由对象结构负责迭代。
+
+### 相关模式
+
++ Composite，访问者可以用于对一-个由Composite模式定义的对象结构进行操作
++ Interpreter，访问者可以用于解释
 
 
 
