@@ -52,3 +52,12 @@ excerpt: 从Java的第一-个版本诞生到现在已经有二十余年的时间
 2018年，LTS版本的JDK 11发布，ZGC出现。同时Oracle调整了JDK授权许可证。OpenJDK免费单只有半年支持。OracleJDK在生产环境必须付费，但有三年支持。迫使商业用户要么不断升级JDK版本，要么就去购买商业支持。
 
 2019年，JDK 12发布，引入Shenandoah垃圾收集器。作为首个非Oracle开发的垃圾收集器，由于目标与Oracle在JDK 11引入的ZGC几乎一致存在竞争。OracleJDK 12把相关代码通过条件编译强行提出，使其无法在OracleJDK中使用。
+
+
+[更新记录-wiki](https://zh.wikipedia.org/wiki/Java%E7%89%88%E6%9C%AC%E6%AD%B7%E5%8F%B2)
+
+[虚拟机规范](https://docs.oracle.com/javase/specs/index.html)
+
+[doc](https://docs.oracle.com/en/java/javase/index.html)
+
+[Java存档](https://www.oracle.com/cn/java/technologies/oracle-java-archive-downloads.html)
