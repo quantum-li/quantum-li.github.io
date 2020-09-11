@@ -232,7 +232,17 @@ AOF(Append Only File)，通过保存Redis服务所执行的写命令记录数据
 
 AOF的实现可以分为命令追加、文件写入、文件同步(sync)三个步骤。
 
-Redis
+Redis主进程在每次事件循环结束会触发刷新AOF的函数，函数内部根据配置是内次刷盘，还是每秒刷盘，还是从不刷盘由系统决定。默认为每秒。
+
+Redis通过创建一个不带网络连接的伪客户端读取AOF里面的命令发送到Redis来从AOF文件还原.
+
+![AOF文件载入过程](/assets/images/redis-design-implements/AOF文件载入过程.png)
+
+## AOF重写
+
+为了避免AOF文件体积过大，Redis提供了AOF文件重写功能。会使用一个子进程读取数据库当前状态生成写入命令，并写入新的AOF文件。由于子进程和主进程同时进行，为了避免新命令改变数据库现有状态，在子进程启动期间Redis会开启一个重写缓冲区。当子进程完成后，通知主进程，然后主进程将重写缓冲区的内容追完到新的AOF文件。然后对新的AOF文件改名来原子的覆盖现有AOF文件。
+
+![AOF重写缓冲区](/assets/images/redis-design-implements/AOF重写缓冲区.png)
 
 
 
