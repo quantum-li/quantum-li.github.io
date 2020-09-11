@@ -159,6 +159,34 @@ excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速
 * ⾸先，压缩列表里要恰好有多 个连续 的、⻓度介于 250 字节至 253 字节之间的节点，连锁更新才有 可能被引发，在实际 中，这种 情况 并不多见；
 * 其次，即使出现连锁更新，但只要被更新的节点数量不多，就不会对性能造成任何影响：比如说，对 三五个节点进行连锁更新是绝对不会影响性能的；
 
+# 对象
+
+Redis内部有一些用来支撑服务的数据结构，并基于这些数据结构创建了一个对象系统来实现键值对数据库。每种对象可以由多种数据结构实现，会根据存储内容的类型可大小动态转化对象内部使用的数据结构，从而优化不同场景的使用效率。Redis对象统还实现了基于引用计数内存回收制，当程序不再使用某个对象的时候，这个对象所占用内存就会被自动释放;另外，Redis还通过引用计数实现了对象共享机制，这一机制可以在适当的条件下，通过让过个数据库键共享同一个对象来节约内存。对象带有访问时间记录信息，该信息可用于计算数据库的空转时长。
+
+## 对象类型
+
+``` c
+typedef struct redisObject {
+//类型
+unsigned type:4;
+//编码
+unsigned encoding: 4;
+//指向底层实现数据结构的指针
+void *ptr;
+//....
+} robj;
+```
+![Redis对象类型](/assets/images/redis-design-implements/Redis对象类型.png)
+
+![对应的type属性输出](/assets/images/redis-design-implements/对应的type属性输出.png)
+
+![Redis对象的编码](/assets/images/redis-design-implements/Redis对象的编码.png)
+
+![不同类型和编码的对象](/assets/images/redis-design-implements/不同类型和编码的对象.png)
+
+![OBJECT_ENCODING对不同编码的输出](/assets/images/redis-design-implements/OBJECT_ENCODING对不同编码的输出.png)
+
+
 # 数据库
 
 初始化服务器时会根据dbnum属性来创建N个数据库，数据库在代码中的表现就是一个数组。client通过显示的select X命令来切换数据库。
@@ -181,10 +209,31 @@ redisDb结构的expires字典保存了数据库中所有键的过期时间，我
 * 过期字典的键是一个指针，这个指针指向键空间中的某个键对象（也即是某个数据库键）。
 * 过期字典的值是一个longlong类型的整数，这个整数保存了键所指向的数据库键的过期时间——一个毫秒精度的UNIX时间戳。
 
-	定时删除、惰性删除、周期删除中redis使用了惰性删除和周期删除
-生成RDB文件时已过期的键不会处理。载入RDB⽂件时如果是主服务器只会载入未过期的键，如果是从服务器全都载⼊，再由主服务器同步的时候从服务器被清空。
-AOF：当过期键被删除后程序会向AOF文件追加删除命令，已过期的键不会保存到AOF重写文件里
-复制：主服务器再删除过期键时会向从服务器同步删除命令，而从服务器不会⾃己主动删除
+
+# RDB持久化
+
+将Redis在内存中的数据库状态保存到磁盘里面，避免数据意外丢失。可以手动执行，也可以根据服务器配置定期执行。RDB文件是一个经过压缩的二进制文件。
+
+![RDB文件](/assets/images/redis-design-implements/RDB文件.png)
+
+## RDB文件的创建与载入
+
+有两个Redis命令生成RDB文件，SAVE和BGSAVE。SAVE命令会阻塞Redis服务器的进程，直到RDB文件创建完。BGSAVE会派生出一个子进程来创建RDB文件，同时在完成之前拒绝SAVE命令和BGSAVE命令。RDB文件的载入工作是在服务器启动时自动执行，不需要单独命令。
+
+因为AOF文件的更新频率通常比RDB文件高，所以如果开启了AOF持久化功能会优先使用AOF，只有在AOF关闭时才使用RDB功能。
+
+![创建和载入RDB文件](/assets/images/redis-design-implements/创建和载入RDB文件.png)
+
+# AOF持久化
+
+AOF(Append Only File)，通过保存Redis服务所执行的写命令记录数据库的状态。AOF文件内容是以Redis的命令请求协议格式保存的文本格式。
+
+![AOF持久化](/assets/images/redis-design-implements/AOF持久化.png)
+
+AOF的实现可以分为命令追加、文件写入、文件同步(sync)三个步骤。
+
+Redis
+
 
 
 ## 事件
