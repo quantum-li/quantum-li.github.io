@@ -1,5 +1,5 @@
 ---
-title: PICTURES
+# title: PICTURES
 description: 图片、gif、动图、猫、狗
 layout: "page"
 ---
