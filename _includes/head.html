@@ -32,6 +32,7 @@
   <script type="text/javascript" src="/assets/js/simple-jekyll-search.js"></script>
   <script>
   
+  function searchBox(){
     window.simpleJekyllSearch = new SimpleJekyllSearch({
         searchInput: document.getElementById('search-input'),
         resultsContainer: document.getElementById('results-container'),
@@ -42,11 +43,14 @@
         fuzzy: false,
         exclude: ['Welcome']
       })
-
+  }
 
     var leafNo = 0;
     var leafDown = false;
     function leaf() {
+        searchBox();
+
+
       var cur = leafNo;
       leafNo++;
       var halfScreenWidth = window.innerWidth / 2;
