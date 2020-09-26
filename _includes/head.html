@@ -37,7 +37,7 @@
         searchInput: document.getElementById('search-input'),
         resultsContainer: document.getElementById('results-container'),
         json: '/search.json',
-        searchResultTemplate: '<div style=""><a href="{url}" title="{desc}">{title}</a></div>',
+        searchResultTemplate: '<div style="margin:2px"><a href="{url}" title="{desc}">{title}</a></div>',
         noResultsText: 'No results found',
         limit: 10,
         fuzzy: false,
@@ -48,9 +48,6 @@
     var leafNo = 0;
     var leafDown = false;
     function leaf() {
-        searchBox();
-
-
       var cur = leafNo;
       leafNo++;
       var halfScreenWidth = window.innerWidth / 2;
@@ -95,6 +92,9 @@
 
     $(document).ready(function () {
       leaf();
+      
+      searchBox();
+
       // fancybox
       $(".post-content img").each(function (n, e) {
         $(e).wrap("<a class='fancybox'\
