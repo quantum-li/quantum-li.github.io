@@ -28,7 +28,7 @@ excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、Sorte
 
 ## Set
 
-不包含重复元素的集合。
+不包含重复元素的集合。更正式地说，集合不包含元素对e1和e2，使得e1.equals(e2)，最多包含一个空元素。
 
 ## SortedSet
 
