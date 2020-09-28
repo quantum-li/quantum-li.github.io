@@ -54,9 +54,6 @@ excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、Sorte
 
 支持在两端插入和删除元素的线性集合。"double ended queue"的缩写。不支持索引访问。不应该向其插入空值，一般空值意味着队列为空。
 
-|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | &nbsp;&nbsp; &nbsp; &nbsp;  First Element (Head)  | &nbsp; &nbsp; &nbsp; &nbsp; Last Element (Tail) |
-| --- | --- | --- |
-
 |   | Throws exception | Special value | Throws exception  | Special value |
 | --- | --- | --- | --- | --- | 
 | Insert | addFirst(e) | offerFirst(e) | addLast(e) | offerLast(e) |
