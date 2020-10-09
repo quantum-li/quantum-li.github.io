@@ -28,7 +28,7 @@ layout: none
     ,{
       "title"    : "{{ poe.title | escape }}",
       "category" : "{{ poe.categories }}",
-      "url"      : "{{ site.baseurl }}{{ poe.path }}",
+      "url"      : "{{ site.baseurl }}{{ poe.url }}",
       "tags"     : "{{ poe.time }}"
     }
   {% endfor %}
