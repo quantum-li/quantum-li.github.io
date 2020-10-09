@@ -27,6 +27,9 @@ collections:
   poetry:
     output: true
     permalink: /poetry/:title
+  article:
+    output: true
+    permalink: /posts/:title
 
 defaults:
   - scope:
@@ -50,6 +53,13 @@ defaults:
     values:
       poetry: true
       layout: "poetry"
+  - scope:
+      path: "_article"
+      type: "article"
+    values:
+      article: true
+      comments: true
+      layout: "post"
 
 plugins: [jekyll-paginate,jekyll-admin, kramdown,jekyll-seo-tag,jemoji,jekyll-redirect-from]
 # Build settings

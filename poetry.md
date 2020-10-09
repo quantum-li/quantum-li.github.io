@@ -16,7 +16,7 @@ layout: "default"
       {{ poe.categories }}
     </div>
     <br>
-    <a class='poeLink' href="{{site.url}}{{site.baseurl}}{{poe.url}}">{{poe.title}}</a>
+    <a class='poeLink' href="{{site.baseurl}}{{poe.url}}">{{poe.title}}</a>
     </div>
     <div class="poeExt">
      {{ poe.excerpt }}
