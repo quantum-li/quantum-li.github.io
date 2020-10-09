@@ -6,6 +6,11 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
+
+# archive模板暂时没有用到；default模板是所有页面父类；page模板是pdf、图片等类型；poetry模板是poetry页面的父类；post模板是post页面父类；
+# about.md是网站about；README是github的；
+# index.html是post列表页；pdf.md是pdf列表页面；poetry.md暂时没用；pictures.md暂时没用；
+# _config中的collections可以配置类别的url模式
 title: Leezw
 email: lee@leezw.net
 description: 一本书有少部分讲的是知识，大部分帮助你理解知识。
@@ -17,10 +22,12 @@ permalink: /posts/:title
 theme-dark: false #Set to true to change to dark website theme
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 excerpt_separator:  '<!-- more -->'
+
 collections:
   poetry:
     output: true
     permalink: /poetry/:title
+
 defaults:
   - scope:
       path: "_posts"
