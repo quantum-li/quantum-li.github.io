@@ -32,9 +32,63 @@ excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、Sorte
 
 有序集合（也称为序列）。该接口可以精确控制列表中每个元素的插入位置。用户可以通过其整数索引（列表中的位置）访问元素，并在列表中搜索元素。 与集合不同，列表通常允许重复的元素。该接口提供了一个特殊的迭代器，称为 `ListIterator`，它允许元素插入和替换。
 
+## AbstractList
+
+此类提供 `List` 接口的基本实现，以最大程度地减少实现由“随机访问”数据存储（例如数组）支持的该接口所需的工作。对于顺序访问数据（例如链表），应优先使用`AbstractSequentialList` 。
+
+## SubList
+
+`AbstractList` 的内部类、实现类。内部保存了子List的长度和父List的长度子列表与父列表的数据修改会互相影响，子列表的长度变化会影响父列表，但是父列表的长度变化会导致子列表执行方法抛异常。
+
+## RandomAccessSubList
+
+`AbstractList` 的内部类、实现类。继承`SubList`，由于`SubList`没有直接实现`RandomAccess`接口，所以其作用只是标识一个实现了`RandomAccess`接口的`SubList`。
+
+## ArrayList
+
+`List`接口的可调整大小的数组实现。实现所有可选的列表操作，并允许所有元素，包括 null。除了实现`List`接口之外，此类还提供一些方法来操纵内部用于存储列表的数组的大小。容量是用于在列表中存储元素的数组的大小。它至少与列表大小一样大。应用程序可以通过使用`sureCapacity` 操作在添加大量元素之前增加ArrayList实例的容量。这可以减少增量重新分配的数量。
+
+此实现未同步。 如果多个线程同时访问`ArrayList`实例，并且至少有一个线程在结构上修改列表，则必须在外部进行同步。（结构修改是添加或删除一个或多个元素或显式调整后备数组大小的任何操作；仅设置元素的值不是结构修改。）如果要同步需要使用` Collections.synchronizedList` 进行包装。`List list = Collections.synchronizedList(new ArrayList(...));`。此类在创建迭代器后任何操作都会快速失败。
+
+## AbstractSequentialList
+
+此类提供了 `List` 接口的基本实现，以最大程度地减少实现由“顺序访问”数据存储（例如链表）支持的该接口所需的工作。对于随机访问数据（例如数组），应优先使用`AbstractList`。
+
+## LinkedList
+
+`List`和`Deque` 接口的双链表实现。实现所有可选的列表操作，并允许所有元素（包括null）。索引到列表中的操作将从开头或结尾遍历列表，以更接近指定索引的位置为准。此实现未同步，如果需要同步应使用`Collections.synchronizedList`来进行包装。`List list = Collections.synchronizedList(new LinkedList(...));`
+
 ## Set
 
 不包含重复元素的集合。最多包含一个空元素。小心集合元素中的可变对象。
+
+## RandomAccess
+
+此接口表示其实现类可以很快的通过坐标访问元素，比如`ArrayList`实现了此接口而`LinkedList`没有实现。
+
+## AbstractSet
+
+此类提供Set 接口的基本实现，以最大程度地减少实现此接口所需的工作。通过扩展此类来实现集合的过程与通过扩展`AbstractCollection` 来实现 `Collection` 的过程相同，不同之处在于，此类的子类中的所有方法和构造函数都必须服从`Set` 接口施加的附加约束（例如， add方法不得允许将一个对象的多个实例添加到集合中）。
+
+## EnumSet
+
+`Set`与枚举类型一起使用的特殊实现。枚举集中的所有元素都必须来自创建集时显式或隐式指定的单个枚举类型。枚举集在内部表示为位向量。这种表示非常紧凑和高效。此类的时空性能应足够好，以使其可以用作传统的基于int的“位标志”的高质量，类型安全的替代方法。如果批量操作（例如containsAll和keepAll）的参数也是一个枚举集，它们也应该非常快速地运行。
+
+由`iterator`方法返回的迭代器以其自然顺序（声明枚举常量的顺序）遍历元素。返回的迭代器是弱一致性的：它将永远不会抛出ConcurrentModificationException ，并且可能会或可能不会显示在进行迭代时对集合进行的任何修改的效果。
+
+空元素是不允许的。尝试插入null元素将引发`NullPointerException`。尝试测试是否存在null元素或删除一个null元素将正常运行。
+
+`EnumSet`不同步。如果多个线程同时访问一个枚举集，并且至少有一个线程修改了该枚举集，则应在外部进行同步。通常，通过对自然封装枚举集的某个对象进行同步来完成此操作。如果不存在这样的对象，则应使用`Collections.synchronizedSet(java.util.Set<T>) `方法“包装”该集合。最好在创建时完成此操作，以防止意外的非同步访问： `Set <MyEnum> s = Collections.synchronizedSet(EnumSet.noneOf(MyEnum.class))`
+ 
+实施注意事项：所有基本操作均按固定时间执行。它们可能（尽管不能保证）比`HashSet`同类产品快得多 。如果批量操作的参数也是一个枚举集，则即使批量操作也会在恒定时间内执行。
+
+## JumboEnumSet
+
+用于EnumSet的私有实现类，用于“巨大”枚举类型(即元素多于64个的元素)
+
+## RegularEnumSet
+
+枚举集的私有实现类，用于“常规大小”枚举类型(即枚举常数为64或更少的枚举)
 
 ## SortedSet
 
@@ -79,21 +133,10 @@ excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、Sorte
 | pop() | removeFirst() |
 | peek() | peekFirst() |
 
-## AbstractList
-
-此类提供 `List` 接口的基本实现，以最大程度地减少实现由“随机访问”数据存储（例如数组）支持的该接口所需的工作。对于顺序访问数据（例如链表），应优先使用`AbstractSequentialList` 。
-
-## AbstractSequentialList
-
-此类提供了 `List` 接口的基本实现，以最大程度地减少实现由“顺序访问”数据存储（例如链表）支持的该接口所需的工作。对于随机访问数据（例如数组），应优先使用`AbstractList`。
-
-## LinkedList
-
-`List`和`Deque` 接口的双链表实现。实现所有可选的列表操作，并允许所有元素（包括null）。索引到列表中的操作将从开头或结尾遍历列表，以更接近指定索引的位置为准。此实现未同步，如果需要同步应使用`Collections.synchronizedList`来进行包装。`List list = Collections.synchronizedList(new LinkedList(...));`
-
 ## ArrayDeque
 
 `Deque`接口的可调整大小的数组实现。阵列双端队列没有容量限制。它们会根据需要增长以支持使用。它们不是线程安全的。在没有外部同步的情况下，它们不支持多个线程的并发访问。空元素是禁止的。此类可能比`Stack`用作堆栈时要快 ，并且比`LinkedList` 用作队列时要快。
+
 
 ## Vector
 
@@ -102,12 +145,7 @@ excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、Sorte
 ## Stack
 
 所述Stack类表示对象的后进先出（LIFO）堆栈。它通过五个操作扩展了`Vector`类，这些操作允许将矢量视为堆栈。首次创建堆栈时，它不包含任何项目。在需要堆栈时应优先使用`Deque`类。 `Deque<Integer> stack = new ArrayDeque<Integer>();`。
-
-## ArrayList
-
-`List`接口的可调整大小的数组实现。实现所有可选的列表操作，并允许所有元素，包括 null。除了实现`List`接口之外，此类还提供一些方法来操纵内部用于存储列表的数组的大小。容量是用于在列表中存储元素的数组的大小。它至少与列表大小一样大。应用程序可以通过使用`sureCapacity` 操作在添加大量元素之前增加ArrayList实例的容量。这可以减少增量重新分配的数量。
-
-此实现未同步。 如果多个线程同时访问`ArrayList`实例，并且至少有一个线程在结构上修改列表，则必须在外部进行同步。（结构修改是添加或删除一个或多个元素或显式调整后备数组大小的任何操作；仅设置元素的值不是结构修改。）如果要同步需要使用` Collections.synchronizedList` 进行包装。`List list = Collections.synchronizedList(new ArrayList(...));`。此类在创建迭代器后任何操作都会快速失败。 
+ 
 
 ## AbstractQueue
 
