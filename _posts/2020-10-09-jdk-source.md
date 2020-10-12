@@ -1,11 +1,11 @@
 ---
-title: jdk体系结构
+title: jdk源码体系结构
 categories:
 - jdk
 - 源码
 description: 
-permalink: "/posts/jdk-architecture"
-excerpt: 介绍jdk包结构，类及接口继承实现关系来了解jdk体系结构
+permalink: "/posts/jdk-source"
+excerpt: 介绍jdk包结构，类及接口继承实现关系来了解jdk源码。
 ---
  
 # JDK包目录
