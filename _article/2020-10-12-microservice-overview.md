@@ -13,7 +13,7 @@ excerpt: 微服务架构组件，以及解决方案
 + Consul：使用GO语言编写，Raft算法
 + SmartStack
 + Nacos：注册中心加配置中心
-+ edct3
++ etcd
 + redis
 + sofa
 + zk
@@ -30,7 +30,7 @@ excerpt: 微服务架构组件，以及解决方案
 + Apollo
 + Consul
 + zk
-+ edct3
++ edct
 
 # 限流
 + SpringCloud自带限流器
