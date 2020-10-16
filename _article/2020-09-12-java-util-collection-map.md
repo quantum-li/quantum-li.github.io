@@ -151,6 +151,10 @@ excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、Sorte
 
 此类提供某些`Queue` 操作的基本实现。不允许空值。
 
+## PriorityQueue
+
+基于优先级堆的无边界优先级队列。里面的元素自然排序，或者创建时提供的`Comparator`。不允许插入空值，即使基于自然排序依然需要元素实现比较。队列的头是最小元素，如果有多个最小元素将是其中之一。poll, remove, peek, element方法从队列头操作。队列虽然是无界的，但内部有容量来记录数组大小，会自动增长。其提供的`iterator()`方法不提供有序遍历，请使用`Arrays.sort(pq.toArray())`。此类线程不安全，可以使用`PriorityBlockingQueue`代替。此类` (offer, poll, remove() and add)`方法有`O(log(n))`时间复杂度，`remove(Object) and contains(Object) `有线性复杂度，(peek, element, and size)有常数复杂度。
+
 ## Map
 
 将键映射到值的对象。映射不能包含重复的键；每个键最多可以映射到一个值。 该接口代替了`Dictionary`类，后者是一个完全抽象的类，而不是一个接口。 Map界面提供了三个集合视图，这些视图允许将Map的内容视为一组键，一组值或一组键-值映射。映射的顺序定义为映射的集合视图上的迭代器返回其元素的顺序。一些Map实现（例如TreeMap类）对其顺序做出特定的保证。其他的（例如HashMap类）则没有。 注意：如果将可变对象用作Map键，则必须格外小心。如果在对象是映射中的键的情况下以影响等值比较的方式更改对象的值，则不会指定映射的行为。
