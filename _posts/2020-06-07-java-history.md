@@ -7,6 +7,15 @@ permalink: "/posts/java-history"
 excerpt: 从Java的第一-个版本诞生到现在已经有二十余年的时间，白驹过隙，沧海桑田，转眼已过了四分之一个世纪，JDK的版本已经发展到了JDK 13。这二十多年里诞生过无数与Java相关的产品、技术与标准。现在让我们走入时间隧道，从孕育Java语言的时代开始，再来回顾一下Java的发展轨迹和历史变迁。
 ---
 
+
+[更新记录-wiki](https://zh.wikipedia.org/wiki/Java%E7%89%88%E6%9C%AC%E6%AD%B7%E5%8F%B2)
+
+[虚拟机规范](https://docs.oracle.com/javase/specs/index.html)
+
+[doc](https://docs.oracle.com/en/java/javase/index.html)
+
+[Java存档](https://www.oracle.com/cn/java/technologies/oracle-java-archive-downloads.html)
+
 ![Java技术发展的时间线](/assets/images/java-history/ce2ed681-f046-4102-9e2e-4159a2d8c173.png)
 
 1991年，绿色计划(Green Project)开始启动，此计划最初的目标是开发一种能够在各种消费性电子产品(如机顶盒、冰箱、收音机等)上运行的程序架构。这个计划的产品就是Java语言的前身: Oak (领导人办公室外的一棵橡树) 。Oak当时在消费品市场上并不算成功，但随着1995年互联网潮流的兴起，Oak迅速找到了最适合自己发展的市场定位并蜕变成为Java语言。
@@ -53,11 +62,5 @@ excerpt: 从Java的第一-个版本诞生到现在已经有二十余年的时间
 
 2019年，JDK 12发布，引入Shenandoah垃圾收集器。作为首个非Oracle开发的垃圾收集器，由于目标与Oracle在JDK 11引入的ZGC几乎一致存在竞争。OracleJDK 12把相关代码通过条件编译强行提出，使其无法在OracleJDK中使用。
 
+2019年9月，JDK 13发布，动态 CDS 归档；ZGC: 取消提交未使用存储器；重新实现旧版 Socket API；Switch 表达式（预览阶段）；
 
-[更新记录-wiki](https://zh.wikipedia.org/wiki/Java%E7%89%88%E6%9C%AC%E6%AD%B7%E5%8F%B2)
-
-[虚拟机规范](https://docs.oracle.com/javase/specs/index.html)
-
-[doc](https://docs.oracle.com/en/java/javase/index.html)
-
-[Java存档](https://www.oracle.com/cn/java/technologies/oracle-java-archive-downloads.html)
