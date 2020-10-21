@@ -1,13 +1,15 @@
 ---
-title: Spring Boot
+title: Spring Framework
 categories:
 - spring
 description: 
-permalink: "/posts/spring-boot"
-excerpt: 使用SpringBoot来使服务更快的搭建并运行起来
+permalink: "/posts/spring-framework"
+excerpt: Spring框架提供依赖注入、事务管理、Web应用、数据访问、消息传递等核心支持
 ---
 
 [docs](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/)
+
+[github](https://github.com/spring-projects/spring-framework)
 
 # [概览](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/overview.html#overview)
 
@@ -30,4 +32,31 @@ Spring提供了`ApplicationContext`接口的几种实现。在单体应用程序
 [使用容器](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-client)
 
 在容器当中，Bean被定义为`BeanDefinition`对象，并包含一些[原信息](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-definition)。
+
+Bean可以有一个`id`属性和多个`name`属性。可以有别名。可以创建内部类。可是使用工厂方法以及工厂方法对象。
+
+依赖注入主要有构造方法注入和set方法注入。可以使用变量名、变量类型、方法参数位置等方式映射。
+
+IOC容器检测到环形依赖时会抛出异常，可以不使用构造方法注入而是使用set方法注入。[原文](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-dependency-resolution)
+
+Bean会被尽量晚的解决依赖问题，因此在引用Bean时才会检查出一些异常。因此对于单例Bean会[预初始化](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-lazy-init)以便提前发现问题，也可以被设置为延迟初始化。
+
+依赖注入及Bean关联关系[配置方法](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-properties-detailed)。
+集合类属性可以使用合并操作。XML配置支持[更便捷的配置方式](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-p-namespace)。
+也可以跨[多个变量层级](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-compound-property-names)进行配置。
+支持使用`depends-on`[声明依赖关系](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-dependson)。
+
+我们也可以使用[自动装配](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-autowire)来简化配置Bean之间的依赖注入。
+但其也有一些[限制](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-autowired-exceptions)。
+也可以配置一些Bean[不使用自动装配](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-autowire-candidate)。
+也会有不同生命周期的Bean之间相互依赖的情况，比如[单例Bean依赖Prototype](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-sing-prot-interaction)的情况，
+需要[特殊处理](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-method-injection)这种关系的注入。
+比如使用[代理方式](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-other-injection)。
+
+容器创建Bean时实际创建的是`BeanDefinition`，此后会根据它创建[不同声明周期的对象实例](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes)。
+Bean的声明周期主要有 [singleton](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-singleton) 、[prototype](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-prototype)及[其他](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-other)。
+Bean的声明周期可以[自由定制](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-custom)。
+
+
+
 

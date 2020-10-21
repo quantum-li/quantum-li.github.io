@@ -1,8 +1,8 @@
 ---
-title: Spring Framework
+title: Spring Boot
 categories:
 - spring
 description: 
-permalink: "/posts/spring-framework"
-excerpt: Spring框架提供依赖注入、事务管理、Web应用、数据访问、消息传递等核心支持
+permalink: "/posts/spring-boot"
+excerpt: 使用SpringBoot来使服务更快的搭建并运行起来
 ---
