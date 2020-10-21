@@ -57,6 +57,10 @@ Bean会被尽量晚的解决依赖问题，因此在引用Bean时才会检查出
 Bean的声明周期主要有 [singleton](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-singleton) 、[prototype](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-prototype)及[其他](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-other)。
 Bean的声明周期可以[自由定制](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-scopes-custom)。
 
+不仅可以定制Bean的声明周期，还可以[定制Bean的行为](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-nature)。比如注册[生命周期回调](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-lifecycle)、[给Bean注入`ApplicationContext`或给Bean注入在容器中的名字](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-aware)、以及其他的Bean[感知接口](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aware-list)。
 
-
+容器可以[扩展功能](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-extension)。
+比如在[容器创建Bean实例前后](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-extension-bpp)对其进行一些自定义操作。
+或者对Bean的[元数据进行操作](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-extension-factory-postprocessors)。
+或者[重写Bean初始化逻辑](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-extension-factorybean)。
 
