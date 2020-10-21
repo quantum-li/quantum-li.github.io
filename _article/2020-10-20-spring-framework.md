@@ -64,3 +64,27 @@ Bean的声明周期可以[自由定制](https://docs.spring.io/spring-framework/
 或者对Bean的[元数据进行操作](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-extension-factory-postprocessors)。
 或者[重写Bean初始化逻辑](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factory-extension-factorybean)。
 
+Spring支持[基于注解](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-annotation-config)的Bean配置和XML的Bean配置，XML配置会覆盖注解的行为。
+包括但不限于 
+[`@Required`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-required-annotation)、
+[`@Autowired`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-autowired-annotation)、
+[`@Primary`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-autowired-annotation-primary)、
+[`@Qualifier`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-autowired-annotation-qualifiers)。
+还可以对[泛型](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-generics-as-qualifiers)进行注入。
+甚至可以不使用`@Qualifier`而[自定义](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-custom-autowire-configurer)一个注解。
+也支持JDK注解[`@Resource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-resource-annotation)。
+[`@Value`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-value-annotations)用来注入外部配置值而不是Bean。
+[`@PostConstruct`和`@PreDestroy`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-postconstruct-and-predestroy-annotations)在JDK6-8中存在，在JDK11中被删除。
+
+除了使用XML来管理Bean，还可以使用[组件扫描](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)来管理Bean。
+同时也可以配置扫描时的[过滤选项](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-scanning-filters)。
+使用注解也可以[定义Bean的元数据](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-factorybeans-annotations)。
+或者[指定Bean的Name](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-scanning-name-generator)。
+使用注解[设置Bean的生命周期](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-scanning-scope-resolver)。
+设置[Qualifier元数据](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-scanning-qualifiers)。
+大型应用为了加快组件扫描，可以使用[组件索引](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-scanning-index)。
+除了使用Spring提供的组件扫描依赖注入注解，还可以使用[JSR-330标准依赖注入](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-standard-annotations)注解。
+当然它们相比Spring提供的注解会有一些[限制](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-standard-annotations-limitations)。
+
+
+
