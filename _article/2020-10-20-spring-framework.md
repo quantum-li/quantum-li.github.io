@@ -93,3 +93,10 @@ Spring支持[基于注解](https://docs.spring.io/spring-framework/docs/5.2.9.RE
 使用`@Scope`来声明Bean的[生命周期](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-specifying-bean-scope)。或者[重新命名](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-customizing-bean-naming)Bean在容器中的名字。
 
 如果[使用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-configuration-annotation)`@Configuration`来包裹`@Bean`声明，则Bean之间的依赖关系会[更加方便](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-injecting-dependencies)。
+对于单例模式的Bean，即使在`@Configuration`下被多次调用，也只会[生成一次](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-further-information-java-config)。
+使用`@Import`注解可以[传递引用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-using-import)多个`@Configuration`类。
+设置Bean在[一定条件](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-conditional)下才需要被初始化，对于不同环境创建不同的Bean这里有更详细的[介绍和使用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-definition-profiles)。
+
+使用Java代码和注解初始化容器可以和使用XML的方法[结合使用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-combining)。
+
+不用的环境可以有不用的[配置源](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-property-source-abstraction)
