@@ -86,5 +86,10 @@ Spring支持[基于注解](https://docs.spring.io/spring-framework/docs/5.2.9.RE
 除了使用Spring提供的组件扫描依赖注入注解，还可以使用[JSR-330标准依赖注入](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-standard-annotations)注解。
 当然它们相比Spring提供的注解会有一些[限制](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-standard-annotations-limitations)。
 
+使用注解来[配置容器](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java)，
+可以初始化[`AnnotationConfigApplicationContext`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-instantiating-container)容器。`AnnotationConfigApplicationContext`也可以再[Web应用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-instantiating-container-web)中使用。
+使用`@Bean`注解来[声明一个Bean](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-declaring-a-bean)，
+配置Bean的[生命周期回调](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-lifecycle-callbacks),
+使用`@Scope`来声明Bean的[生命周期](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-specifying-bean-scope)。或者[重新命名](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-customizing-bean-naming)Bean在容器中的名字。
 
-
+如果[使用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-configuration-annotation)`@Configuration`来包裹`@Bean`声明，则Bean之间的依赖关系会[更加方便](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-injecting-dependencies)。
