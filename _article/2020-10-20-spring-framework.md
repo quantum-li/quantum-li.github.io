@@ -99,4 +99,29 @@ Spring支持[基于注解](https://docs.spring.io/spring-framework/docs/5.2.9.RE
 
 使用Java代码和注解初始化容器可以和使用XML的方法[结合使用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-java-combining)。
 
-不用的环境可以有不用的[配置源](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-property-source-abstraction)
+不用的环境可以有不用的[配置源](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-property-source-abstraction)。
+
+可以通过在`@Configuration`类上添加`@EnableLoadTimeWeaving`来把Aspectj的编译器织入换成类加载期织入，这里有个[使用场景](https://www.cnblogs.com/davidwang456/p/5633609.html)。
+
+`ApplicationContext`接口继承了解决i18n问题的[`MessageSource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#context-functionality-messagesource)、
+标准或者自定义的[事件通知&处理](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#context-functionality-events)、
+[访问资源文件](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#context-functionality-resources)、
+在[Web项目中加载容器](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#context-create)、
+将`ApplicationContext`[部署到一个RAR文件](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#context-deploy-rar)。
+
+`BeanFactory`及诸多接口是Spring与第三方结合的[切入点](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-beanfactory)。
+`BeanFactory`与`ApplicationContext`之间的[区别](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#context-introduction-ctx-vs-beanfactory)。
+
+Spring的[资源管理](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources)，
+Spring中所有形式的资源都继承自[`Resource`接口](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-resource)，
+Spring内部有[多种形式的资源类型](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-implementations)：
+[`UrlResource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-implementations-urlresource)、
+[`ClassPathResource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-implementations-classpathresource)、
+[`FileSystemResource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-implementations-filesystemresource)、
+[`ServletContextResource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-implementations-servletcontextresource)、
+[`InputStreamResource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-implementations-inputstreamresource)、
+[`ByteArrayResource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-implementations-bytearrayresource)。
+通过使用`ResourceLoader`来[加载资源](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-resourceloader)。
+任何Bean都可以通过实现[`ResourceLoaderAware`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-resourceloaderaware)来注入`ResourceLoader`，如果一个类持有`Resource`字段，可以[使用资源路径](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-as-dependencies)来注入资源。
+有多种方法使用资源路径来[初始化](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-app-ctx-construction)一个容器，资源路径有多种[通配符表示](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-app-ctx-wildcards-in-resource-paths)。
+注意`FileSystemApplicationContext`会认为所有`FileSystemResource`为[相对路径](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-filesystemresource-caveats)，所以注意使用方式来避免意外。
