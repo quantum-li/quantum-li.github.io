@@ -125,3 +125,10 @@ Spring内部有[多种形式的资源类型](https://docs.spring.io/spring-frame
 任何Bean都可以通过实现[`ResourceLoaderAware`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-resourceloaderaware)来注入`ResourceLoader`，如果一个类持有`Resource`字段，可以[使用资源路径](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-as-dependencies)来注入资源。
 有多种方法使用资源路径来[初始化](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-app-ctx-construction)一个容器，资源路径有多种[通配符表示](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-app-ctx-wildcards-in-resource-paths)。
 注意`FileSystemApplicationContext`会认为所有`FileSystemResource`为[相对路径](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#resources-filesystemresource-caveats)，所以注意使用方式来避免意外。
+
+Spring提供了[验证器](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#validator)可以用来验证数据，并[处理](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#validation-conversion)验证失败结果。
+
+`BeanWrapper`丰富了许多[操作Bean属性](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-beans)的方法。
+以及继承`PropertyEditorSupport`转换String到Bean实例的[方法](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-beans-conversion)，
+也可以继承`PropertyEditorSupport`来[自定义](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-beans-conversion-customeditor-registration)String到类的转换方法。
+除了这种方法，还可以使用Spring提供的[Converter SPI](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#core-convert)功能。
