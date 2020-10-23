@@ -132,3 +132,16 @@ Spring提供了[验证器](https://docs.spring.io/spring-framework/docs/5.2.9.RE
 以及继承`PropertyEditorSupport`转换String到Bean实例的[方法](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-beans-conversion)，
 也可以继承`PropertyEditorSupport`来[自定义](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#beans-beans-conversion-customeditor-registration)String到类的转换方法。
 除了这种方法，还可以使用Spring提供的[Converter SPI](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#core-convert)功能。
+同时Spring也提供了支持国际化和互转的[Formatter SPI](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#format)功能。
+配置一个[全局的Formatter](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#format-configuring-formatting-globaldatetimeformat)。
+Spring提供了对Java Bean[验证API](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#validation-beanvalidation)的支持。
+
+Spring特有的[`SpEL`表达式](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions)，
+及其[简单实用](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions-evaluation)。
+可以对其解析行为[进行配置](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions-parser-configuration)。
+Spring提供两种`SpEL`解析[Context](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions-evaluation-context)实现。
+可以将`SpEL`表达式与基于XML或基于注释的配置元数据一起使用，以[定义BeanDefinition实例](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions-beandef)。
+`SpEL`表达式和Java语言一样也有[自己的语法](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions-language-ref)。
+
+实用Spring[面向切面编程](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop)，
+切面编程的一些[概念](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-introduction-defn)。Spring AOP区别于AspectJ的[特点](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-introduction-spring-defn)。Spring AOP默认实用标准JDK动态代理用于AOP代理，可以使用CGLIB代理。
