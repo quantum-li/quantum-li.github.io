@@ -143,5 +143,26 @@ Spring提供两种`SpEL`解析[Context](https://docs.spring.io/spring-framework/
 可以将`SpEL`表达式与基于XML或基于注释的配置元数据一起使用，以[定义BeanDefinition实例](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions-beandef)。
 `SpEL`表达式和Java语言一样也有[自己的语法](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#expressions-language-ref)。
 
-实用Spring[面向切面编程](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop)，
-切面编程的一些[概念](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-introduction-defn)。Spring AOP区别于AspectJ的[特点](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-introduction-spring-defn)。Spring AOP默认实用标准JDK动态代理用于AOP代理，可以使用CGLIB代理。
+Spring AOP实现[面向切面编程](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop)，
+切面编程的一些[概念](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-introduction-defn)。Spring AOP区别于切面框架的[功能和目标](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-introduction-spring-defn)。Spring AOP使用[代理模式](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-introduction-proxies)实现切面编程，默认使用JDK动态代理，可以使用CGLIB代理。Spring AOP支持部分@AspectJ[语法](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-ataspectj)，同时也支持使用Spring特有的[XML风格](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-schema)声明切面。至于是[选择](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-choosing)Spring AOP还是AspectJ、是使用@AspectJ风格声明Spring AOP还是XML风格，因素包括应用程序需求，开发工具和团队对AOP的熟悉程度。甚至可以[混合](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-mixing-styles)使用@AspectJ风格和XML风格。Spring AOP的代理[机制](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-proxying)。当然Spring也支持使用[纯编码](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-aspectj-programmatic)的方式组装切面。虽然Spring AOP只支持部分@AspectJ注解，并且和AspectJ实现完全不一样，但是也可以[在Spring框架中使用AspectJ](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-using-aspectj)。
+
+上面介绍了Spring AOP和AspectJ之间的关系。切面编程中的一些概念在Spring AOP中都有相应的[接口及实现](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-api)。
+比如：[`Pointcut`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-api-pointcuts)、
+[`Advice`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-api-advice)、
+以及Spring AOP特有的[`Advisor`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-api-advisor)。
+使用[`ProxyFactoryBean`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-pfb)创建AOP代理。
+选择代理[声明方式](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-concise-proxy)。
+使用[`ProxyFactory`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-prog)通过代码创建AOP代理。
+创建了代理对象之后使用[`Advised`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-api-advised)对其进行修改。除了使用`ProxyFactoryBean`或`ProxyFactory`，
+还可以使用[自动代理](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-autoproxy)Bean。
+可以使用[`TargetSource`](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#aop-targetsource)实现HotSwap代理对象、Pooling代理对象、Prototype代理对象、ThreadLocal代理对象。
+Spring在`org.springframework.aop.framework.adapter`包中提供了SPI来客制化新的Advice类型。
+
+Spring在框架层面提供对[空指针安全](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#null-safety)的支持。
+
+Spring中的[Data Buffer和Codecs](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#databuffers)。
+
+Spring XML [Schemas扩展阅读](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#appendix)，包含[util Schema](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#xsd-schemas-util)、[aop Schema](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#xsd-schemas-aop)、[context Schema](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#xsd-schemas-context)、[beans Schema](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#xsd-schemas-beans)。
+[创作Schema](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/core.html#xml-custom)。
+
+
