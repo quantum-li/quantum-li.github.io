@@ -6,7 +6,7 @@ description:
 permalink: "/posts/spring-boot"
 excerpt: 使用SpringBoot来使服务更快的搭建并运行起来
 ---
-[docs](https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/reference/html/)
+[reference](https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/reference/html/)
 [github](https://github.com/spring-projects/spring-boot)
 [pdf](https://leezw.net/pdf/spring-boot-reference.2.3.4.pdf)
 

@@ -7,7 +7,7 @@ permalink: "/posts/spring-framework"
 excerpt: Spring框架提供依赖注入、事务管理、Web应用、数据访问、消息传递等核心支持
 ---
 
-[docs](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/)
+[reference](https://docs.spring.io/spring-framework/docs/5.2.9.RELEASE/spring-framework-reference/)
 
 [github](https://github.com/spring-projects/spring-framework)
 
