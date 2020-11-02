@@ -14,7 +14,7 @@ excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、Sorte
 
 基于 jdk8 <https://docs.oracle.com/javase/8/docs/api/index.html>
 
-[The Collections Framework](https://docs.oracle.com/javase/8/docs/technotes/guides/collections/index.html)
++ [The Collections Framework](https://docs.oracle.com/javase/8/docs/technotes/guides/collections/index.html)
 
 # 概览
 

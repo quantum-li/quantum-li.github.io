@@ -7,14 +7,10 @@ permalink: "/posts/java-history"
 excerpt: 从Java的第一-个版本诞生到现在已经有二十余年的时间，白驹过隙，沧海桑田，转眼已过了四分之一个世纪，JDK的版本已经发展到了JDK 13。这二十多年里诞生过无数与Java相关的产品、技术与标准。现在让我们走入时间隧道，从孕育Java语言的时代开始，再来回顾一下Java的发展轨迹和历史变迁。
 ---
 
-
-[更新记录-wiki](https://zh.wikipedia.org/wiki/Java%E7%89%88%E6%9C%AC%E6%AD%B7%E5%8F%B2)
-
-[虚拟机规范](https://docs.oracle.com/javase/specs/index.html)
-
-[doc](https://docs.oracle.com/en/java/javase/index.html)
-
-[Java存档](https://www.oracle.com/cn/java/technologies/oracle-java-archive-downloads.html)
++ [更新记录-wiki](https://zh.wikipedia.org/wiki/Java%E7%89%88%E6%9C%AC%E6%AD%B7%E5%8F%B2)
++ [虚拟机规范](https://docs.oracle.com/javase/specs/index.html)
++ [doc](https://docs.oracle.com/en/java/javase/index.html)
++ [Java存档](https://www.oracle.com/cn/java/technologies/oracle-java-archive-downloads.html)
 
 ![Java技术发展的时间线](/assets/images/java-history/ce2ed681-f046-4102-9e2e-4159a2d8c173.png)
 

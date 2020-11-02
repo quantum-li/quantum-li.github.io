@@ -9,7 +9,7 @@ categories:
 permalink: "/posts/linux-commandline-and-shellscripting-bible"
 ---
 
-[Linux命令行与shell脚本编程大全.第3版.pdf](https://leezw.net/assets/pdf/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8.%E7%AC%AC3%E7%89%88.pdf)
++ [Linux命令行与shell脚本编程大全.第3版.pdf](https://leezw.net/assets/pdf/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8.%E7%AC%AC3%E7%89%88.pdf)
 
 # 常用命令
 ## sort

@@ -10,9 +10,8 @@ excerpt: Spring使每个人都可以更快，更轻松和更安全地进行Java�
 
 使用了Spring框架，可以获得许多现成的解决方案，而不必担心编写大量额外的代码。
 
-[WhySpring](https://spring.io/why-spring)
- 
-[SpringProjects](https://spring.io/projects)
++ [WhySpring](https://spring.io/why-spring)
++ [SpringProjects](https://spring.io/projects)
 
 
 {% for art in site.article %}
