@@ -1,6 +1,6 @@
 ---
 title: 出师表
-time: 蜀国
+time: 三国-蜀
 categories: 诸葛亮
 ---
 

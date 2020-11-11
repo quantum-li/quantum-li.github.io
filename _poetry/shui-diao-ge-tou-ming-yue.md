@@ -1,6 +1,6 @@
 ---
 title: 水调歌头·明月几时有
-time: 宋代
+time: 宋
 categories: 苏轼
 ---
 

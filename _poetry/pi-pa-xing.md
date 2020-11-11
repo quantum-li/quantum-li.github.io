@@ -1,6 +1,6 @@
 ---
 title: 琵琶行
-time: 唐朝
+time: 唐
 categories: 白居易
 ---
 

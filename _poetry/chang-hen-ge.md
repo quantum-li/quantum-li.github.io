@@ -1,6 +1,6 @@
 ---
 title: 长恨歌
-time: 唐朝
+time: 唐
 categories: 白居易
 ---
 

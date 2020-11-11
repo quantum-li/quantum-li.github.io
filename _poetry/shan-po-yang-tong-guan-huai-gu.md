@@ -1,6 +1,6 @@
 ---
 title: 山坡羊·潼关怀古
-time: 元代
+time: 元
 categories: 张养浩
 ---
 
