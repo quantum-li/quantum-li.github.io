@@ -117,6 +117,36 @@ Git 的分支，其实本质上仅仅是指向提交对象的可变指针。
 
 Git中有一个特殊的指针`HEAD`，它指向当前所在的本地分支，表示当前分支。
 
+## 远程分支
+
+远程引用是对远程仓库的引用（指针），包括分支、标签等等。可以通过 `git ls-remote <remote>` 来显式地获得远程引用的完整列表， 或者通过 `git remote show <remote>` 获得远程分支的更多信息。
+
+远程跟踪分支以 `<remote>/<branch>`的方式命名，例如 `origin/master`。使用 `git clone -o` 可以在clone时自定义远程仓库的名字。远程仓库不会自动与本地索引进行同步，需要显示使用抓取命令`git fetch <remote>`。
+
+可以添加多个远程仓库引用到当前项目，使用`git remote add <remote> <url>`。
+
+推送本地索引到远程分支使用`git push <remote> <branch>`，例如`git push origin develop`。Git会自动将分支名字`develop`展开为`refs/heads/develop:refs/heads/develop`，意味着”推送本地的 `develop` 分支来更新远程仓库上的 `develop` 分支。”。可以把展开的名字简写为`git push origin develop:develop`。完全可以推送到不同的远程分支，只需要修改远程端的名字，比如`git push origin develop:master`。
+
+每次抓取到新的远程跟踪分支，只是拉取到一个远程分支的指针到本地索引。并没有可编辑的本地分支。可以把远程跟踪分支的指针`merge`到本地其他分支，或使用`git checkout -b develop origin/develop`来使用远程跟踪分支的指针创建本地分支。
+
+从一个远程跟踪分支检出一个本地分支会自动创建所谓的“跟踪分支”（它跟踪的分支叫做“上游分支”）。跟踪分支是与远程分支有直接关系的本地分支。 如果在一个跟踪分支上输入 `git pull`，Git 能自动地识别去哪个服务器上抓取、合并到哪个分支。
+
+当克隆一个仓库时，它通常会自动地创建一个跟踪 `origin/master` 的 `master` 分支。设置跟踪分支`git checkout -b <branch> <remote>/<branch>` 等效于 `git checkout --track <remote>/<branch>` ，如果本地不存在且远程只有一个名字匹配的分支则等效于 `git checkout <branch>`。
+
+如果要为即将新建的本地分支换名字，则使用`git checkout -b <new-name> <remote>/<branch>`。
+
+设置已有的本地分支跟踪一个刚刚拉取下来的远程分支，或者想要修改正在跟踪的上游分支， 可以在任意时间使用 `-u` 或 `--set-upstream-to` 选项运行 `git branch` 来显式地设置。`git branch -u origin/develop`。
+
+当设置好跟踪分支后，可以通过简写 `@{upstream}` 或 `@{u}` 来引用它的上游分支。 所以在 `master` 分支时并且它正在跟踪 `origin/master` 时，可以使用 `git merge @{u}` 来取代 `git merge origin/master`。
+
+查看所有跟踪分支 `git branch -vv`。
+
+删除远程分支使用带有 `--delete` 选项的 `git push` 命令，`git push origin --delete develop`。基本上这个命令做的只是从服务器上移除这个指针。 Git 服务器通常会保留数据一段时间直到垃圾回收运行，所以如果不小心删除掉了，通常是很容易恢复的。
+
+## 变基
+
+
+
 # 分布式Git
 
 学习使用Git为一个开源项目贡献代码或管理管理很多开发者参与的项目。
