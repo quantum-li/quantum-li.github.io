@@ -201,6 +201,19 @@ git merge client
 
 # 服务器上的Git
 
+一个远程仓库只是一个裸仓库，没有本地工作目录，只有`.git`目录下的内容。
+
+Git 可以使用四种不同的协议来传输资料:本地协议(Local)，HTTP 协议，SSH(Secure Shell)协议及 Git 协议。
+
++ **本地协议**，使用本地文件系统或共享文件系统
++ **HTTP协议**，使用HTTP协议进行数据传输和权限验证，在Git的版本历史中出现了功能简单的Dumb HTTP 协议和功能更丰富Smart HTTP 协议
++ **SSH协议**，基于SSH协议，只是不支持匿名访问
++ **Git协议**，服务器端有Git守护进程，该协议权限验证低级，要么允许所有访问，要么不允许任何访问
+
+## 搭建Git
+
+见pdf：[progit_v2.1.53.pdf](https://leezw.net/assets/pdf/progit_v2.1.53.pdf)
+
 # 分布式Git
 
 学习使用Git为一个开源项目贡献代码或管理管理很多开发者参与的项目。
@@ -234,6 +247,10 @@ Git集成管理者的工作流是开发者Fork出自己的远程仓库后提交�
 2. 副主管将普通开发者的主题分支合并到自己的 master 分支中。
 3. 主管将所有副主管的 master 分支并入自己的 master 分支中。
 4. 最后，主管将集成后的 master 分支推送到参考仓库中，以便所有其他开发者以此为基础进行变基。
+
+## 维护一个项目
+
+见pdf：[progit_v2.1.53.pdf](https://leezw.net/assets/pdf/progit_v2.1.53.pdf)
 
 # GitHub
 
