@@ -273,6 +273,20 @@ Git集成管理者的工作流是开发者Fork出自己的远程仓库后提交�
 
 GitHub支持配置一些服务，或者仓库变动时调用外部HTTP接口的钩子。同时还提供一些API来供外部使用。
 
+# Git 工具
+
+## 提交历史的选择、引用、过滤
+
++ 每个提交都可以用简短的SHA-1引用
++ 分支也有SHA-1，因此分支除了使用分支名，也能用SHA-1引用。可以使用`git rev-parse branch`命令查看分支的SHA-1
++ 使用`HEAD@{n}`可以引用HEAD的前 `n`次提交
++ 使用`master@{yesterday}`可以引用master昨天引用的提交，此点可以引申`HEAD@{2.months.ago}`
++ 使用`^`或`~`符号可以引用父提交，`HEAD^^`、`HEAD~2`、`HEAD^2`
++ `git log master..develop`表示“在develop分支，不在master分支中的提交
++ `git log origin/master..HEAD`可以查看即将要推送到远端的内容
++ `master..develop`等于`^master develop`等于`develop --not master`
++ `git log master...develop`表示”被两个引用之一包含但又不被两者同时包含“，可以加上`--left-right`显示来自于哪个分支
+
 
 # 附录
 
