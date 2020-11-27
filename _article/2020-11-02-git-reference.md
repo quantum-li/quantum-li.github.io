@@ -287,6 +287,42 @@ GitHub支持配置一些服务，或者仓库变动时调用外部HTTP接口的�
 + `master..develop`等于`^master develop`等于`develop --not master`
 + `git log master...develop`表示”被两个引用之一包含但又不被两者同时包含“，可以加上`--left-right`显示来自于哪个分支
 
+## 交互式暂存
+
+`git add -i[--interactive]` 命令可以选择一个文件部分提交。进入交互式页面后可以选择的操作有：暂存文件、取消暂存文件、暂存文件的一部分、添加未被追踪的文件、显示暂存内容的区别。
+
+`git add -p[--patch]`可以交互式主页面，直接开始暂存部分文件交互。同样的还有`git reset --patch`、`git checkout --patch`、`git stash save --patch`。
+
+## 贮藏与清理
+
+`git stash`命令将当前工作目录中的改动保存起来以备以后使用。是可以跨分支还原的。支持`--patch`交互。
+
++ `git stash [push]` 进行保存，`--include-untracked`包含未被跟踪文件
++ `git stash list` 列出保存历史
++ `git stash apply` 还原内容
++ `git stash drop` 删除某次保存历史
++ `git stash branch <new branchname>`从保存内容新建分支
+
+`git clean`用于清理工作目录中所有未跟踪的文件，谨慎使用不可恢复。
+
++ `git clean --dry-run[-n]` 打印要清理的信息而不实际操作
++ `-f` 用于确认操作，`-d`移除空目录，`-x`用于移除被`.gitignore`排除跟踪的文件，`-i`进入交互界面
+
+## 签署工作
+
+用于验证提交是不是真正来自于可信来源。可以签署tag或一次提交。
+
+## 搜索
+
+`git grep`命令用于提交历史、工作目录、甚至索引中查找一个字符串或者正则表达式。
+
++ `-n` 输出行号
++ `-c` 输出概述信息和每个文件匹配数量
++ `-p[--show-function]`显示匹配项所在的方法或函数
+
+`git log -S`查找包含的提交。`-G`使用正则表达式。
+
+`git log -L 内容:文件`可以查看一行或者一个函数的历史。
 
 # 附录
 
