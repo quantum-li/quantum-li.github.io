@@ -235,3 +235,34 @@ template <> void swap<int>(int &a,int &b){};
 
 # 内存模型和名称空间
 
+## 存储说明符和cv-限定符
+
+存储说明符：
++ register （用于在声明中指示寄在器存储）
++ static
++ extern（引用声明，即声明引用在其他地方定义的变量）
++ thread_loacl（之于线程，犹如常规静态变量之于整个程序）
++ mutable（即使结构（或类）变量为 const，其某个成员也可以被修改）
+
+cv-限定符：
++ const（内存被初始化后，程序便不能再对它进行修改）
++ volatile（即使程序代码没有对内存单元进行修改，其值也可能发生变化）
+
+static使用：
+
++ 在函数外部没有static修饰的变量可在程序的其他文件中使用
++ 在函数外部有static修饰的变量可在程序的引用它的文件中使用
++ 在函数内部有static修饰的变量只能在函数内部使用，但是他是全局静态的
++ 用于方法时，该函数只在文件中可见，将覆盖外部定义
+
+## 定位new运算符
+
+new可以指定地址位置，这时将不受delete控制。
+
+```c++
+char buffer1[50];
+char buffer2[500];
+a_struct *p1 = new (buffer1) a_struct;
+int *p2 = new (buffer2) int[20];
+```
+
