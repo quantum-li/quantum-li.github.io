@@ -347,7 +347,47 @@ git commit --amend
 git rebase --continue
 ```
 
+历史改写脚本：`filter-branch`或`git-filter-repo`
 
+## 重置
+
+重置有两个命令，`reset`和`checkout`。区别在于`reset`重置`HEAD`指向的分支的内容，这意味着如果 HEAD 设置为`master` 分支(例如，你正在 `master` 分支上)， 运行 `git reset 9e5e6a4`将会使`master`指向`9e5e6a4`。而`checkout`重置`HEAD`的指向，同时`checkout`更安全，它会在工作目录试图执行合并操作，而`reset --hard`只做替换。他们都支持`--patch`交互。
+
+他们之间的区别如图：
+
+![reset和checkout区别](/assets/images/git-reference/reset-checkout-diff.png)
+
+假设当前仓库的状态如图：
+
+![当前仓库状态01](/assets/images/git-reference/当前仓库状态01.png)
+
+执行带`--soft`的`reset`后：
+
+![使用soft](/assets/images/git-reference/soft-reset.png)
+
+执行带`--mixed`的`reset`后（`--mixed`是`reset`的默认行为）：
+
+![使用mixed](/assets/images/git-reference/mixed-reset.png)
+
+执行带`--hard`的`reset`会强制覆盖了工作目录中的文件。Git 数据库中的一个提交内还留有该文件的 v3 版本，可以通过 `reflog` 来找回它。但是若该文件还未提交，Git 仍会覆盖它从而导致无法恢复：
+
+![使用hard](/assets/images/git-reference/hard-reset.png)
+
+还可以指定`reset`的作用路径，指定了路径后不会更新`HEAD`指针，而是会从`HEAD`拉取数据更新暂存区或工作目录的指定文件。也可以同时指定一次提交，这样会从指定的提交拉取数据更新暂存区：
+
+![指定文件](/assets/images/git-reference/reset-file-指定提交.png)
+
+使用`reset`命令可以实现提交的压缩或`--amend`命令，假设当前仓库状态如图：
+
+![使用reset压缩提交](/assets/images/git-reference/reset压缩前.png)
+
+执行`git reset --soft HEAD~2`后：
+
+![执行reset](/assets/images/git-reference/reset-执行.png)
+
+再次执行`commit`：
+
+![reset压缩后](/assets/images/git-reference/reset压缩后.png)
 
 
 
