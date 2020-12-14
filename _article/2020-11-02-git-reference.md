@@ -389,6 +389,20 @@ git rebase --continue
 
 ![reset压缩后](/assets/images/git-reference/reset压缩后.png)
 
+## 高级合并
+
+在做一次可能有冲突的合并前尽可能保证工作目录是干净的。如果你有正在做的工作，要么提交到一个临时分支要么储藏它。
+
+使用`git merge --abort`可以中断一次合并。
+
+处理空白变更，`git merge`的时候关于空格的处理参数一共有5个，使用时`git merge -Xignore-space-change 合并过来的分支`，变更结果将直接以发生了实质性更改的分支为准，而不进行合并：
+
+1. 无配置：这时候任何空格都不会被忽略，包括尾部的空格数量不同，都会导致冲突的产生
+2. ignore-space-at-eol：忽略尾部空格的改变
+3. ignore-space-change：当两边在同一位置都有空格，只是空格数量不一样会被忽略；当非末尾位置一边有空白另一边没有，认为发生冲突
+4. ignore-all-space：忽略任何空格，这意味着"a b c"和"abc"将等效
+5. ignore-cr-at-eol：忽略结尾的回车换行符
+
 
 
 # 附录
