@@ -413,13 +413,26 @@ git show :3:hello.rb > hello.theirs.rb
 git merge-file -p hello.ours.rb hello.common.rb hello.theirs.rb > hello.rb
 ```
 
-git checkout 可以带参数比如：
+当合并进行中并出现冲突时，使用`git checkout` 可以带参数比如：
 
 + --conflict=diff3：显示检出冲突样式为ours、base、theirs
 + --conflict=merge：默认
 + --ours：留下我们的修改
 + --theirs：留下外部的修改
 
+查看冲突发生的历史日志：
+
++ `git log --oneline --left-right HEAD...MERGE_HEAD`
++ `git log --oneline --left-right --merge` 只显示带有冲突文件的提交
++ `git log --oneline --left-right -p` 得到所有冲突文件的区别
+
+如果误合并一个分支之后，想要还原合并操作：
++ 如果还没有推送到远程，可以使用 `git reset --hard HEAD~`
++ 否则使用`git revert`命令。注意此命令如果想要再次执行合并会出现`Already up-to-date.`，这种情况需要对revert进行revert来重新合并
+
+如果合并解决冲突的方式只是简单的保留一边代码，可以使用` git merge -Xours[-Xtheirs] XXX`。其底层命令是`git merge-file --ours[--theirs]`。
+
+如果根本不想发生代码上的合并，只是记录一次合并动作，可以使用`git merge -s ours XXX`。这样只是把当前代码当成合并结果进行提交。这在bugfix分支同时合并进入master和release后，release又合并会master的情况下会避免冲突。
 
 # 附录
 
