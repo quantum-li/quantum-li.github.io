@@ -434,6 +434,60 @@ git merge-file -p hello.ours.rb hello.common.rb hello.theirs.rb > hello.rb
 
 如果根本不想发生代码上的合并，只是记录一次合并动作，可以使用`git merge -s ours XXX`。这样只是把当前代码当成合并结果进行提交。这在bugfix分支同时合并进入master和release后，release又合并会master的情况下会避免冲突。
 
+当一个项目的子目录映射到另一个项目时，可以使用子树合并功能，其类似于子模块。
+
+```shell
+git remote add rack_remote https://****/rack
+git fetch rack_remote
+git checkout -b rack_branch rack_remote/master
+git checkout master
+git read-tree --prefix=rack/ -u rack_branch
+```
+
+更新子目录代码可以使用：
+
+```shell
+git checkout rack_branch
+git pull
+git checkout master
+git merge --squash -s recursive -Xsubtree=rack rack_branch
+```
+
+子目录的差异查看不是使用diff命令，需要使用
+```shell
+git diff-tree -p rack_branch 和目标分支比较
+git diff-tree -p rack_remote/master 和最近一次抓取的其他分支比较
+```
+
+## Rerere
+
+自动记录一次解决冲突的结果，当下次遇到相同的冲突时会被按照记录的方式自动解决。使用`git config --global rerere.enabled true` 开启。
+
+## 找到bug是在哪次提交被引入的
+
+`git blame`查看每一行的提交信息。
+
+在提交历史中进行二分查找bug何时被引入：
+
+```shell
+git bisect start //启动
+git bisect bad  //标记当前所在提交是有问题的
+git bisect good v1.0  //告诉git已知的最后一次正常状态的提交
+```
+
+之后循环测试当前代码，并告诉git是`git bisect good`还是`git bisect bad`。当git能确定问题是在哪次提交被引入时，会显示引入错误的那次提交的一些说明。当知道错误是被哪次提交引入后，使用`git bisect reset`来恢复到开始状态。
+
+如果提交历史过多，也可以使用使用检测脚本来让git自己测试出问题是在哪次提交被引入：
+
+```shell
+git bisect start HEAD v1.0  //git bisect start <出现问题的提交> <最后一次已知的正常的提交>
+git bisect run test-error.sh
+```
+
+## 子模块
+
+
+
 # 附录
 
 ## git log 常用选项
