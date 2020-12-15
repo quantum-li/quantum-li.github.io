@@ -403,6 +403,22 @@ git rebase --continue
 4. ignore-all-space：忽略任何空格，这意味着"a b c"和"abc"将等效
 5. ignore-cr-at-eol：忽略结尾的回车换行符
 
+手动合并文件：
+
+```shell
+git show :1:hello.rb > hello.common.rb
+git show :2:hello.rb > hello.ours.rb
+git show :3:hello.rb > hello.theirs.rb
+*** do something with files ***
+git merge-file -p hello.ours.rb hello.common.rb hello.theirs.rb > hello.rb
+```
+
+git checkout 可以带参数比如：
+
++ --conflict=diff3：显示检出冲突样式为ours、base、theirs
++ --conflict=merge：默认
++ --ours：留下我们的修改
++ --theirs：留下外部的修改
 
 
 # 附录
