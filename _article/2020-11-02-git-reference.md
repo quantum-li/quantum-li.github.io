@@ -430,9 +430,9 @@ git merge-file -p hello.ours.rb hello.common.rb hello.theirs.rb > hello.rb
 + 如果还没有推送到远程，可以使用 `git reset --hard HEAD~`
 + 否则使用`git revert`命令。注意此命令如果想要再次执行合并会出现`Already up-to-date.`，这种情况需要对revert进行revert来重新合并
 
-如果合并解决冲突的方式只是简单的保留一边代码，可以使用` git merge -Xours[-Xtheirs] XXX`。其底层命令是`git merge-file --ours[--theirs]`。
+如果合并解决冲突的方式只是简单的保留一边代码，可以使用` git merge -Xours[-Xtheirs] <branch>`。其底层命令是`git merge-file --ours[--theirs]`。
 
-如果根本不想发生代码上的合并，只是记录一次合并动作，可以使用`git merge -s ours XXX`。这样只是把当前代码当成合并结果进行提交。这在bugfix分支同时合并进入master和release后，release又合并会master的情况下会避免冲突。
+如果根本不想发生代码上的合并，只是记录一次合并动作，可以使用`git merge -s ours <branch>`。这样只是把当前代码当成合并结果进行提交。这在bugfix分支同时合并进入master和release后，release又合并会master的情况下会避免冲突。
 
 当一个项目的子目录映射到另一个项目时，可以使用子树合并功能，其类似于子模块。
 
@@ -486,7 +486,22 @@ git bisect run test-error.sh
 
 ## 子模块
 
++ 添加子模块` git submodule add https://github.com/<>/<>`，同时会生成`.gitmodules`子模块配置文件
++ `git diff --submodule`查看子模块的详细diff信息
++ `clone`主项目时默认不拉取子模块，需要使用`git submodule init`先初始化本地配置文件，再使用`git submodule update`拉取子模块数据，或使用`git submodule update --init [ --recursive(更新嵌套子模块)]`简化操作。甚至可以使用`git clone --recurse-submodules <url>`来一步到位。
++ 更新子模块进入子模块目录使用`git fetch`或`git merge`等命令
++ 或者不进入子模块执行`git submodule update --remote [module(可选，默认所有子模块)]`，这会默认更新检出`master`分支，如果需要指定子模块的其他分支，使用`git config [-f(修改并更新到文件)] .gitmodules submodule.<project>.branch <branch>`配置`.gitmodules`文件
++ 配置`git config --global diff.submodule log`可以省去每次diff都传递`--submodule`
++ 配置`git config status.submodulesummary 1`使`git status`显示子模块更详细的更改信息
++ 在pull主项目后，需要使用`git submodule update`，可以使用`git pull --recurse-submodules`简化操作，如果需要这个是默认行为，可以将配置选项 `submodule.recurse` 设置为 `true`，会让 Git 为所有支持 `--recurse-submodules` 的命令使用该选项（除 `clone`以外）
++ 当子模块的远端URL发生变化时(通常因为改变托管平台)， `git pull --recurse-submodules` 或`git submodule update` 会失败，需要执行：
 
+```shell
+# 将新的 URL 复制到本地配置中
+git submodule sync --recursive
+# 从新 URL 更新子模块
+git submodule update --init --recursive
+```
 
 # 附录
 
