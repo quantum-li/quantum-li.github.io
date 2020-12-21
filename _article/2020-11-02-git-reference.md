@@ -514,6 +514,12 @@ git submodule update --init --recursive
   4. `git commit -am 'message'`
 + `git submodule foreach 'git stash`，foreach命令可以对所有子模块执行指定的命令
 
+当不是所有的分支都有子模块时，在不同的分支切换，Git 2.13之前的版本无法正常处理子模块及其文件目录，需要每次手动处理。比如从有子模块的分支切换到没有子模块的分支时会有一个没有被跟踪的子模块目录。从没有子模块的分支切换的有子模块的分支时，子模块需要重新初始化并拉取。在Git 2.13及其之后版本中，可以给checkout命令传递` --recurse-submodules`来解决此问题`git checkout --recurse-submodules <with_submodule_branch>`。当然，可以设置`git config submodule.recurse true`来让这个行为成为所有支持这个命令的默认选项。
+
+## 打包
+
+
+
 
 
 
