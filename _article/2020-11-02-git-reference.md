@@ -488,7 +488,7 @@ git bisect run test-error.sh
 
 + 添加子模块` git submodule add https://github.com/<>/<>`，同时会生成`.gitmodules`子模块配置文件
 + `git diff --submodule`查看子模块的详细diff信息
-+ `clone`主项目时默认不拉取子模块，需要使用`git submodule init`先初始化本地配置文件，再使用`git submodule update`拉取子模块数据，或使用`git submodule update --init [ --recursive(更新嵌套子模块)]`简化操作。甚至可以使用`git clone --recurse-submodules <url>`来一步到位。
++ `clone`主项目时默认不拉取子模块，需要使用`git submodule init`先初始化本地配置文件，再使用`git submodule update`拉取子模块数据(此命令不会创建可用的本地分支，子模块会处于游离态的HEAD)，或使用`git submodule update --init [ --recursive(更新嵌套子模块)]`简化操作。甚至可以使用`git clone --recurse-submodules <url>`来一步到位。
 + 更新子模块进入子模块目录使用`git fetch`或`git merge`等命令
 + 或者不进入子模块执行`git submodule update --remote [module(可选，默认所有子模块)]`，这会默认更新检出`master`分支，如果需要指定子模块的其他分支，使用`git config [-f(修改并更新到文件)] .gitmodules submodule.<project>.branch <branch>`配置`.gitmodules`文件
 + 配置`git config --global diff.submodule log`可以省去每次diff都传递`--submodule`
@@ -502,6 +502,24 @@ git submodule sync --recursive
 # 从新 URL 更新子模块
 git submodule update --init --recursive
 ```
+
+当我们运行 `git submodule update` 从子模块仓库中抓取修改时，Git将会获得这些改动并更新子目录中的文件，但是会将子仓库留在一个称作“游离的 HEAD”的状态。 这意味着没有本地工作分支（例如“master” ）跟踪改动，所有本地变更都会丢失。如果想要像普通Git项目那样使用，进入每个子模块并检出其相应的工作分支。接着，若你做了更改就需要告诉 Git 它该做什么，然后运行 `git submodule update --remote --merge[--rebase]` 来从上游拉取新工作。 
+
++ 在主项目上`git push --recurse-submodules=check`会检查，如果有没有推送的子模块会推送主项目失败，可以通过设置`git config push.recurseSubmodules check`使他变成`push`的默认行为
++ 在主项目上`git push --recurse-submodules=on-demand`会在推送主项目时尝试推送子模块，如果子模块有冲突会推送失败，可以通过设置`git config push.recurseSubmodules on-demand`使他变成`push`的默认行为
++ 合并子模块改动
+  1. 在主项目`git pull`
+  2. 进入子模块，解决冲突
+  3. 返回主项目，执行`git add <submodule>`
+  4. `git commit -am 'message'`
++ `git submodule foreach 'git stash`，foreach命令可以对所有子模块执行指定的命令
+
+
+
+
+
+
+
 
 # 附录
 
