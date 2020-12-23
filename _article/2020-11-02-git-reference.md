@@ -518,12 +518,21 @@ git submodule update --init --recursive
 
 ## 打包
 
++ `git bundle create <filename> HEAD master`打包master分支
++ `git clone <filename> <reponame>` 从文件clone出项目
+如果你在打包时没有包含 HEAD 引用，你还需要在命令后指定一个 -b master 或者其他被引入的分支， 否则Git 不知道应该检出哪一个分支。
++ `git bundle create <filename> master ^9a466c5` 打包指定区间
++ `git bundle verify <filename-with-path>` 校验包是否可用
++ `git bundle list-heads <filename-with-path>` 查看包中包含哪些分支
++ `git fetch[pull] <filename-with-path> master:<本地分支>` 取出提交
 
+## 替换
 
++ `git replace 81a708d c6e1e95`
 
+`replace`命令可以让你在Git中指定某个对象并告诉Git：“每次遇到这个对象时，假装它是其它对象”。在你用一个不同的提交替换历史中的一个提交而不想以`git filter-branch`之类的方式重建完整的历史时，这会非常有用。
 
-
-
+例如，你有一个大型的代码历史并想把自己的仓库分成一个短的历史和一个更大更长久的历史， 短历史供新的开发者使用，后者给喜欢数据挖掘的人使用。你可以通过用新仓库中最早的提交“替换”老仓库中最新的提交来连接历史，这种方式可以把一条历史移植到其他历史上。这意味着你不用在新历史中真正替换每一个提交。
 
 
 
