@@ -213,6 +213,8 @@ method(int_val); //调用声明了引用变量参数的方法
 
 返回引用而不是值，可以只传递引用，从而避免一次值拷贝。但是不要返回方法内临时变量的引用，方法执行完后会被销毁。返回引用也可以使用`const`修饰，这样在调用方法位置不能对返回值进行修改。
 
+函数`const Foo & fun(const Foo & f) const;`隐式访问一个对象(this)，显示访问另一个对象(f)，并返回一个对象的引用。括号中的 const表明，该函数不会修改被显式地访问的对象：而括号后的 const表明，该函数不会修改被隐式地访问的对象。由于该函数返回了两个 const对象之一的引用，因此返回类型也应为 const引用。
+
 ## 模板函数
 
 ```c++
@@ -265,4 +267,60 @@ char buffer2[500];
 a_struct *p1 = new (buffer1) a_struct;
 int *p2 = new (buffer2) int[20];
 ```
+# 名称空间
 
+C++中的名称空间除了全局和方法内，还可以自定义名称空间。名称空间可以是全局的也可以位于另一个名称空间中(嵌套：OuterNameSpace::InnerNameSpace::field)及在另一个名称空间中使用，但不能位于代码块中。
+
+```c++
+// 声明一个名称空间
+namespace MyNameSpace{
+    double filed1;
+    void method1();
+}
+// 向名称空间中添加名称
+namespace MyNameSpace{
+    struct struct1{ ... }
+}
+// 对名称空间中的方法原型进行实现
+namespace MyNameSpce{
+    void method1()
+    {
+        ...
+    }
+}
+```
+
+using 声明(using MyNameSpace::field1)将名称添加到using所属的声明区域中，以便于不用每次都使用空间限定符`::`；using编译指令(using namespace MyNameSpace)使空间中所有名称都可用。
+
+当局部变量隐藏同名的全局变量时，如果想要调用全局变量可以使用不带命名空间的限定符`::var`。命令空间可以创建别名`namespace MNS = MyNameSpace`
+
+
+# 对象
+
+## 构造函数和析构函数
+
++ 构造函数结构`Foo(const string & f1,long f2=0, double f3 = 0.0);`
++ 使用构造函数创建并初始化对象`Foo *foo = new Foo("foo",19,17.0);`
++ 使用构造函数初始化对象`Foo foo = Foo("foo",1,2.0);`或`Foo foo("foo",1,2.0);`
++ 使用列表初始化对象`Foo foo = {"foo",1,2.0};`
++ 使用列表初始化对象`Foo foo {"foo",1,2.0};`
++ 如果没有提供显示构造函数，则有没有参数的默认构造函数
++ 析构函数`~Foo();`
+
+
+
+# 使用类
+
+## 运算符重载
+
+运算符重载分为成员函数重载和非成员函数重载，需要使用成员函数访问符`object.method()`访问的是成员函数，不需要的是非成员函数。`operator*op*(arglist)`重载运算符，比如`operator+()`重载+运算符。运算符重载只能重载已有的运算符，不能创造新的运算符。不能违反运算符原来的语法规则和优先级。
+
+`B + 2.7`将调用B重载运算符的成员函数，但是反过来`2.7 + B`将行不通，这时需要使用友元来重载`operator+(double d,const B & b)`
+
+## 友元
+
++ 友元函数
++ 友元类
++ 友元成员函数
+
+创建友元函数需要将函数原型放在类声明中，并在原型声明前加关键字friend `friend Foo operator*(int m,const Foo & f);`。这意味着虽然函数是在类声明中声明的，但不是成员函数；虽然不是成员函数但与成员函数的访问权限相同。
