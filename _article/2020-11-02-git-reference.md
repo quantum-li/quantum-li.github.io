@@ -534,6 +534,61 @@ git submodule update --init --recursive
 
 例如，你有一个大型的代码历史并想把自己的仓库分成一个短的历史和一个更大更长久的历史， 短历史供新的开发者使用，后者给喜欢数据挖掘的人使用。你可以通过用新仓库中最早的提交“替换”老仓库中最新的提交来连接历史，这种方式可以把一条历史移植到其他历史上。这意味着你不用在新历史中真正替换每一个提交。
 
+## 凭证暂存
+
+使用HTTP协议连接时需要用户名和密码。Git有一个凭证系统可以帮助缓存密码避免每次都输入。
+
++ 默认所有都不缓存
++ "cache"模式会放在内存中15分钟，不落盘  `git config --global credential.helper 'cache [--timeout <seconds>]'`
++ "store"模式会明文落盘在home目录下，永不过期  `git config --global credential.helper 'store [--file <path>]'`
++ 对于Mac，Git的osxkeychain模式会把凭证存到系统用户的钥匙串中
++ 对于Windows，可以使用“Git Credential Manager for Windows”辅助工具，和钥匙链类似。
++ 可以在配置文件中配置多个辅助工具，Git会按顺序调用
+
+底层实现Git 凭证辅助工具系统的命令是 `git credential`。由于凭证辅助工具和Git是两个独立的应用，所以我们可以自定义自己的凭证辅助工具。
+
+# 自定义Git
+
+## 配置Git
+
++ `core.editor`：默认情况下，Git 会调用你通过环境变量 $VISUAL 或 $EDITOR 设置的文本编辑器， 如果没有设置，默认则会 调用 vi 来创建和编辑你的提交以及标签信息。 你可以使用 core.editor 选项来修改默认的编辑器
++ `commit.template`：如果把此项指定为你的系统上某个文件的路径，当你提交的时候， Git 会使用该文件的内容作为提交的默认初始化信息。
++ `core.pager`：该配置项指定 Git 运行诸如 log 和 diff 等命令所使用的分页器。 你可以把它设置成用 more 或者任何你喜欢的分页器（默认用的是 less），当然也可以设置成空字符串，关闭该选项
++ `user.signingkey`： GPG 签署密钥设置为配置项创建经签署的含附注的标签
++ `core.excludesfile`：设置全局生效的ignore文件路径
++ `help.autocorrect`：如果打错一个命令，Git只会提示看似相近的命令。如果把这个设置为1，那Git就会在打错命令的时候自动执行看似相近的命令
+ 
+## Git 中的着色
+
+`color.ui`默认是`auto`只有输出到终端才着色，可选`false`或`always`
+
+`color.*`：具体到哪些命令输出需要被着色以及怎样着色，它们都能被置为 true、false 或 always。比如`color.branch`、`color.diff` 等等。上每个配置项都有子选项，它们可以被用来覆盖其父设置，以达到为输出的各个部分着色的目的。
+
+例如，为了让 `diff` 的输出信息以蓝色前景、黑色背景和粗体显示，你可以运行
+
+``` shell
+git config --global color.diff.meta "blue black bold"
+```
+
+你能设置的颜色有：normal、black、red、green、yellow、blue、magenta、cyan 或 white。 正如以上例子设置的粗体属性，想要设置字体属性的话，可以选择包括：bold、dim、ul（下划线）、blink、reverse（交换前景色和背景色）。
+
+## 外部的合并与比较工具
+
+```
+[merge]
+  tool = extMerge
+[mergetool "extMerge"]
+  cmd = extMerge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+  trustExitCode = false    ## 返回值是否表示合并操作成功
+[diff]
+  external = extDiff
+```
+
+## 格式化与多余的空白字符
+
++ `core.autocrlf`：让Git在代码提交或检出时自动转换CRLF和LF，可配置项有`true`、`input`仅在提交时转换、`false`
++ `core.whitespace`：
+
 
 
 # 附录
