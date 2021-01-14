@@ -586,8 +586,67 @@ git config --global color.diff.meta "blue black bold"
 
 ## 格式化与多余的空白字符
 
-+ `core.autocrlf`：让Git在代码提交或检出时自动转换CRLF和LF，可配置项有`true`、`input`仅在提交时转换、`false`
-+ `core.whitespace`：
+ `core.autocrlf`让Git在代码提交或检出时自动转换CRLF和LF，可配置项有`true`、`input`仅在提交时转换、`false`。
+
+ `core.whitespace`，它的参数为一系列用英文逗号分隔控制空白符位置的开关。要想关闭某个选 项，你可以在输入设置选项时不指定它或在它前面加个 `-`。
+
+ 默认被打开的三个选项是：`blank-at-eol`行尾的空格；`blank-at-eof`文件尾部的空行；`space-before-tab`行头 tab 前面的空格。
+
+ 默认被关闭的三个选项是：`indent-with-non-tab`以空格而非 tab 开头的行；`tab-in-indent`行头表示缩进的 tab；`cr-at-eol`行尾的回车。
+
+## 服务器端配置
+
++ `receive.fsckObjects`：在每次推送前都检查库的完整性
++ `receive.denyNonFastForwards`：关闭强制推送功能`push -f`
++ `receive.denyDeletes`：禁止通过推送删除分支和标签
+
+# Git 属性
+
+在不同目录下使用`.gitattributes`文件来针对特定的路径做一些设置。如果不想让这些属性文件与其它文件一同提交，你也可以在 .git/info/attributes 文件中进行设置。
+
++ 如果想把某个文本文件当做二进制文件处理，可以在`.gitattributes`文件配置` <filename> binary`
++ 如果想实现对二进制文件的diff比较，可以配置比较过滤器。例如docx文件`*.docx diff=word` 然后配置过滤器`git config diff.word.textconv <filter>`，然后创建该过滤器脚本。同样可以延伸到图片文件、pdf文件等
++ 在Git中可以使用过滤器来在提交和检出文件时处理文件。一个过滤器由检出过滤器"clean"和提交过滤器"smudge"两个子过滤器组成。首先在`.gitattributes`文件配置`<filename> filter=<filtername>`，然后设置`git config --global filter.<filetername>.clean <cleanfilter>`和`git config --global filter.<filetername>.smudge <smudgefilter>`
++ 如果在导出归档时想忽略一些文件或目录可以配置`<filepattern> export-ignore`
++ 将`git log`的格式化和关键字展开处理应用到标记了`export-subst`属性的部分文件。
++ 配置文件自定义合并策略`<filepattern> merge=<mergestrategy>`，然后配置`git config --global merge.<mergestrategy>.driver true`  什么是合并策略，为什么是true???
+
+# 钩子
+
+hook分为客户端的和服务器端的。 客户端钩子由诸如提交和合并这样的操作所调用，而服务器端钩子作用于诸如接收被推送的提交这样的联网操作。位于 Git 目录下的`hooks`子目录中。 也即绝大部分项目中的`.git/hooks`。钩子有约定的命名并且不带扩展名。这个目录初始状态下会有一些示例文件。
+
+客户端的钩子又分为提交工作流钩子、电子邮件工作流钩子和其他钩子。
+
+提交工作流钩子：
+
++ `pre-commit` 钩子在键入提交信息前运行。 它用于检查即将提交的快照。如果该钩子以非零值退出，Git 将放弃此次提交，不过你可以用 `git commit --no-verify` 来绕过这个环节。 利用该钩子，可以检查代码风格等。
++ `prepare-commit-msg` 钩子在启动提交信息编辑器之前，默认信息被创建之后运行。 它允许你编辑提交者所看到的默认信息。 该钩子接收一些选项：存有当前提交信息的文件的路径、提交类型和修补提交的提交的 SHA-1 校验。
++ `commit-msg` 钩子接收存有当前提交信息的临时文件的路径。 如果该钩子脚本以非零值退出，Git 将放弃提交，因此，可以用来在提交通过前验证项目状态或提交信息。 
++ `post-commit` 钩子在整个提交过程完成后运行。 它不接收任何参数，但你可以很容易地通过运行 `git log-1 HEAD` 来获得最后一次的提交信息。 该钩子一般用于通知之类的事情。
+
+电子邮件工作流钩子，这些钩子都是由 `git am` 命令调用的。可以通过电子邮件接收由 git format-patch 产生的补丁：
+
++ `applypatch-msg` 它接收单个参数：包含请求合并信息的临时文件的名字。如果脚本返回非零值，Git 将放弃该补丁。 你可以用该脚本来确保提交信息符合格式，或直接用脚本修正格式错误。
++ `pre-applypatch` 运行于应用补丁之后，产生提交之前，所以你可以用它在提交前检查快照。 你可以用这个脚本运行测试或检查工作区。 脚本以非零值退出会中断 `git am` 的运行，这样补丁就不会被提交。
++ `post-applypatch` 运行于提交产生之后，是在 `git am` 运行期间最后被调用的钩子。 可以用来发送通知。 但不能停止打补丁的过程。
+
+其他客户端钩子：
+
++ `pre-rebase` 钩子运行于变基之前，以非零值退出可以中止变基的过程。 
++ `post-rewrite` 钩子被那些会替换提交记录的命令调用，比如 `git commit --amend` 和 `git rebase`（不过不包括 `git filter-branch`）。 它唯一的参数是触发重写的命令名，同时从标准输入中接受一系列重写的提交记录。 这个钩子的用途很大程度上跟`post-checkout` 和 `post-merge` 差不多
++ `git checkou`t 成功运行后，`post-checkout` 钩子会被调用。你可以根据你的项目环境用它调整你的工作目录。 其中包括放入大的二进制文件、自动生成文档或进行其他类似这样的操作。
++ 在 `git merge` 成功运行后，`post-merge` 钩子会被调用。 你可以用它恢复 Git 无法跟踪的工作区数据，比如权限数据。 这个钩子也可以用来验证某些在 Git 控制之外的文件是否存在，这样你就能在工作区改变时，把这些文件复制进来。
++ `pre-push` 钩子会在 `git push` 运行期间， 更新了远程引用但尚未传送对象时被调用。 它接受远程分支的名字和位置作为参数，同时从标准输入中读取一系列待更新的引用。 你可以在推送开始之前，用它验证对引用的更新操作（一个非零的退出码将终止推送过程）
++ Git 的一些日常操作在运行时，偶尔会调用 `git gc --auto` 进行垃圾回收。 `pre-auto-gc` 钩子会在垃圾回收开始之前被调用，可以用它来提醒你现在要回收垃圾了，或者依情形判断是否要中断回收。
+
+服务器端钩子：
+
++ `pre-receive`处理来自客户端的推送操作时，最先被调用的脚本是 pre-receive。 它从标准输入获取一系列被推送的引用。如果它以非零值退出，所有的推送内容都不会被接受。 你可以用这个钩子阻止对引用进行非快进（non-fast-forward）的更新，或者对该推送所修改的所有引用和文件进行访问控制。
++ `update` 脚本和 `pre-receive` 脚本十分类似，不同之处在于它会为每一个准备更新的分支各运行一次。 假如推送者同时向多个分支推送内容，`pre-receive` 只运行一次，相比之下 `update` 则会为每一个被推送的分支各运行一次。 它不会从标准输入读取内容，而是接受三个参数：引用的名字（分支），推送前的引用指向的内容的SHA-1 值，以及用户准备推送的内容的 SHA-1 值。 如果 update 脚本以非零值退出，只有相应的那一个引用会被拒绝；其余的依然会被更新。
++ `post-receive` 钩子在整个过程完结以后运行，可以用来更新其他系统服务或者通知用户。 它接受与 `pre-receive` 相同的标准输入数据。 它的用途包括给某个邮件列表发信，通知持续集成（continous integration） 的服务器， 或者更新问题追踪系统（ticket-tracking system） —— 甚至可以通过分析提交信息来决定某个问题 （ticket）是否应该被开启，修改或者关闭。 该脚本无法终止推送进程，不过客户端在它结束运行之前将保持连接状态， 所以如果你想做其他操作需谨慎使用它，因为它将耗费你很长的一段时间。
+
+# Git 内部原理
+
 
 
 
