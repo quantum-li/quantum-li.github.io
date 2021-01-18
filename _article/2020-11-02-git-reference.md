@@ -647,6 +647,47 @@ hook分为客户端的和服务器端的。 客户端钩子由诸如提交和合
 
 # Git 内部原理
 
+## 底层命令与上层命令
+
+由于 Git 最初是一套面向版本控制系统的工具集，而不是一个完整的、用户友好的版本控制系统， 所以它还包含了一部分用于完成底层工作的子命令。 这些命令被设计成能以 UNIX 命令行的风格连接在一起，抑或藉由脚本调用，来完成工作。
+
+.git目录的结构如下：
+
++ config    包含项目配置
++ description     仅供GitWeb程序使用
++ HEAD      指向当前被检出的分支
++ hooks/    客户端或服务器端的钩子脚本
++ info/     包含一个全局的exclude文件
++ objects/     所有数据内容
++ refs/     指向数据的提交对象指针
++ index     保存暂存区信息
+
+## Git 对象
+
++ `git hash-object -w` 命令用于向对象系统（objects目录）存储对象
++ `git cat-file -p` 用于从对象系统取出对象数据
+ 
+Git 根据某一时刻暂存区所表示的状态创建并记录一个树对象。
+
++ `git update-index --add --cacheinfo ` 创建并添加到对象到暂存区
++ `git write-tree` 将暂存区内容写入一个树对象
++ `git read-tree --prefix=<folder>` 把树对象读入暂存区
+ 
+有了树对象、二进制对象之后，还需要使用提交对象记录谁在什么时候提交了什么内容
+
++ `git commit-tree` 创建一个提交对象
+
+## 对象存储
+
+Git 首先会以识别出的对象的类型（blob、tree、commit）作为开头来构造一个头部信息。 随后是一个空格和数据内容的字节数，最后是一个空字节(null byte)。然后计算头信息+原始数据的SHA-1 校验和。最后把头信息+原始数据使用zlib压缩后存储到以校验和命令的文件中。
+
+```
+string store = header + content;
+string fileName = sha-1(store);
+string file = zlib(store);
+```
+
+## Git 引用
 
 
 
