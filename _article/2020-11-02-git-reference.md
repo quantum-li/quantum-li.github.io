@@ -679,7 +679,7 @@ Git 根据某一时刻暂存区所表示的状态创建并记录一个树对象�
 
 ## 对象存储
 
-Git 首先会以识别出的对象的类型（blob、tree、commit）作为开头来构造一个头部信息。 随后是一个空格和数据内容的字节数，最后是一个空字节(null byte)。然后计算头信息+原始数据的SHA-1 校验和。最后把头信息+原始数据使用zlib压缩后存储到以校验和命令的文件中。
+Git 首先会以识别出的对象的类型（blob、tree、commit）作为开头来构造一个头部信息。 随后是一个空格和数据内容的字节数，最后是一个空字节(null byte)。然后计算头信息+原始数据的 SHA-1 校验和。最后把头信息+原始数据使用zlib压缩后存储到以校验和命令的文件中。
 
 ```
 string store = header + content;
@@ -688,6 +688,41 @@ string file = zlib(store);
 ```
 
 ## Git 引用
+
+每个提交对象，或数对象都可以用一个 SHA-1 值来检索。但是 SHA-1 值又不方便记忆。引用可以帮助记录一次提交，或一个对象的 SHA-1 值。引用全部存储在`.git/refs`目录下。`git update-ref`命令用于查看或更新一个引用
+
+`HEAD`文件是一个对引用的引用，也叫符号引用。它指向当前所在分支。存储的是当前分支的引用对象。`git symbolic-ref`命令用于查看或更新 HEAD 引用。
+
+标签也是一种引用，位于`.git/refs/tags/`目录下。附注标签也会是一个对象。通常指向一个提交对象，但不像分支引用那样会移动。轻量标签如同一个引用一样指向一个提交对象。而附注标签指向一个标签对象，标签对象记录附注及提交对象。
+
+远程引用位于`.git/refs/remotes`目录下。当其与本地分支对齐时内容与分支引用一致。但是远程引用只读不可手动修改。
+
+## 包文件
+
+运行 `git gc` 时会将松散的文件打包成 `.idx` 和 `.pack` 文件放在 `.git/object/pack` 目录下。 `.idx` 是包的索引，可是意思`git verify-pack` 命令查看索引内容。在`.pack`文件中最新版本会保存文件全部内容，而之前版本会以差异信息保存。
+
+## 引用规范
+
+使用`git remote add` 命令时会在你仓库中的 `.git/config` 文件中添加一个小节， 并在其中指定远程版本库的名称、URL 和一个用于获取操作的`引用规范(refspec)`:
+
+```
+[remote "origin"]
+   url = https://github.com/XX/XX
+   fetch = +refs/heads/*:refs/remotes/origin/*
+```
+
+引用规范的格式由一个可选的 `+` 号和紧随其后的 `<src>:<dst>` 组成， 其中 `<src> `是一个模式(pattern)， 代表远程版本库中的引用; `<dst>` 是本地跟踪的远程引用的位置。 `+` 号告诉 Git 即使在不能快进的情况下也要 (强制)更新引用。
+
+如果想让 Git 每次只拉取远程的 `master` 分支，而不是所有分支， 可以把(引用规范的)`fetch` 那一行修改为只引用该分支`fetch = +refs/heads/master:refs/remotes/origin/master`。
+
+我们不能在模式中使用部分通配符，所以像下面这样的引用规范是不合法的`fetch = +refs/heads/qa*:refs/remotes/origin/qa*`。但我们可以使用命名空间(或目录)来达到类似目的。如过QA想把 `master` 分支推送到远程服务器的 `qa/master` 分支上，可以修改引用规范`push = refs/heads/master:refs/heads/qa/master`。
+
+删除引用可以使用:
+
++ `git push origin :topic`
++ Git v1.7.0 以后可以使用新语法 `git push origin --delete topic`
+
+## 传输协议
 
 
 
