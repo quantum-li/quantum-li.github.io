@@ -744,8 +744,176 @@ smart 协议基于部署在客户端（send-pack）和服务端（receive-pack�
 
 ### 移除文件
 
-在所有的提交记录中移除一个大文件。
+在所有的提交记录中移除一个大文件。使用`git filter-branch`
 
+# 环境变量
+
+## 全局行为
+
++ `GIT_EXEC_PATH` 决定Git到哪找它的子程序(像git-commit,git-diff等等)。你可以用 `git --exec -path` 来查看当前设置。
++ `PREFIX` 也类似，除了用于系统级别的配置。 Git 在 `$PREFIX/etc/gitconfig` 查找系统级别配置。
++ `GIT_CONFIG_NOSYSTEM` 禁用系统级别的配置文件。 这在系统配置影响了你的命令，而你又无权限修改的时候很有用。
++ `GIT_PAGER` 控制在命令行上显示多页输出的程序。 如果这个没有设置，就会用 `PAGER` 。
++ `GIT_EDITOR` 当用户需要编辑一些文本(比如提交信息)时， Git 会启动这个编辑器。 如果没设置，就会用 `EDITOR` 。
+
+## 版本库位置
+
++ `GIT_DIR` 是 `.git` 目录的位置。 如果这个没有设置， Git 会按照目录树逐层向上查找 `.git` 目录，直到到达 `~` 或 `/`。
++ `GIT_CEILING_DIRECTORIES` 控制查找 `.git` 目录的行为。 如果你访问加载很慢的目录(如那些磁带机上的或通过网络连接访问的)，你可能会想让 Git 早点停止尝试，尤其是 shell 构建时调用了 Git 。
++ `GIT_WORK_TREE` 是非空版本库的工作目录的根路径。 如果指定了 `--git-dir` 或 `GIT_DIR` 但未指定 `--work -tree`、`GIT_WORK_TREE` 或 `core.worktree`，那么当前工作目录就会视作工作树的顶级目录。 
++ `GIT_INDEX_FILE` 是索引文件的路径(只有非空版本库有)。
++ `GIT_OBJECT_DIRECTORY` 用来指定 `.git/objects` 目录的位置。
++ `GIT_ALTERNATE_OBJECT_DIRECTORIES` 一个冒号分割的列表(格式类似 /dir/one:/dir/two:...)用来告 诉 Git 到哪里去找不在 `GIT_OBJECT_DIRECTORY` 目录中的对象。 如果你有很多项目有相同内容的大文件，这个可以用来避免存储过多备份。
+
+## 路径规则
+
+指你在 Git 中如何指定路径，包括通配符的使用。 它们会在 `.gitignore` 文件中用到， 命令行里也会用到(`git add *.c`)。
+
++ `GIT_GLOB_PATHSPECS` 和 `GIT_NOGLOB_PATHSPECS` 控制通配符在路径规则中的默认行为。 如果 `GIT_GLOB_PATHSPECS` 设置为 1, 通配符表现为通配符(这是默认设置); 如果 `GIT_NOGLOB_PATHSPECS` 设置为 1,通配符仅匹配字面。意思是 `*.c` 只会匹配文件名是 `*.c` 的文件，而不是以 `.c` 结尾的文件。 你可以在各个路径规范中用 :(glob) 或 :(literal) 开头来覆盖这个配置，如 :(glob)*.c 。 
++ `GIT_LITERAL_PATHSPECS` 禁用上面的两种行为;通配符将不能用，前缀覆盖也不能用。 
++ `GIT_ICASE_PATHSPECS` 让所有的路径规范忽略大小写。
+
+## 提交
+
+Git 提交对象的创建通常最后是由 `git-commit-tree` 来完成， `git-commit-tree` 用这些环境变量作主要的信息源。 仅当这些值不存在才回退到预置的值。
+
++ `GIT_AUTHOR_NAME` 是 “author” 字段的可读名字。
++ `GIT_AUTHOR_EMAIL` 是 “author” 字段的邮件。
++ `GIT_AUTHOR_DATE` 是 “author” 字段的时间戳。
++ `GIT_COMMITTER_NAME` 是 “committer” 字段的可读名字。
++ `GIT_COMMITTER_EMAIL` 是 “committer” 字段的邮件。
++ `GIT_COMMITTER_DATE` 是 “committer” 字段的时间戳。
+ 
+如果 `user.email` 没有配置， 就会用到 `EMAIL` 指定的邮件地址。 如果这个也没有设置， Git 继续回退使用系统用户和主机名
+
+## 网络
+
+Git 使用 `curl` 库通过 HTTP 来完成网络操作。
+
++ `GIT_CURL_VERBOSE` 告诉 Git 显示所有由那个库产生的消息。 这跟在命令行执行 `curl -v` 差不多。
++ `GIT_SSL_NO_VERIFY` 告诉 Git 不用验证 SSL 证书。 这在有些时候是需要的， 例如你用一个自己签名的证书通过 HTTPS 来提供 Git 服务， 或者你正在搭建 Git 服务器，还没有安装完全的证书。
++ 如果 Git 操作在网速低于 `GIT_HTTP_LOW_SPEED_LIMIT` 字节/秒，并且持续 `GIT_HTTP_LOW_SPEED_TIME` 秒以上的时间，Git 会终止那个操作。 这些值会覆盖 `http.lowSpeedLimit` 和 `http.lowSpeedTime` 配置的值。
++ `GIT_HTTP_USER_AGENT` 设置 Git 在通过 HTTP 通讯时用到的 `user-agent`。 默认值类似于 git/2.0.0 。
+
+## 比较和合并
+
++ `GIT_DIFF_OPTS` 这个有点起错名字了。 有效值仅支持 `-u<n>` 或 `--unified=<n>`，用来控制在 `git diff` 命令中显示的内容行数。
++ `GIT_EXTERNAL_DIFF` 用来覆盖 `diff.external` 配置的值。 如果设置了这个值， 当执行 `git diff` 时，Git 会调用该程序。
++ `GIT_DIFF_PATH_COUNTER` 和 `GIT_DIFF_PATH_TOTAL` 对于 `GIT_EXTERNAL_DIFF` 或 `diff.external` 指定的程序有用。 前者表示在一系列文件中哪个是被比较的(从 1 开始)，后者表示每批文件的总数。 `GIT_MERGE_VERBOSITY` 控制递归合并策略的输出。 允许的值有下面这些:
+  + 0 什么都不输出，除了可能会有一个错误信息。 
+  + 1 只显示冲突。
+  + 2(默认值) 还显示文件改变。
+  + 3 显示因为没有改变被跳过的文件。
+  + 4 显示处理的所有路径。 
+  + 5 显示详细的调试信息。
+
+## 调试
+
++ `GIT_TRACE` 控制常规跟踪，它并不适用于特殊情况。 它跟踪的范围包括别名的展开和其他子程序的委托。
++ `GIT_TRACE_PACK_ACCESS` 控制访问打包文件的跟踪信息。 第一个字段是被访问的打包文件，第二个是文件的偏移量
++ `GIT_TRACE_PACKET` 打开网络操作包级别的跟踪信息
++ `GIT_TRACE_PERFORMANCE` 控制性能数据的日志打印。 输出显示了每个 git 命令调用花费的时间
++ `GIT_TRACE_SETUP` 显示 Git 发现的关于版本库和交互环境的信息
+
+## 其他
+
++ 如果指定了 `GIT_SSH`， Git 连接 SSH 主机时会用指定的程序代替 ssh
++ `GIT_ASKPASS` 覆盖了 `core.askpass` 配置。 这是 Git 需要向用户请求验证时用到的程序，它接受一个文本提 示作为命令行参数，并在 `stdout` 中返回应答。 (查看凭证存储访问更多相关内容)
++ `GIT_NAMESPACE` 控制有命令空间的引用的访问，与 `--namespace` 标志是相同的。 这主要在服务器端有用， 如果你想在一个版本库中存储单个版本库的多个 fork, 只要保持引用是隔离的就可以
++ `GIT_FLUSH` 强制 Git 在向标准输出增量写入时使用没有缓存的 I/O。 设置为 1 让 Git 刷新更多， 设置为 0 则使 所有的输出被缓存。 默认值(若此变量未设置)是根据活动和输出模式的不同选择合适的缓存方案
++ `GIT_REFLOG_ACTION` 让你可以指定描述性的文字写到 `reflog` 中
+
+# 在应用中嵌入 Git
+
++ 命令行方式
++ Libgit2 是一个 Git 的非依赖性的工具，它致力于为其他程序使用 Git 提供更好的 API。https://libgit2.org
++ JGit 是一个用 Java 写成的功能相对健全的 Git 的实现，它在 Java 社区中被广泛使用。 JGit 项目由 Eclipse 维护。https://www.eclipse.org/jgit 
++ go-git  golang编写。https://github.com/src-d/go-git/blob/master/COMPATIBILITY.md
++ Dulwich python编写。https://www.dulwich.io/
+
+# Git 命令
+
+你可以输入 `git commit --a`，它的行为与 `git commit --amend` 相同。 请在编写脚本时使用完整的选项。
+
+## 设置与配置
+
++ `git config`
++ `git help <command>`
+
+## 获取与创建项目
+
++ `git init` 将一个目录转变成一个Git仓库
++ `git clone` = `git init` + `git remote add` + `git fetch` + `git checkout`
+
+## 快照
+
++ `git add` 将内容从工作目录添加到暂存区以备下次提交
++ `git status` 显示工作区及暂存区域中不同状态的文件
++ `git diff` 当需要查看任意两棵树的差异时，可以使用 `git diff` 命令。 此命令可以查看你工作环境与你的暂存区的差异 (`git diff`默认的做法)，你暂存区域与你最后提交之间的差异(`git diff --staged`)，或者比较两个 提交记录的差异(`git diff master branchB`)
++ `git difftool` 用来简单地启动一个外部工具来为你展示两棵树 之间的差异
++ `git commit` 将所有通过git add暂存的文件内容在数据库中创建一个持久的快照，然后将当前分支上的分支指针移到其之上
++ `git reset` 用来根据你传递给动作的参数来执行撤销操作
++ `git rm` 用来从工作区，或者暂存区移除文件的命令
++ `git mv` 用于移到一个文件并且在新文件上执行 `git add` 命令及在老文件上执行 `git rm` 命令
++ `git clean` 用来从工作区中移除不想要的文件的命令
+
+## 分支与合并
+
++ `git branch` 列出你所有的分支、创建新分支、删除分支及 重命名分支
++ `git checkout` 用来切换分支，或者检出内容到工作目录
++ `git merge` 用来合并一个或者多个分支到你已经检出的分支中。 然后它将当前分支指针移动到合并结果上
++ `git mergetool` 启动一个外部的合并帮助工具
++ `git log`用来展示一个项目的可达历史记录，从最近的提交快照起。默认情况下，它只显示你当前所在分 支的历史记录，但是可以显示不同的甚至多个头记录或分支以供遍历。 此命令通常也用来在提交记录级别显示 两个或多个分支之间的差异
++ `git stash` 用来临时地保存一些还没有提交的工作，以便在分支上不需要提交未完成工作就可以清理工作目录
++ `git tag`用来为代码历史记录中的某一个点指定一个永久的书签。 一般来说它用于发布相关事项
+
+## 项目分享与更新
+
++ `git fetch`将远程仓库中有但是在当前仓库的没有的所有信息拉取下来然后存储在你本地数据库中
++ `git pull` 是 `git fetch` 和 `git merge` 命令的组合体，Git从你指定的远程仓库中抓取内容， 然后马上尝试将其合并进你所在的分支中 
++ `git push`将差异推送到远程仓库
++ `git remote` 远程仓库记录的管理工具，将一个长的 URL 保存成一个简写的句柄，例如 `origin`，这样你就可以不用每次都输入他们了。你可以有多个这样的句柄，`git remote` 可以用来添加， 修改，及删除它们
++ `git archive` 用来创建项目一个指定快照的归档文件
++ `git submodule`用来管理一个仓库的其他外部仓库。 它可以被用在库或者其他类型的共享资源上。 `submodule` 命令有几个子命令, 如(add、update、sync 等等)用来管理这些资源
+
+## 检查与比较
+
++ `git show` 以一种简单的人类可读的方式来显示一个Git对象。你一般使用此命令来显示一个标签或一 个提交的信息
++ `git shortlog`用来归纳 `git log` 的输出的命令。 它可以接受很多与 `git log` 相同的选项，但是此命令并不会列出所有的提交，而是展示一个根据作者分组的提交记录的概括性信息
++ `git describe` 用来接受任何可以解析成一个提交的东西，然后生成一个人类可读的字符串且不可变
+
+## 调试
+
++ `git bisect`通过自动进行一个二分查找来找到哪一个特定的提交是导致 bug 或者问题的第一个提交
++ `git blame` 标注任何文件的行，指出文件的每一行的最后的变更的提交及谁是那一个提交的作者
++ `git grep`帮助在源代码中，甚至是你项目的老版本中的任意文件中查找任何字符串或者正则表达式
+
+## 补丁
+
++ `git cherry-pick`用来获得在单个提交中引入的变更，然后尝试将作为一个新的提交引入到你当前分支上。 从一个分支单独一个或者两个提交而不是合并整个分支的所有变更是非常有用的
++ `git rebase` 基本是是一个自动化的 cherry-pick 命令。 它计算出一系列的提交，然后再以它们在其他 地方以同样的顺序一个一个的 cherry-picks 出它们
++ `git revert` 本质上就是一个逆向的 git cherry-pick 操作。 它将你提交中的变更的以完全相反的方式 的应用到一个新创建的提交中，本质上就是撤销或者倒转
+
+## 邮件
+
++ `git apply` 命令应用一个通过 `git diff` 或者甚至使用 `GNU diff` 命令创建的补丁。 它跟补丁命令做了差不多的工作
++ `git am` 命令用来应用来自邮箱的补丁。特别是那些被 mbox 格式化过的。 这对于通过邮件接受补丁并将他们轻松地应用到你的项目中很有用
++ `git format-patch` 命令用来以mbox的格式来生成一系列的补丁以便你可以发送到一个邮件列表中
++ `git imap-send` 将一个由 `git format-patch` 生成的邮箱上传至 IMAP 草稿文件夹
++ `git send-mail` 命令用来通过邮件发送那些使用`git format-patch`生成的补丁
++ `git request-pull` 命令只是简单的用来生成一个可通过邮件发送给某个人的示例信息体
+
+## 外部系统
+
++ `git svn` 可以使 Git 作为一个客户端来与 Subversion 版本控制系统通信
++ 对于其他版本控制系统或者从其他任何的格式导入，你可以使用 `git fast-import` 快速地将其他格式映射到 Git 可以轻松记录的格式
+
+## 管理
+
++ `git gc` 命令在你的仓库中执行 “garbage collection”，删除数据库中不需要的文件和将其他文件打包成一种更有效的格式
++ `git fsck` 命令用来检查内部数据库的问题或者不一致性
++ `git reflog` 命令分析你所有分支的头指针的日志来查找出你在重写历史上可能丢失的提交
++ `git filter-branch` 命令用来根据某些规则来重写大量的提交记录，例如从任何地方删除文件，或者通过过滤一个仓库中的一个单独的子目录以提取出一个项目
 
 # 附录
 
