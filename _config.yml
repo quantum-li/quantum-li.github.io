@@ -64,4 +64,4 @@ defaults:
 plugins: [jekyll-paginate,jekyll-admin, kramdown,jekyll-seo-tag,jemoji,jekyll-redirect-from]
 # Build settings
 markdown: kramdown
-highlighter: rouge
+# highlighter: rouge
