@@ -64,11 +64,11 @@ VS Code 可以从 Gulp、Grunt、NPM 或者 Maven、c# 的 `dotnet` 自动检测
 
 你可以使用 `presentation` 控制终端面板的展示逻辑。它下级有如下配置项：
 
-+ **reveal** ：控制面板弹出行为，可选`always|never|silent` 分别代表 "总是|从不|仅无错误时"
++ **reveal** ：控制面板弹出行为，可选`always/never/silent` 分别代表 "总是|从不|仅无错误时"
 + **focus** ：控制终端是否获取输入焦点，默认是 `false`
 + **echo** ：控制 Task 执行的命令是否输出到面板，默认是 `true`
 + **showReuseMessage** ：控制是否提示 "Terminal will be reused by tasks, press any key to close it"
-+ **panel** ：控制 Task 间共享面板的行为，可选 `shared|dedicated|new` 分别代表 "所有 Task 混用终端|同类Task公用终端|全新终端"
++ **panel** ：控制 Task 间共享面板的行为，可选 `shared/dedicated/new` 分别代表 "所有 Task 混用终端|同类Task公用终端|全新终端"
 + **clear** ：控制 Task 运行前是否清空终端，默认 `false`
 + **group** ：输出分组，同一分组的输出将在同一面板的不同分区（split）下
 
