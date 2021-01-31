@@ -1,15 +1,11 @@
 ---
-layout: none
+layout: null
 ---
 {% assign everything = site.posts | concat: site.article %}
 {
     "routes": [
     {% for post in everything %}
-      {
-            "src": "{{ site.baseurl }}{{ post.url }}",
-            "dest": "{{ site.baseurl }}{{ post.url }}.html"
-        }
-      {% unless forloop.last %},{% endunless %}
+      {"src": "{{ site.baseurl }}{{ post.url }}","dest": "{{ site.baseurl }}{{ post.url }}.html"}{% unless forloop.last %},{% endunless %}
     {% endfor %}
     ]
 }
