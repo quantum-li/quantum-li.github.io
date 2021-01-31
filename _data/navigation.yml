@@ -1,7 +1,7 @@
 header:
 
-  - title: 归档
-    url: /archive.html
+  # - title: 归档
+  #   url: /archive.html
 
-  - title: 关于
-    url: /about.html
+  # - title: 关于
+  #   url: /about.html
