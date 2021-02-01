@@ -10,11 +10,11 @@ window.TEXT_SEARCH_DATA={
       {%- assign _url = __return -%}
       'url':{{ _url | jsonify }}}
       {%- endfor -%}
-    ],
+    ]
   {%- endfor -%}
 
   {% assign pdf_files = site.static_files | where: "pdf", true %}
-  'pdf':[
+  ,'pdf':[
       {%- for pdf in pdf_files -%}
       {%- unless forloop.first -%},{%- endunless -%}
       {'title':{{ pdf.name | jsonify }},
