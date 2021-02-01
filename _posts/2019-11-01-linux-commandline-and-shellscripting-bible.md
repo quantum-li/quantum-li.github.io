@@ -9,12 +9,16 @@ categories:
 permalink: "/posts/linux-commandline-and-shellscripting-bible"
 ---
 
-+ [Linux命令行与shell脚本编程大全.第3版.pdf](https://leezw.net/assets/pdf/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8.%E7%AC%AC3%E7%89%88.pdf)
+1. [Linux命令行与shell脚本编程大全.第3版.pdf](https://leezw.net/assets/pdf/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8.%E7%AC%AC3%E7%89%88.pdf)
 
-# 常用命令
-## sort
-# 理解shell
-## 进程列表
+## 常用命令
+
+### sort
+
+## 理解shell
+
+### 进程列表
+
 命令用分号隔开，会依次执行。但并不是进程列表。
 
 ``` shell
@@ -27,45 +31,53 @@ pwd ; ps ; cd - ; ls
 (pwd ; ps)
 ```
 
-## 后台命令
-在命令后面加 & 进入后台
+### 后台命令
+
+在命令后面加 `&` 进入后台
 
 ``` shell
-jobs 查看后台命令
-coproc  协程命令
+jobs    #查看后台命令
+coproc  #协程命令
 ```
 
-## 内建命令外部命令
-外部命令位于/bin /usr/bin /sbin /usr/sbin
+### 内建命令外部命令
+
+外部命令位于`/bin /usr/bin /sbin /usr/sbin`
 执行外部命令会创建子进程执行
 
 ``` shell
-which 查找命令
-type 查看命令
-alias 创建别名
+which   #查找命令
+type    #查看命令
+alias   #创建别名
 ```
 
-## 环境变量
+### 环境变量
+
 ```shell
-unset删除环境变量
-定义变量 variable=value 等号两边没有空格
-数组变量 var=(one two)
-${var[0]} ${var[*]}
+unset           #删除环境变量
+variable=value  #定义变量，等号两边没有空格
+var=(one two)   #数组变量 
+${var[0]} 
+${var[*]}
 ```
 
-## 全局变量
+### 全局变量
+
 ``` shell
-env或printenv查看全局变量
-export 会把变量升级为全局
+env         #查看全局变量
+printenv    #查看全局变量
+export      #会把变量升级为全局
 ```
 
-## 局部变量
+### 局部变量
+
 ``` shell
 local var=var
-set显示所有环境变量
+set     #显示所有环境变量
 ```
 
-## 登陆的shell会依次启动文件
+### 登陆shell时会依次启动文件
+
 ``` shell
 /etc/profile
 ~/.bash_profile
@@ -73,88 +85,99 @@ set显示所有环境变量
 ~/.profile
 ```
 
-## 交互式（在命令行中启动bash )
-只会检查~/.bashrc
-## 非交互式shell （脚本）
-不会检查变量文件，但大多数都是从子shell中执行所有会继承交互式shell变量
+### 交互式（在命令行中启动bash)
 
-升级系统的时候/etc/profile会被更新，所以建议在/etc/profile.d 目录下 建.sh脚本
+只会检查 `~/.bashrc`
 
-# 文件权限
+### 非交互式shell（脚本）
 
-/etc/passwd文件
+不会检查变量文件，但大多数都是从子shell中执行所有会继承交互式shell变量。
 
->用户名  
-密码  
-账户uid  
-账户的分组uid  
-账户文本描述  
-home目录位置  
-默认shell  
-
-/etc/shadow文件
-只有root账户能访问
->与/etc/passwd文件中的登录名字段对应的登录名  
-加密后的密码  
-自上次修改密码后过去的天数密码(自1970年1月1日开始计  
-多少天后才能更改密码  
-多少天后必须更改密码  
-密码过期前提前多少天提醒用户更改密码  
-过期后多久禁用账户  
-用户账户被禁用的日期  
-预留  
-
-## 用户
-useradd 如果不指定参数会使用默认值
-
-默认值存在/etc/default/useradd可以使用useradd -D查看默认值
-``` shell
-userdel删除用户
-usermod
-passwd 修改密码
-chsh 修改默认登陆shell
-```
-## 组
-/etc/group文件
->组名  
-密码  
-gid  
-用户列表  
-groupadd  
-groupmod  
+升级系统的时候`/etc/profile`会被更新，所以建议在`/etc/profile.d`目录下建`.sh`脚本。
 
 ## 文件权限
+
+`/etc/passwd`文件：
+
+1. 用户名
+2. 密码
+3. 账户uid
+4. 账户的分组uid
+5. 账户文本描述
+6. home目录位置
+7. 默认shell  
+
+`/etc/shadow`文件，只有root账户能访问：
+
+1. 与`/etc/passwd`文件中的登录名字段对应的登录名  
+2. 加密后的密码  
+3. 自上次修改密码后过去的天（自1970年1月1日）  
+4. 多少天后才能更改密码  
+5. 多少天后必须更改密码  
+6. 密码过期前提前多少天提醒用户更改密码  
+7. 过期后多久禁用账户  
+8. 用户账户被禁用的日期  
+9. 预留  
+
+### 用户
+
+`useradd` 如果不指定参数会使用默认值，默认值存在`/etc/default/useradd`，可以使用`useradd -D`查看默认值。
+
 ``` shell
-权 限 二进制值 八进制值 描 述 
---- 000 0 没有任何权限 
---x 001 1 只有执行权限 
--w- 010 2 只有写入权限 
--wx 011 3 有写入和执行权限 
-r-- 100 4 只有读取权限 
-r-x 101 5 有读取和执行权限 
-rw- 110 6 有读取和写入权限 
-rwx 111 7 有全部权限
+userdel     #删除用户
+usermod
+passwd      #修改密码
+chsh        #修改默认登陆shell
 ```
+### 组
+
+`/etc/group`文件
+
+1. 组名  
+2. 密码  
+3. gid  
+4. 用户列表  
+5. groupadd  
+6. groupmod  
+
+### 文件权限
+
+
+| 权 限 | 二进制值 | 八进制值 | 描 述 |
+| :-: | :-: | :-: | :-: |  
+| --- | 000 | 0 | 没有任何权限 
+| --x | 001 | 1 | 只有执行权限 
+| -w- | 010 | 2 | 只有写入权限 
+| -wx | 011 | 3 | 有写入和执行权限 
+| r-- | 100 | 4 | 只有读取权限 
+| r-x | 101 | 5 | 有读取和执行权限 
+| rw- | 110 | 6 | 有读取和写入权限 
+| rwx | 111 | 7 | 有全部权限
+
 ``` shell
-umask 设置默认新建文件权限
+umask   #设置默认新建文件权限
 ```
-## 文件系统
+### 文件系统
+
 ``` shell
-fdisk  创建分区
-mkefs 创建一个ext文件系统 
-mke2fs 创建一个ext2文件系统 
-mkfs.ext3 创建一个ext3文件系统 
-mkfs.ext4 创建一个ext4文件系统 
-mkreiserfs 创建一个ReiserFS文件系统 
-jfs_mkfs 创建一个JFS文件系统 
-mkfs.xfs 创建一个XFS文件系统 
-mkfs.zfs 创建一个ZFS文件系统 
-mkfs.btrfs 创建一个Btrfs文件系统
-mount 挂载文件系统
-fsck 修复文件系统
+fdisk       #创建分区
+mkefs       #创建一个ext文件系统 
+mke2fs      #创建一个ext2文件系统 
+mkfs.ext3   #创建一个ext3文件系统 
+mkfs.ext4   #创建一个ext4文件系统 
+mkreiserfs  #创建一个ReiserFS文件系统 
+jfs_mkfs    #创建一个JFS文件系统 
+mkfs.xfs    #创建一个XFS文件系统 
+mkfs.zfs    #创建一个ZFS文件系统 
+mkfs.btrfs  #创建一个Btrfs文件系统
+mount       #挂载文件系统
+fsck        #修复文件系统
 ```
-# 软件包管理
-## 基于debian系统
+
+## 软件包管理
+
+### 基于debian系统
+
 ``` shell
 dpkg 
 apt-get
@@ -162,12 +185,12 @@ aptitude
 apt
 ```
 
-## 基于RedHat系统
+### 基于RedHat系统
 
 ``` shell
 yum
 ```
-## 从源码安装
+### 从源码安装
 
 ``` shell
 tar
@@ -175,57 +198,71 @@ tar
 make 
 make install  
 ```
-# 编辑器
-## vim
-## nano
-## emacs
-# 脚本
-## 命令替换
-``` shell
-`` 
-$()  
-```
-## 重定向
+## 编辑器
+
+### vim
+
+### nano
+
+### emacs
+
+## 脚本
+
+### 命令替换
 
 ``` shell
-> 输出重定向
-< 输入重定向
-<< 内联输入重定向 用于命令行输入重定向
+``
+$()  
 ```
-## 管道
+
+### 重定向
+
+``` shell
+>   #输出重定向
+<   #输入重定向
+<<  #内联输入重定向 用于命令行输入重定向
+```
+### 管道
+
 ``` shell
 |
 ``` 
-## 数学计算
+
+### 数学计算
+
 ``` shell
 expr 1 + 5
 $[1 + 5]
-bc 命令用于浮点计算
+bc      #命令用于浮点计算
 $(echo "options; expression" | bc)
 $(echo "scale=4; 3.44 / 5" | bc)
 ```
-## 退出脚本
+
+### 退出脚本
+
 ``` shell
 exit
 ```
-# 结构化命令
 
-## 命令
+## 结构化命令
 
 ### if-then
 
 **if 命令只能检测条件的返回状态码**
+
 ``` shell
 if command 
 then
  commands 
 fi
 ```
+
 ``` shell
 if command; then
  commands 
 fi
 ```
+
 ``` shell
 if command 
 then
@@ -234,6 +271,7 @@ else
  commands 
 fi
 ```
+
 ``` shell
 if command1
 then
@@ -245,85 +283,94 @@ fi
 ```
 
 **高级条件需要在if后面使用比较命令test或 [  ]**
+
 ``` shell
 if test condition
 then
  commands
 fi 
 ```
+
 ```shell
 if [ condition ]
 then
  commands
 fi 
 ```
+
 #### 复合条件
 
 ``` shell
 [ condition1 ] && [ condition2 ]
 [ condition1 ] || [ condition2 ]
 ```
+
 #### 数值比较
+
 ``` shell
-n1 -eq n2 检查n1是否与n2相等 
-n1 -ge n2 检查n1是否大于或等于
-n1 -gt n2 检查n1是否大于n2 
-n1 -le n2 检查n1是否小于或等于n2 
-n1 -lt n2 检查n1是否小于n2 
-n1 -ne n2 检查n1是否不等于n2
+n1 -eq n2   #检查n1是否与n2相等 
+n1 -ge n2   #检查n1是否大于或等于
+n1 -gt n2   #检查n1是否大于n2 
+n1 -le n2   #检查n1是否小于或等于n2 
+n1 -lt n2   #检查n1是否小于n2 
+n1 -ne n2   #检查n1是否不等于n2
 ```
 #### 双括号
-**提供更高级的数学运算**  
-**(( expression ))**
 
->val++ 后增  
-val-- 后减  
-++val 先增  
---val 先减  
-! 逻辑求反  
-~ 位求反  
-** 幂运算  
-<< 左位移  
-\>\> 右位移  
-& 位布尔和  
-| 位布尔或  
-&& 逻辑和  
-|| 逻辑或
-
-#### 双方括号
-**提供更高级的字符串比较**  
-**[[ expression ]]**
+`(( expression ))`，提供更高级的数学运算
 
 ``` shell
-str1 = str2 检查str1是否和str2相同 
-str1 != str2 检查str1是否和str2不同 
-str1 < str2 检查str1是否比str2小 
-str1 > str2 检查str1是否比str2大 
--n str1 检查str1的长度是否非0 
--z str1 检查str1的长度是否为0
+val++   #后增  
+val--   #后减  
+++val   #先增  
+--val   #先减  
+!       #逻辑求反  
+~       #位求反  
+**      #幂运算  
+<<      #左位移  
+\>\>    #右位移  
+&       #位布尔和  
+|       #位布尔或  
+&&      #逻辑和  
+||      #逻辑或
 ```
->大于号小于号的转义  \>   \<
 
-双方括号 提供字符串比较高级特性，它提供了test命 令未提供的另一个特性——模式匹配（pattern matching）
+#### 双方括号
+
+`[[ expression ]]`，提供更高级的字符串比较
+
+``` shell
+str1 = str2     #检查str1是否和str2相同 
+str1 != str2    #检查str1是否和str2不同 
+str1 < str2     #检查str1是否比str2小 
+str1 > str2     #检查str1是否比str2大 
+-n str1         #检查str1的长度是否非0 
+-z str1         #检查str1的长度是否为0
+```
+
+大于号小于号的转义 `\>`,`\<`
+
+双方括号提供字符串比较高级特性，它提供了test命令未提供的另一个特性——模式匹配（pattern matching）
 
 ``` shell
 if [[ $USER == r* ]]
 ```
 #### 文件比较
+
 ``` shell
--d file 检查file是否存在并是一个目录 
--e file 检查file是否存在 
--f file 检查file是否存在并是一个文件 
--r file 检查file是否存在并可读 
--s file 检查file是否存在并非空 
--w file 检查file是否存在并可写 
--x file 检查file是否存在并可执行 
--O file 检查file是否存在并属当前用户所有 
--G file 检查file是否存在并且默认组与当前用户相同 
-file1 -nt file2 检查file1是否比file2新 
-file1 -ot file2 检查file1是否比file2旧
+-d file         #检查file是否存在并是一个目录 
+-e file         #检查file是否存在 
+-f file         #检查file是否存在并是一个文件 
+-r file         #检查file是否存在并可读 
+-s file         #检查file是否存在并非空 
+-w file         #检查file是否存在并可写 
+-x file         #检查file是否存在并可执行 
+-O file         #检查file是否存在并属当前用户所有 
+-G file         #检查file是否存在并且默认组与当前用户相同 
+file1 -nt file2 #检查file1是否比file2新 
+file1 -ot file2 #检查file1是否比file2旧
 ```
-#### case
+### case
 
 ``` shell
 case variable in 
@@ -332,7 +379,8 @@ pattern3) commands2;;
 *) default commands;; 
 esac
 ```
-#### for
+
+### for
 
 ``` shell
 for var in list 
@@ -340,24 +388,25 @@ do
  commands 
 done
 ```
+
 ``` shell
 for (( a=1, b=10; a <= 10; a++, b-- )) 
 do 
  echo "$a - $b" 
 done
 ```
-#### 更改字符串分隔符
+
+### 更改字符串分隔符
 
 ``` shell
 IFS.OLD=$IFS 
 IFS=$'\n' 
-<在代码中使用新的IFS值> 
 IFS=$IFS.OLD
 ```
-#### 遍历文件
+### 遍历文件
 
 ``` shell
-for file in /home/rich/.b* /home/rich/badtest 
+for file in /home/rich/.b* /home/rich/badtest  # 会把文件列表自动合并
 do 
     if [ -d "$file" ] 
     then 
@@ -369,13 +418,14 @@ do
     echo "$file doesn't exist" 
     fi 
 done 
-# 会把文件列表自动合并
-$ ./test7 
-/home/rich/.backup.timestamp is a file 
-/home/rich/badtest doesn't exist
+
+#输出
+#./test7 
+#/home/rich/.backup.timestamp is a file 
+#/home/rich/badtest doesn't exist
 ```
 
-#### while
+### while
 
 while命令允许你在while语句行定义多个测试命令。只有最后一个测试命令的退出状态码 会被用来决定什么时候结束循环。
 
@@ -386,7 +436,7 @@ do
 done
 ```
 
-#### until
+### until
 
 ``` shell
 until test commands 
@@ -395,15 +445,15 @@ do
 done
 ```
 
-#### 控制循环
+### 控制循环
 
 ``` shell
-break;  break n;//跳出n层循环
-continue;  continue n;//跳过n层循环
+break;  break n;        #跳出n层循环
+continue;  continue n;  #跳过n层循环
 ```
-#### 处理循环的输出
+### 处理循环的输出
 
-通过在done命令 之后添加一个处理命令来实现。
+通过在done命令之后添加一个处理命令来实现。
 
 ```shell
 for state in "North Dakota" Connecticut Illinois Alabama Tennessee 
@@ -413,7 +463,7 @@ done | sort
 echo "This completes our travels"
 ```
 
-# 处理用户输入
+# 处理用户输入 TODO
 
 ## 命令行参数
 
