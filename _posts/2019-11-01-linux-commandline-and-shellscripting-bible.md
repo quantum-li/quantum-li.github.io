@@ -463,28 +463,31 @@ done | sort
 echo "This completes our travels"
 ```
 
-# 处理用户输入 TODO
+## 处理用户输入
 
-## 命令行参数
+### 命令行参数
 
 ``` shell
 $1 $2 ${10}
+
 # basename命令会返回不包含路径的脚本名。
 $(basename $0)
+
 #判断是否有参数
 if [ -n "$1" ]
+
 #特殊参数
-$#     #参数的个数
-${!#}  #最后一个参数
-$*和$@   #变量可以用来轻松访问所有的参数。
-$*    #变量会将命令行上提供的所有参数当作一个单词保存。
-$@     #变量会将命令行上提供的所有参数当作同一字符串中的多个独立的单词。
+$#              #参数的个数
+${!#}           #最后一个参数
+$*和$@          #变量可以用来轻松访问所有的参数。
+$*              #变量会将命令行上提供的所有参数当作一个单词保存。
+$@              #变量会将命令行上提供的所有参数当作同一字符串中的多个独立的单词。
 shift shift n   #参数前移，舍弃第一个参数
 ```
 
-## 命令行选项
+### 命令行选项
 
-### 使用shift命令来处理
+#### 使用shift命令来处理
 
 ``` shell
 echo
@@ -503,23 +506,25 @@ do
  shift
 done 
 ```
-### 使用getopt命令
+
+#### 使用getopt命令
 
 ``` shell
 getopt ab:cd -a -b test1 -cd test2 test3
 #忽略错误参数可以使用 getopt -q
 ```
-optstring定义了四个有效选项字母：a、b、c和d。冒号（:）被放在了字母b后面，因为b 选项需要一个参数值。当getopt命令运行时，它会检查提供的参数列表（-a -b test1 -cd test2 test3），并基于提供的optstring进行解析。注意，它会自动将-cd选项分成两个单独的选项，并插入双破折线来分隔行中的额外参数。
+`optstring`定义了四个有效选项字母：`a、b、c、d`。冒号`:`被放在了字母`b`后面，因为`b`选项需要一个参数值。当`getopt`命令运行时，它会检查提供的参数列表`-a -b test1 -cd test2 test3`，并基于提供的`optstring`进行解析。注意，它会自动将`-cd`选项分成两个单独的选项，并插入双破折线来分隔行中的额外参数。
 
 ``` shell
 set -- $(getopt -q ab:cd "$@")
 ```
 
-set命令的选项之一是双破折线（--），它会将命令行参数替换成set命令的命令行值。
+set命令的选项之一是双破折线`--`，它会将命令行参数替换成`set`命令的命令行值。
 
-### 更高级的getopts命令
+#### 更高级的getopts命令
 
-getopt命令不能处理 command -a "var1 var2" 的情况。
+`getopt`命令不能处理`command -a "var1 var2"`的情况。
+
 ```
 #getopts命令会用到两个环境变量。如果选项需要跟一个参数值，
 #OPTARG环境变量就会保 存这个值。
@@ -539,25 +544,25 @@ done
 常用的linux选项含义
 
 ```
--a 显示所有对象
--c 生成一个计数
--d 指定一个目录
--e 扩展一个对象
--f 指定读入数据的文件
--h 显示命令的帮助信息
--i 忽略文本大小写
--l 产生输出的长格式版本
--n 使用非交互模式（批处理）
--o 将所有输出重定向到的指定的输出文件
--q 以安静模式运行
--r 递归地处理目录和文件
--s 以安静模式运行
--v 生成详细输出
--x 排除某个对象
--y 对所有问题回答yes
+-a      #显示所有对象
+-c      #生成一个计数
+-d      #指定一个目录
+-e      #扩展一个对象
+-f      #指定读入数据的文件
+-h      #显示命令的帮助信息
+-i      #忽略文本大小写
+-l      #产生输出的长格式版本
+-n      #使用非交互模式（批处理）
+-o      #将所有输出重定向到的指定的输出文件
+-q      #以安静模式运行
+-r      #递归地处理目录和文件
+-s      #以安静模式运行
+-v      #生成详细输出
+-x      #排除某个对象
+-y      #对所有问题回答yes
 ```
 
-## 获得用户输入
+### 获得用户输入
 
 输入的每一个变量都会分配给变量列表中的变量，如果变量数量不够，剩下的数据就全部分配给最后一个变量。
 
@@ -566,61 +571,73 @@ done
  read var
  echo $var
 ```
-如果在read命令中不指定变量，会存入环境变量REPLY中
+
+如果在`read`命令中不指定变量，会存入环境变量`REPLY`中
 
 ``` shell
 read -p "input :" var
 echo $var
 ```
 
-read的参数
+#### read的参数
 
 ```
--t 指定超时时间。
--n 接收字符数。
--s 隐藏方式读取。
+-t      #指定超时时间。
+-n      #接收字符数。
+-s      #隐藏方式读取。
 ```
 
-read命令读取文件
+#### read命令读取文件
 
 ``` shell
 cat test | while read var
 ```
 
-# 呈现数据
+## 呈现数据
 
-## 标准文件描述符
+### 标准文件描述符
 
 ```
-0   STDIN
-1   STDOUT
-2   STDERR
+0       #STDIN
+1       #STDOUT
+2       #STDERR
 ```
 
-重定向错误输出
+#### 重定向错误输出
+
 ``` shell
 cat "hello" 2> file
 ```
-重定向标准输出
+
+#### 重定向标准输出
+
 ``` shell
 cat "hello" 1> file  #1和>挨着
 ```
-重定向错误和输出
+
+#### 重定向错误和输出
+
 ``` shell
 cat "hello" &> file
 ```
-## 脚本中重定向输出
-临时
+
+### 脚本中重定向输出
+
+#### 临时
+
 ``` shell
 #这种方式会继承命令行中的重定向
 echo "hello" >&2  #>和&和2挨着
 ```
-永久
+
+#### 永久
+
 ``` shell
 exec 1>file
 echo "hello"
 ```
-## 脚本中重定向输入
+### 脚本中重定向输入
+
 ``` shell
 exec 0< file
 while read var
@@ -629,51 +646,64 @@ do
 done
 ```
 
-## 创建读写文件描述符
-## 关闭文件描述符
+### 创建读写文件描述符
 
-## /dev/null
-```
+### 关闭文件描述符
+
+### /dev/null
+
+``` shell
 echo "hello" >/dev/null
 cat /dev/null > file # 清空文件
 ```
 
-## 临时文件临时目录
-```
+### 临时文件临时目录
+
+``` shell
 mktemp file.XXXXXX  #.加6X是规定
 mktemp -t file.XXXXXX
 mktemp -d dir.XXXXXX
 ```
-## 同时输出到STDOUT和文件
-```
+
+### 同时输出到STDOUT和文件
+
+``` shell
 echo "hello" | tee file
 #使用追加
 echo "hello" | tee -a file
 ```
-```
+
+``` shell
 cat >> file << EOF 
 aaa bbb ccc
 EOF
 ```
 
-# 控制脚本
+## 控制脚本
 
-## 后台任务控制
-```
+### 后台任务控制
+
+``` shell
 jobs
 fg  前台模式重启任务
 bg  后台模式重启任务
 ```
-优先级
+
+#### 优先级
+
+``` shell
 nice  nice -10 ./test4.sh    启动时设置优先级
 renice renice -n 10 -p 5055 更改优先级
+```
 
-## 定时任务
+### 定时任务
+
 ```
 at   
 atrm 删除等待作业
 atq 列出等待的队列
 ```
+
 ```
 corn
 #min hour dayofmonth month dayofweek command
@@ -681,18 +711,22 @@ corn
 #设置每个月最后一天执行
 00 12 * * * if [`date +%d -d tomorrow` = 01 ] ; then ; command
 ```
-**corn目录**
 
+corn目录
+
+``` shell
 /etc/cron.*ly
-
 \*  ： hourly、daily、monthly和weekly
+```
 
->corn不会执行已经错过的作业，因此有个命令anacron
+corn不会执行已经错过的作业，因此有个命令anacron
 
-# 高阶
-## 函数
+## 高阶
+
+### 函数
 
 函数需要先定义再使用
+
 ``` shell
 function name {
  commands
@@ -702,14 +736,19 @@ name() {
 commands
 }
 ```
-## 返回值
+
+### 返回值
+
 可以获取函数最后一条命令的退出状态码
+
 ``` shell
 func1 
 echo 
 "The exit status is: $?"
 ```
+
 使用return
+
 ``` shell
 return 1
 ```
@@ -717,8 +756,8 @@ return 1
 >函数一结束就要取返回值
 返回状态码不能超过256
 
-使用函数输出  
-read 命令输出了一条简短的消息来向用户询问输入值。bash shell脚本并不将其作为STDOUT 输出的一部分，并且忽略掉它。如果你用echo语句生成这条消息来向用户查询，那么它会与输 出值一起被读进shell变量中。
+使用函数输出  `read` 命令输出了一条简短的消息来向用户询问输入值。bash shell脚本并不将其作为 `STDOUT` 输出的一部分，并且忽略掉它。如果你用`echo`语句生成这条消息来向用户查询，那么它会与输出值一起被读进shell变量中。
+
 ``` shell
 function dbl {
  read -p "Enter a value: " value
@@ -732,36 +771,40 @@ Enter a value: 200
 The new value is 400 
 ```
 
-## 函数参数
+### 函数参数
 
-函数可以像脚本一样通过 $0  $1使用参数
+函数可以像脚本一样通过`$0 $1`使用参数
 
-## 函数变量
+### 函数变量
 
-### 全局变量
+#### 全局变量
 
 默认声明使用就是全局变量
 
-### 局部变量
+#### 局部变量
+
 ``` shell
 local temp=$[ $value + 5 ]
 ```
-## 将数组作为出参入参
+
+### 将数组作为出参入参
 
 还未整理
 
-## 创建函数库
+### 创建函数库
 
 在脚本中引用另一个脚本的函数和变量
+
 ``` shell
 source a.sh
 . ./a.sh
 ```
 
-把函数或包含函数的脚本放在.bashrc文件中，就能在命令行使用函数
+把函数或包含函数的脚本放在`.bashrc`文件中，就能在命令行使用函数
 
-# shell中的多线程
-## & wait
+## shell中的多线程
+
+### & wait
 
 ``` shell
 for num in `seq 1 10`
@@ -775,16 +818,16 @@ wait
 commands
 ```
 
-## fd mkfifo
+### fd mkfifo
 
-## 令牌桶
+### 令牌桶
 
 ``` shell
 tempfifo="my_temp_fifo"
-mkfifo ${tempfifo}     #创建名字管道
+mkfifo ${tempfifo}          #创建名字管道
 # 使文件描述符为非阻塞式
-exec 6<>${tempfifo}     #把fd 6指向名字管道（任意大于3 小于 ulimit -n 的fd）
-rm -f ${tempfifo}     #此时可以先删除管道文件，还可以通过fd读写
+exec 6<>${tempfifo}         #把fd 6指向名字管道（任意大于3 小于 ulimit -n 的fd）
+rm -f ${tempfifo}           #此时可以先删除管道文件，还可以通过fd读写
 
 # 为文件描述符创建占位信息
 for ((i=1;i<=${thread_num};i++))
@@ -792,18 +835,17 @@ do
 {
     echo 
 }
-done >&6  #向fd输入thread_num行
-
+done >&6                    #向fd输入thread_num行
 
 # 
 for num in `seq 1 ${all_num}`
 do
 {
-    read -u6   #从fd读取一行，如果暂时没有令牌会阻塞
+    read -u6                #从fd读取一行，如果暂时没有令牌会阻塞
     {
         sleep 1
         echo ${num}
-        echo "" >&6   #放回令牌
+        echo "" >&6         #放回令牌
     } & 
 } 
 done 
@@ -814,30 +856,29 @@ wait
 exec 6>&-
 ```
 
-## xargs
+### xargs
 
 ``` shell
 seq 1 ${all_num} | xargs -n 1 -I {} -P ${thread_num} sh -c "sleep 1;echo {}"
 ```
 
-## parallel
+### parallel
 
 ``` shell
 parallel -j 5 "sleep 1;echo {}" ::: `seq 1 10`
 ```
 
-## 脚本库
+### 脚本库
 
 GNU shtool库的下载安装使用
 
-## 图形库
+### 图形库
 
 dialog
 
-# sed
+## sed
 
-**stream editor流式编辑器**  
-sed options script file
+全名**stream editor流式编辑器**，格式`sed options script file`
 
 sed命令操作文件流程：
 
@@ -849,12 +890,12 @@ sed命令操作文件流程：
 可用选项：
 
 | 选项 | 描述 |
-| --- | --- |
+| :-: | :-: |
 | -e script | 在处理输入时，将script中指定的命令添加到已有的命令中 |
 | -f file | 在处理输入时，将file中指定的命令添加到已有的命令中 |
 | -n | 不产生命令输出，使用print命令来完成输出 |
 
-script参数指定了应用于流数据上的单个命令。如果需要用多个命令，要么使用-e选项在 命令行中指定，要么使用-f选项在单独的文件中指定。
+script参数指定了应用于流数据上的单个命令。如果需要用多个命令，要么使用`-e`选项在命令行中指定，要么使用`-f`选项在单独的文件中指定。
 
 从管道获取输入流
 
@@ -884,7 +925,7 @@ s/dog/cat/
 sed -f script1.sed data1.txt
 ```
 
-替换命令 *s/pattern/repac* 默认只替换第一个匹配。s命令有替换标记。 *s/pattern/repac/flags* ：
+替换命令`s/pattern/repac`默认只替换第一个匹配。s命令有替换标记。 `s/pattern/repac/flags`：
 
 + 数字，表明替换第几处匹配
 + g，全局替换
@@ -914,7 +955,7 @@ command3
 }
 ```
 
-## 区间操作
+### 区间操作
 
 指定行号
 
@@ -942,7 +983,7 @@ Samantha:x:502:502::/home/Samantha:/bin/bash
 > sed '/Samantha/s/bash/csh/' /etc/passwd
 ```
 
-## 命令组合
+### 命令组合
 
 ``` shell
 sed '3,${
@@ -951,7 +992,7 @@ sed '3,${
 > }' data1.txt
 ```
 
-删除行命令 *d* 
+删除行命令 `d` 
 
 ``` shell
 sed '3d' data6.txt
@@ -971,7 +1012,7 @@ sed '/pattern/d' data6.txt
 4
 ```
 
-插入文本命令 *i* ,附加文本命令 *a*，修改行命令 *c*，字符转换命令 *y：[address]y/inchars/outchars/*
+插入文本命令 `i`,附加文本命令 `a`，修改行命令 `c`，字符转换命令 `y：[address]y/inchars/outchars/`
 
 ``` shell
 > echo "Test Line 2" | sed 'i\Test Line 1'
@@ -1070,7 +1111,7 @@ This\tline\tcontains\ttabs.$
 > sed -n '/pattern/w test.txt' data.txt
 ```
 
-读取命令 *r:[address]r filename* 。filename参数指定了数据文件的绝对路径或相对路径。你在读取命令中使用地址区间，只
+读取命令 `r:[address]r filename` 。`filename`参数指定了数据文件的绝对路径或相对路径。你在读取命令中使用地址区间，只
 能指定单独一个行号或文本模式地址。sed编辑器会将文件中的文本插入到指定地址后。
 
 ``` shell
@@ -1091,7 +1132,7 @@ data1 line.
 > sed '/line2/{r data1.txt; d;}' data2.txt
 ```
 
-## 操作多行
+### 操作多行
 
 使用sed对跨多行的数据执行特定操作。如果你想匹配的文本跨了多行，每行各包含其中一部分语句，需要使用多行文本命令。
 
@@ -1099,7 +1140,7 @@ data1 line.
 + D：删除多行组中的一行。
 + P：打印多行组中的一行。
 
-单行的next命令 *n* ，会告诉sed编辑器移动到数据流中的下一文本行。
+单行的next命令 `n` ，会告诉sed编辑器移动到数据流中的下一文本行。
 
 ``` shell
 > cat data1.txt
@@ -1115,9 +1156,9 @@ This is a data line.
 This is the last line.
 ```
 
-多行版本的next命令 *N* 会将下一行文本添加到模式空间中已有的文本后，注意会包含换行符。这样的作用是将数据流中的两个文本行合并到同一个模式空间中。
+多行版本的next命令 `N` 会将下一行文本添加到模式空间中已有的文本后，注意会包含换行符。这样的作用是将数据流中的两个文本行合并到同一个模式空间中。
 
-但是 *N* 命令只会执行到倒数第二行然后和最后一行合并操作，不会再继续操作第一行。如果最后一行有需要匹配的文本就需要注意命令的顺序：
+但是 `N` 命令只会执行到倒数第二行然后和最后一行合并操作，不会再继续操作第一行。如果最后一行有需要匹配的文本就需要注意命令的顺序：
 
 ``` shell
 > sed '{s/System Administrator/Desktop User/; N; s/System\nAdministrator/Desktop\nUser/}' data.txt
@@ -1126,7 +1167,7 @@ User's group meeting will be held.
 All Desktop Users should attend.
 ```
 
-当 *N* 和 *d* 一起使用时，会删除模式空间中的两行。当 *N* 和 *D* 一起使用时，会删除模式空间中的第一行。
+当 `N` 和 `d` 一起使用时，会删除模式空间中的两行。当 `N` 和 `D` 一起使用时，会删除模式空间中的第一行。
 
 ``` shell
 > cat data.txt
@@ -1142,9 +1183,9 @@ This is a data line.
 This is the last line.
 ```
 
-当 *N* 和 *p* 一起使用时，会打印模式空间中的两行。当 *N* 和 *P* 一起使用时，会打印模式空间中的第一行。
+当 `N` 和 `p` 一起使用时，会打印模式空间中的两行。当 `N` 和 `P` 一起使用时，会打印模式空间中的第一行。
 
-## 模式空间和保持空间
+### 模式空间和保持空间
 
 模式空间（pattern space）是一块活跃的缓冲区，在sed编辑器执行命令时它会保存待检查的文本。但它并不是sed编辑器保存文本的唯一空间。sed编辑器有另一块称作保持空间（hold space）的缓冲区域。在处理模式空间中的某些行时，可以用保持空间来临时保存一些行。保持空间的命令：
 
@@ -1154,7 +1195,7 @@ This is the last line.
 + G，将保持空间附加到模式空间
 + x，交换模式空间和保持空间的内容
 
-可以使用 *!* 命令用来排除地址或地址区间。
+可以使用 `!` 命令用来排除地址或地址区间。
 
 ``` shell
 > sed -n '/header/!p' data2.txt
@@ -1163,13 +1204,13 @@ This is the second data line.
 This is the last line.
 ```
 
-普通p命令只打印data2文件中包含单词header的那行。加了感叹号之后，情况就相反了：除了包含单词header那一行外，文件中其他所有的行都被打印出来了。
+普通`p`命令只打印data2文件中包含单词header的那行。加了感叹号之后，情况就相反了：除了包含单词header那一行外，文件中其他所有的行都被打印出来了。
 
-## 分支流程
+### 分支流程
 
 通常，sed编辑器会从脚本的顶部开始，一直执行到脚本的结尾。sed编辑器提供了一个方法来改变命令脚本的执行流程，其结果与结构化编程类似。
 
-分支（branch）命令b的格式如下： *[address]b [label]* ,address参数决定了哪些行的数据会触发分支命令。label参数定义了要跳转到的位置。如果没有加label参数，跳转命令会跳转到 *脚本的结尾* 。
+分支（branch）命令`b`的格式如下： `[address]b [label]` ,`address`参数决定了哪些行的数据会触发分支命令。`label`参数定义了要跳转到的位置。如果没有加`label`参数，跳转命令会跳转到 *脚本的结尾* 。
 
 ``` shell
 > cat data.txt
@@ -1184,7 +1225,7 @@ This is the second data line.
 Is this the last test?
 ```
 
-要指定标签，将它加到b命令后即可。使用标签允许你跳过地址匹配处的命令，但仍然执行脚本中的其他命令。
+要指定标签，将它加到`b`命令后即可。使用标签允许你跳过地址匹配处的命令，但仍然执行脚本中的其他命令。
 
 ``` shell
 > sed '{/first/b jump1 ; s/This is the/No jump on/
@@ -1222,7 +1263,7 @@ This is a test to remove commas.
 > }'
 ```
 
-测试（test）命令（t）也可以用来改变sed编辑器脚本的执行流程。测试命令会根据替换命令的结果跳转到某个标签，而不是根据地址进行跳转。如果替换命令成功匹配并替换了一个模式，测试命令就会跳转到指定的标签。如果替换命令未能匹配指定的模式，测试命令就不会跳转。
+测试（test）命令`t`也可以用来改变sed编辑器脚本的执行流程。测试命令会根据替换命令的结果跳转到某个标签，而不是根据地址进行跳转。如果替换命令成功匹配并替换了一个模式，测试命令就会跳转到指定的标签。如果替换命令未能匹配指定的模式，测试命令就不会跳转。
 
 ``` shell
 > sed '{
@@ -1237,16 +1278,16 @@ No match on last line
 ```
 第一个替换命令会查找模式文本first。如果匹配了行中的模式，它就会替换文本，而且测试命令会跳过后面的替换命令。如果第一个替换命令未能匹配模式，第二个替换命令就会被执行。
 
-## 匹配模式
+### 匹配模式
 
-*&* 符号可以用来代表替换命令中的匹配的模式。不管模式匹配的是什么样的文本，你都可以在替代模式中使用&符号来使用这段文本。
+`&` 符号可以用来代表替换命令中的匹配的模式。不管模式匹配的是什么样的文本，你都可以在替代模式中使用&符号来使用这段文本。
 
 ``` shell
 > echo "The cat sleeps in his hat." | sed 's/.at/"&"/g'
 The "cat" sleeps in his "hat".
 ```
 
-&符号会提取匹配替换命令中指定模式的整个字符串。sed编辑器用圆括号来定义替换模式中的子模式。你可以在替代模式中使用特殊字符来引用每个子模式。替代字符由反斜线和数字组成。数字表明子模式的位置。sed编辑器会给第一个子模式分配字符\1，给第二个子模式分配字符\2，依此类推。当在替换命令中使用圆括号时，必须用转义字符将它们标示为分组字符而不是普通的圆括号。这跟转义其他特殊字符正好相反。
+`&`符号会提取匹配替换命令中指定模式的整个字符串。sed编辑器用圆括号来定义替换模式中的子模式。你可以在替代模式中使用特殊字符来引用每个子模式。替代字符由反斜线和数字组成。数字表明子模式的位置。sed编辑器会给第一个子模式分配字符`\1`，给第二个子模式分配字符`\2`，依此类推。当在替换命令中使用圆括号时，必须用转义字符将它们标示为分组字符而不是普通的圆括号。这跟转义其他特殊字符正好相反。
 
 ``` shell
 > echo "The System Administrator manual" | sed '
@@ -1267,9 +1308,9 @@ That cat is pretty
 1,234,567
 ```
 
-# gawk
+## gawk
 
-gawk options program file
+全名`gawk options program file`
 
 + 定义变量来保存数据
 + 使用算术和字符串操作符来处理数据
@@ -1279,7 +1320,7 @@ gawk options program file
 可用选项
 
 | 选项 | 描述 |
-| --- | --- |
+| :-: | :-: |
 | -F fs | 指定行中划分数据字段的字段分隔符 |
 | -f file | 从指定的文件中读取程序 |
 | -v var=value | 定义gawk程序中的一个变量及其默认值 |
@@ -1335,12 +1376,12 @@ gawk 'BEGIN {print "The data3 File Contents:"} {print $0}' data3.txt
 gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of File"}' data3.txt
 ```
 
-## 使用变量
+### 使用变量
 
 内建变量
 
 | 变量 | 描述 |
-| --- | --- |
+| :-: | :-: |
 | FIELDWIDTHS | 由空格分隔的一列数字，定义了每个数据字段确切宽度 |
 | FS | 输入字段分隔符 |
 | RS | 输入记录分隔符 |
@@ -1350,7 +1391,7 @@ gawk 'BEGIN {print "The data3 File Contents:"} {print $0} END {print "End of Fil
 数据变量
 
 | 变量 | 描述 |
-| --- | --- |
+| :-: | :-: |
 | ARGC | 当前命令行参数个数 |
 | ARGIND | 当前文件在ARGV中的位置 |
 | ARGV | 包含命令行参数的数组 |
@@ -1391,7 +1432,7 @@ data12
 data22
 data32
 ```
-使用命令行参数来定义变量值会有一个问题。在你设置了变量后，这个值在代码的BEGIN部分不可用。可以用-v命令行参数来解决这个问题。它允许你在BEGIN代码之前设定变量。在命令行上，-v命令行参数必须放在脚本代码之前。
+使用命令行参数来定义变量值会有一个问题。在你设置了变量后，这个值在代码的BEGIN部分不可用。可以用`-v`命令行参数来解决这个问题。它允许你在BEGIN代码之前设定变量。在命令行上，`-v`命令行参数必须放在脚本代码之前。
 
 ``` shell
 > gawk -v n=3 -f script2 data1
@@ -1401,7 +1442,7 @@ data23
 data33
 ```
 
-## 使用数组
+### 使用数组
 
 gawk中的数组不是使用数字引用成员。
 
@@ -1461,7 +1502,7 @@ Index: g - Value: 2
 Index: a - Value: 1
 ```
 
-## 模式匹配
+### 模式匹配
 
 使用模式匹配时正则表达式必须出现在它要控制的程序脚本的左花括号前。
 
@@ -1470,14 +1511,14 @@ Index: a - Value: 1
 data11
 ```
 
-匹配操作符（matching operator）允许将正则表达式限定在记录中的特定数据字段。匹配操作符是波浪线（~）。可以指定匹配操作符、数据字段变量以及要匹配的正则表达式。
+匹配操作符（matching operator）允许将正则表达式限定在记录中的特定数据字段。匹配操作符是波浪线`~`。可以指定匹配操作符、数据字段变量以及要匹配的正则表达式。
 
 ``` shell
 > gawk 'BEGIN{FS=","} $2 ~ /^data2/{print $0}' data
 data21,data22,data23,data24,data25
 ```
 
-你也可以用!符号来排除正则表达式的匹配。
+你也可以用`!`符号来排除正则表达式的匹配。
 
 ``` shell
 > gawk –F: '$1 !~ /rich/{print $1,$NF}' /etc/passwd
@@ -1486,7 +1527,7 @@ daemon /bin/sh
 bin /bin/sh
 sys /bin/sh
 ```
-## 数学表达式
+### 数学表达式
 
 除了正则表达式，你也可以在匹配模式中用数学表达式。这个功能在匹配数据字段中的数字值时非常方便。举个例子，如果你想显示所有属于root用户组（组ID为0）的系统用户，可以用这个脚本。
 
@@ -1507,9 +1548,9 @@ operator
 + x >= y：值x大于等于y。
 + x > y：值x大于y。
 
-## 结构化命令
+### 结构化命令
 
-if 语句
+`if` 语句
 
 ``` shell
 > gawk '{if ($1 > 20) print $1}' data
@@ -1528,7 +1569,7 @@ if 语句
 > }}' data
 ```
 
-while 语句，while语句支持使用break和continue语句。
+`while` 语句，`while`语句支持使用`break`和`continue`语句。
 
 ``` shell
 > gawk '{
@@ -1546,7 +1587,7 @@ while 语句，while语句支持使用break和continue语句。
 > }' data
 ```
 
-do-while语句
+`do-while`语句
 
 ``` shell
 > gawk '{
@@ -1560,7 +1601,7 @@ do-while语句
 > print total }' data
 ```
 
-for 语句
+`for` 语句
 
 ``` shell
 > gawk '{
@@ -1574,14 +1615,14 @@ for 语句
 > }' data5
 ```
 
-## 格式化打印
+### 格式化打印
 
-*printf "format string", var1, var2 . . .* 
+格式`printf "format string", var1, var2 . . .`
 
 格式化指定符
 
 | 控制字母 | 描述 |
-| --- | --- |
+| :-: | :-: |
 | c | 将一个数作为ASCII字符显示 |
 | d | 显示一个整数值 |
 | i | 显示一个整数值（跟d一样） |
@@ -1602,6 +1643,7 @@ The answer is: 1.000000e+03
 ```
 
 除了控制字母外，还有3种修饰符可以用来进一步控制输出。
+
 + width：指定了输出字段最小宽度的数字值。如果输出短于这个值，printf会将文本右对齐，并用空格进行填充。如果输出比指定的宽度还要长，则按照实际的长度输出。
 + prec：这是一个数字值，指定了浮点数中小数点后面位数，或者文本字符串中显示的最大字符数。
 + -（减号）：指明在向格式化空间中放入数据时采用左对齐而不是右对齐。
@@ -1617,12 +1659,12 @@ Haley Snell    (313)555-4938
 128.3
 ```
 
-## 函数
+### 函数
 
 数学函数
 
 | 函 数 | 描 述 |
-| --- | --- |
+| :-: | :-: |
 | atan2(x, y) | x/y的反正切，x和y以弧度为单位 |
 | cos(x) | x的余弦，x以弧度为单位 |
 | exp(x) | x的指数函数 |
@@ -1636,7 +1678,7 @@ Haley Snell    (313)555-4938
 位操作
 
 | 函数 | 描述 |
-| --- | --- |
+| :-: | :-: |
 | and(v1, v2) | 执行值v1和v2的按位与运算。 |
 | compl(val) | 执行val的补运算。 |
 | lshift(val, count) | 将值val左移count位。 |
@@ -1647,7 +1689,7 @@ Haley Snell    (313)555-4938
 字符串函数
 
 | 函数 | 描述 |
-| --- | --- |
+| :-: | :-: |
 | asort(s [,d]) | 将数组s按数据元素值排序。索引值会被替换成表示新的排序顺序的连续数字。另外，如果指定了d，则排序后的数组会存储在数组d中 |
 | asorti(s [,d]) | 将数组s按索引值排序。生成的数组会将索引值作为数据元素值，用连续数字索引来表明排序顺序。另外如果指定了d，排序后的数组会存储在数组d中 |
 | gensub(r, s, h [, t]) | 查找变量$0或目标字符串t（如果提供了的话）来匹配正则表达式r。如果h是一个以g或G开头的字符串，就用s替换掉匹配的文本。如果h是一个数字，它表示要替换掉第h处r匹配的地方 |
@@ -1689,7 +1731,7 @@ data31 data35
 时间函数
 
 | 函 数 | 描 述 |
-| --- | --- |
+| :-: | :-: |
 | mktime(datespec) | 将一个按YYYY MM DD HH MM SS [DST]格式指定的日期转换成时间戳值 |
 | strftime(format [,timestamp]) | 将当前时间的时间戳或timestamp（如果提供了的话）转化格式化日期（采用shell函数date()的格式） |
 | systime( ) |  返回当前时间的时间戳 |
@@ -1774,10 +1816,10 @@ Total for team1 is 635, the average is 105.833
 Total for team2 is 706, the average is 117.667
 ```
 
-# shell中的特殊环境变量
+## shell中的特殊环境变量
 
 | 变更 | 说明 |
-| --- | --- | 
+| :-: | :-: | 
 | `$$` | Shell本身的PID（ProcessID）|
 | |这个变量经常用来构造一个"unique"的临时文件名，通常比调用`mktemp`来得简单 |
 | `$!` | Shell最后运行的后台Process的PID |
@@ -1795,10 +1837,10 @@ Total for team2 is 706, the average is 117.667
 | `${#*}` | 传递到脚本中的命令行参数的个数 |
 | `${#@}` | 传递到脚本中的命令行参数的个数 |
 
-## 参数替换和扩展
+### 参数替换和扩展
 
 | 表达式 | 含义 |
-| --- | --- |
+| :-: | :-: |
 | `${var}` | 变量`var`的值, 与`$var`相同 |
 | `${var-DEFAULT}` | 如果`var`没有被声明, 那么就以`$DEFAULT`作为其值 * |
 | `${var:-DEFAULT}` | 如果`var`没有被声明, 或者其值为空, 那么就以`$DEFAULT`作为其值 * |
@@ -1811,10 +1853,10 @@ Total for team2 is 706, the average is 117.667
 | `${!varprefix*}` | 匹配之前所有以`varprefix`开头进行声明的变量 |
 | `${!varprefix@}` | 匹配之前所有以`varprefix`开头进行声明的变量 |
 
-## 字符串操作
+### 字符串操作
 
 | 表达式 | 含义 |
-| --- | --- |
+| :-: | :-: |
 | `${#string}` | `$string`的长度 |
 | `${string:position}` | 在`$string`中, 从位置`$position`开始提取子串 |
 | `${string:position:length}` | 在`$string`中, 从位置`$position`开始提取长度为`$length`的子串 |
@@ -1836,12 +1878,12 @@ Total for team2 is 706, the average is 117.667
 | `expr "$string" :'.\*\($substring\)'` | 从`$string`的结尾提取`$substring`* |
 
 --------------------------------------------------------------------------------
-*$substring*是一个正则表达式.
+`$substring`是一个正则表达式.
 
-## 括号
+### 括号
 
 | **中括号** | |
-| --- | --- |
+| :-: | :-: |
 | `if[ CONDITION ]` | 测试结构 |
 | `if[[ CONDITION ]]` | 扩展的测试结构 |
 | `Array[1]=element1` | 数组初始化 |
