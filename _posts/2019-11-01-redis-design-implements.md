@@ -10,18 +10,18 @@ permalink: "/posts/redis-design-implements"
 excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速、有效地了解Redis内部构造以及运作机制。
 ---
 
-+ [Redis设计与实现.pdf](https://leezw.net/assets/pdf/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0.pdf)
+1. [Redis设计与实现.pdf](https://leezw.net/assets/pdf/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0.pdf)
 
-# 数据结构
+## 数据结构
 
-## 简单动态字符串
+### 简单动态字符串
 
-*SDS（SImple Dynamic String)*
+SDS 全名 SImple Dynamic String
 
 
 ### sds.h/sdshdr 结构
 
-{% highlight c %}
+``` c
  struct	sdshdr	{
  //记录buf数组中已使⽤字节的数量
  //等于SDS所保存字符串的⻓度
@@ -31,27 +31,28 @@ excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速
  //字节数组，⽤于保存字符串
  char buf[];
  };
-{% endhighlight %}
+```
 
 ### 与 c 语言不同
 
-* 在字符串末尾都保留空字符以兼容传统的c字符串操作
-* 存储字符串长度信息，可以直接获取sds长度。
-* 可以杜绝缓冲区溢出，sds API会检查空间。而string API如果程序员疏忽没分配足够空间会溢出
-* sds修改时会预分配空间避免数据库频繁修改数据时的空间申请。
->
-如果对 SDS 进行修改之后， SDS 的长度（ 也即是 len 属性的值） 将小于1MB，那么程序分配和 len 属性同样大小的未使用空间， 这时 SDS len 属性的值将和 free 属性的值相同。举个例子， 如果进行修改 之后， SDS 的 len 将变成 13 字节， 那么程序也会分配 13 字节的未使用空间，SDS 的 buf 数组的实际长度将变成 13+ 13+ 1= 27 字节（ 额外的一字节用 于保存空字符）。
-如果对 SDS 进行修改之后，SDS 的长度将大于等于 1MB， 那么程序会分配 1MB 的未使用空间。 举个 例子，如果进行修改之后，SDS的 len 将变成 30MB，那么程序会分配 1MB的未使用空间，SDS的 buf 数组的实际长度将为 30MB+ 1MB+ 1byte。
-* sds二进制安全，sds以二进制方式处理buf内容，而string必须符合某种编码，字符串中不能出现空字符，所以不能保存blob数据。
-* 因为sds也是以空字符结尾，可以兼容部分string原⽣生函数。
+1. 在字符串末尾都保留空字符以兼容传统的c字符串操作
+2. 存储字符串长度信息，可以直接获取sds长度。
+3. 可以杜绝缓冲区溢出，sds API会检查空间。而string API如果程序员疏忽没分配足够空间会溢出
+4. sds修改时会预分配空间避免数据库频繁修改数据时的空间申请。
+   + 如果对 SDS 进行修改之后， SDS 的长度（ 也即是 len >属性的值） 将小于1MB，那么程序分配和 len 属性同样大小的未使用空间， 这时 SDS len 属性的值将和 free 属性的值相同。举个例子， 如果进行修改 之后， SDS 的 len 将变成 13 字节， 那么程序也会分配 13 字节的未使用空间，SDS 的 buf 数组的实际长度将变成 13+ 13+ 1= 27 字节（ 额外的一字节用 于保存空字符）。
 
-## 链表
+   + 如果对 SDS 进行修改之后，SDS 的长度将大于等于 1MB， 那么程序会分配 1MB 的未使用空间。 举个 例子，如果进行修改之后，SDS的 len 将变成 30MB，那么程序会分配 1MB的未使用空间，SDS的 buf 数组的实际长度将为 30MB+ 1MB+ 1byte。
 
-## 字典
+1. sds二进制安全，sds以二进制方式处理buf内容，而string必须符合某种编码，字符串中不能出现空字符，所以不能保存blob数据。
+2. 因为sds也是以空字符结尾，可以兼容部分string原⽣生函数。
 
-### dict. h/ dict 结构
+### 链表
 
-{% highlight c %}
+### 字典
+
+#### dict. h/ dict 结构
+
+``` c
  typedef struct dict {
  // 类型特定函数
  dictType *type;
@@ -62,13 +63,12 @@ excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速
  //rehash索引
  //当rehash不在进行时，值为-1	
  in trehashidx;
- /*	rehashing not in progress if rehashidx == -1*/
  }	dict;
-{% endhighlight %}
+```
 
-### dict. h/ dictht 结构
+#### dict. h/ dictht 结构
 
-{% highlight c %}
+``` c
  typedef struct dictht	
  {
  //哈希表数组
@@ -81,9 +81,9 @@ excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速
  //该哈希表已有节点的数量
  unsigned long used;
  }	dictht;
-{% endhighlight %}
+```
 
-{% highlight c %}
+``` c
  typedef struct dictEntry	
  {
  //键
@@ -93,23 +93,25 @@ excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速
  //指向下个哈希表节点，形成链表
  struct	dictEntry *next;
  } dictEntry;
-{% endhighlight %}
+```
  
-* type 属性是一 个指向 dictType 结构的指针， 每个 dictType 结构保存 了 一簇用于操作特定类型键值对的函数， Redis 会为用途 不同 的字典设置不同的类型特定函数
-* ht 属性是一 个包含两个项的数组，数组中的每个项都是一个dictht 哈希表，一般情况下，字典只使⽤用ht[ 0 ] 哈希表， ht[ 1 ] 哈希表只会在对ht[ 0 ] 哈希表进⾏ rehash 时使用。
-* 除了 ht[ 1 ] 之外，另一个和 rehash 有关的属性就是 rehashidx，它记录了 rehash ⽬前的进度，如果⽬前没有在进⾏ rehash， 那么 它的 值 为- 1。
++ `type` 属性是一个指向 `dictType` 结构的指针， 每个 `dictType` 结构保存了一簇用于操作特定类型键值对的函数， Redis 会为用途不同的字典设置不同的类型特定函数
++ `ht` 属性是一个包含两个项的数组，数组中的每个项都是一个`dictht` 哈希表，一般情况下，字典只使⽤用`ht[0]` 哈希表， `ht[1]` 哈希表只会在对`ht[0]` 哈希表进⾏ rehash 时使用。
++ 除了 `ht[1]` 之外，另一个和 rehash 有关的属性就是 `rehashidx`，它记录了 rehash ⽬前的进度，如果⽬前没有在进⾏ rehash， 那么它的值为 `-1`。
 
-### rehash
+#### rehash
 
-1. 为字典的ht[ 1 ] 哈希表分配空间， 这个哈希表的空间⼤小取决于要执⾏的操作，以及 ht[0 ] 当前包含 的键值对数量（ 也即是 ht[ 0 ]. used 属性的值）：
-  * 如果执⾏的是扩展操作，那么 ht[ 1 ] 的⼤小为第一个 大于等于 ht[ 0 ]. used* 2 的 2 n（ 2的 n 次⽅方 幂）；
-  * 如果执⾏的是收缩操作，那么 ht[ 1 ] 的 ⼤小为第一个大于等于 ht[ 0 ]. used 的 2 n。
-2. 将保存在 ht[ 0 ] 中的所有键值对 rehash 到 ht[ 1 ] 上面： rehash 指的是重新计算键的哈希值和索引值， 然后将键值对放置到 ht[ 1 ] 哈希表的指定位置上。
-> 渐进式rehash
-1） 为 ht[ 1] 分配空间， 让字典同时持有 ht[ 0] 和 ht[ 1] 两个哈希表。
-2） 在字典中维持一个索引计数器变量 rehashidx， 并将它的值设置为 0， 表示 rehash工作正式开始。
-3） 在 rehash 进行期间， 每次对字典 执行添加、 删除、 查找或者更新操作时，程序除了执行指定的操作以外，还会顺带将 ht[ 0] 哈希表在 rehashidx 索引上的所有键值对 rehash 到 ht[ 1]， 当 rehash 工作完成之后，程序将 rehashidx 属性的值增 一。
-4） 随着字典操作的不断 执行， 最终在某 个时间点上，ht[ 0] 的所有键值对都会被rehash 至 ht[ 1]，这时程序将 rehashidx 属性的值设为- 1， 表示 rehash 操作已完成。
+1. 为字典的`ht[1]`哈希表分配空间， 这个哈希表的空间⼤小取决于要执⾏的操作，以及 `ht[0]` 当前包含的键值对数量（ 也即是 `ht[0].used` 属性的值）：
+   + 如果执⾏的是扩展操作，那么 `ht[1]` 的⼤小为第一个大于等于 `ht[0].used` * 2 的 2 n（ 2的 n 次⽅方 幂）；
+   + 如果执⾏的是收缩操作，那么 `ht[1]` 的⼤小为第一个大于等于 `ht[0].used` 的 2 n。
+
+2. 将保存在 `ht[0]` 中的所有键值对 rehash 到 `ht[1]` 上面： rehash 指的是重新计算键的哈希值和索引值， 然后将键值对放置到 `ht[1]` 哈希表的指定位置上。
+    
+        渐进式rehash：
+         1. 为 `ht[1]` 分配空间， 让字典同时持有 `ht[0]` 和 `ht[1]` 两个哈希表。
+         2. 在字典中维持一个索引计数器变量 rehashidx， 并将它的值设置为 `0`， 表示 rehash 工作正式开始。
+         3. 在 rehash 进行期间， 每次对字典执行添加、 删除、 查找或者更新操作时，程序除了执行指定的操作以外，还会顺带将 `ht[0]` 哈希表在 rehashidx 索引上的所有键值对 rehash 到 `ht[1]`， 当 rehash 工作完成之后，程序将 rehashidx 属性的值增一。
+         4. 随着字典操作的不断执行， 最终在某个时间点上，`ht[0]` 的所有键值对都会被rehash 至 `ht[1]`，这时程序将 rehashidx 属性的值设为`-1`， 表示 rehash 操作已完成。
 3. 当 ht[ 0 ] 包含的所有键值对都迁移到了 ht[ 1 ] 之后（ ht[ 0 ] 变为 空 表）， 释放 ht[ 0 ]， 将 ht[ 1 ]设置 为 ht[ 0 ]， 并在 ht[ 1 ] 新创 建 一个 空白哈希表，为 下一次 rehash 做准备。当以下 条件中的任意一个 被满足时，程序会自动开始对哈希表执行扩展操作：
  * 服务器目前没有在执行 BGSAVE 命令或者 BGREWRITEAOF 命令，并且哈希表的负载因子大于等于 1 。
  * 服务器目前正在执行 BGSAVE 命令或者 BGREWRITEAOF 命令，并且哈希表的负载因⼦大于等于 5 。
