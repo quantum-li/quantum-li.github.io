@@ -11,7 +11,7 @@ excerpt: 列出了Redis的大多数单机功能以及实现原理，可以快速
 lightbox: true
 ---
 
-1. [Redis设计与实现.pdf](https://leezw.net/assets/pdf/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0.pdf)
++ [Redis设计与实现.pdf](https://leezw.net/assets/pdf/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0.pdf)
 
 ## 数据结构
 
