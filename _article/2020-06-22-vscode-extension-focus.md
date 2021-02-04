@@ -1,17 +1,27 @@
-# Focus
+---
+title: VS Code Extension-Focus
+categories:
+- VS Code
+- VS Code Extension
+description: VS Code Extension-Focus 介绍
+permalink: "/posts/vscode-extension-focus"
+excerpt: VS Code 插件，突出显示当前代码行、代码块，帮助你专心于眼前。
+---
+
+## Focus
 
 突出显示当前代码行、代码块，帮助你专心于眼前。
 
 [Download page](https://marketplace.visualstudio.com/items?itemName=QuanLi.focus)
 
-## Features
+### Features
 
 * 高亮当前行。
 * 根据配置，高亮固定的行数。
 * 高亮代码块，根据缩进高亮，适合Python。
 * 高亮代码块，高亮以 "{" 和 "}" 包裹的代码块。
 
-## Usages
+### Usages
 
 * 点进链接或者在vscdoe扩展搜索并安装。
 * 提供了快捷命令和状态栏快捷按钮帮助切换。
@@ -23,7 +33,7 @@
 ![Usage03](/assets/images/vscode-extension-focus/usage03.png)
 
 
-## Configuration
+### Configuration
 
 使用UI或者JOSN设置高亮级别:
 
@@ -47,11 +57,11 @@
 ```
 
 
-## 迭代记录
+### 迭代记录
 See Change Log [here](https://github.com/mzzw/focus/blob/master/CHANGELOG.md)
 
-## Issues
+### Issues
 Submit the [issues](https://github.com/mzzw/focus/issues) if you find any bug or have any suggestion.
 
-## Contribution
+### Contribution
 Fork the [repo](https://github.com/mzzw/focus) and submit pull requests.
