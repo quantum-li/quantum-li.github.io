@@ -22,9 +22,9 @@
     line-height: 1.5rem;
     transition: 0.5s;
     width: 200px;
-    position: absolute;
+    position: fixed;
     top: 2rem;
-    left: 3rem;
+    right: -3rem;
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -54,15 +54,4 @@
     top: auto;
 }
 
-.forkongithub {
-    pointer-events:none;
-    position: fixed;
-    display: block;
-    top: 0rem;
-    right: 0rem;
-    width: 12rem;
-    overflow: hidden;
-    height: 12rem;
-    z-index: 8000;
-}
 /* end custom scss snippet */
