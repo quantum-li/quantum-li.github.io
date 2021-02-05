@@ -63,7 +63,7 @@ license:  # "CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-NC-4.0", "CC-BY-ND-4.0"
 
 ## TOC
 toc:
-  selectors: # "h1,h2,h3" (default)
+  selectors: "h2,h3,h4" # "h1,h2,h3" (default)
 
 
 ## => Markdown Enhancements
@@ -188,8 +188,8 @@ defaults:
       footer: false
       show_date: false
       categories: "posts"
-      toc:
-        selectors: "h1,h2,h3,h4"  # "h1,h2,h3" (default)
+      aside:
+        toc: true
   - scope:
       path: "_article"
       type: article
@@ -202,8 +202,8 @@ defaults:
       header: false
       footer: false
       show_date: false
-      toc:
-        selectors: "h1,h2,h3,h4"  # "h1,h2,h3" (default)
+      aside:
+        toc: true
   - scope:
       path: "assets/pdf"
     values:
