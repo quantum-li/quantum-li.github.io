@@ -103,7 +103,7 @@ sharing:
 ## => Comments
 ##############################
 comments:
-  provider: gitalk # false (default), "disqus", "gitalk", "valine", "custom"
+  provider: false # false (default), "disqus", "gitalk", "valine", "custom"
 
   ## Disqus
   disqus:
@@ -188,6 +188,8 @@ defaults:
       footer: false
       show_date: false
       categories: "posts"
+      toc:
+        selectors: "h1,h2,h3,h4"  # "h1,h2,h3" (default)
   - scope:
       path: "_article"
       type: article
@@ -200,6 +202,8 @@ defaults:
       header: false
       footer: false
       show_date: false
+      toc:
+        selectors: "h1,h2,h3,h4"  # "h1,h2,h3" (default)
   - scope:
       path: "assets/pdf"
     values:
