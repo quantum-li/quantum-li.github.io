@@ -589,4 +589,64 @@ c.B1::show();
 
 类模板将类型作为参数初始化对象。在容器类中最为常见。定义类模板有两种方式，一种是使用 `typedef` ，这种方式最大的问题是每个程序只能生成一种类型的类。第二种是使用 `template`。
 
+``` c++
+typedef unsigend long Item;
 
+class Stack
+{
+    private: 
+        Item items[10];
+    public:
+        bool push(const Item & item);
+}
+```
+
+``` c++
+template <class Type>
+//template <typename Type>
+
+class Stack
+{
+    private:
+        Type items[10];
+    public:
+        bool push(const Type &item);
+};
+
+// 在方法中使用模板
+template <typename Type>
+bool Stack<Type>::push(const Type & item)
+{
+    ...
+}
+
+//使用模板声明对象
+Stack<int> it;
+Stack<string> st;
+```
+
+模板类中的类变量可以为指针，但是要注意合理使用。
+
+模板参数也可以为非类型参数，也就是值参数。值参数带有参数类型，且可以有默认值。值参数可以为整型、枚举、引用或指针。模板代码不能修改参数的值，也不能使用参数的地址。在实例化模板时，用作表达式参数的值必须是常量表达式。
+
+``` c++
+template <typename T = string,int n = 10>
+class Stack
+{
+    private:
+        T items[n];
+}
+
+Stack<T,n>::Stack(const T & v)
+{
+    for(int i=0; i<n; i++);
+}
+```
+
+可以将用于常规类的技术用于模板类。模板类可用作基类，也可用作组件类，还可用作其他模板的类型参数。
+
+``` c++
+Array<Stack<int>> ast;
+```
+
+TODO 14.4.6
