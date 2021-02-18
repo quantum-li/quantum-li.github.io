@@ -551,5 +551,42 @@ ostream & operator<<(ostream & os, const Student & stu)
 
 ### 多重继承
 
+多重继承（multiple inheritance，MI）。相比于单继承更为复杂，其主要表现为：1.从两个不同的基类继承同名方法；2.从两个基类继承同一个类的多个实例。需要额外使用一些规则和语法来解决这些问题。
+
+``` c++
+class A {...};
+class B1 : public A {...};
+class B2 : public A {...};
+class C : public B1, public B2 {...};
+```
+
+对于第2个问题，可以使用虚基类来解决。虚基类使得从多个基类相同的类派生出的对象只继承一个基类对象。虚基类使用关键字`virtual`修饰：
+
+``` c++
+class B1 : virtual public A {...};
+class B2 : public virtual A {...};
+class C : public B1, public B2 {...};
+```
+
+使用了虚基类后，对象 C 将只包含 A 对象的一个副本。也就是继承的 B1 和 B2 对象共享一个 A 对象。使用了虚基类的继承，在构造函数的初始化列表将使用新的方式：
+
+``` c++
+C(int a, int b, int c) 
+    : A(a), B(b), C(c)  //这时会先初始化 A 对象
+{...};
+```
+
+对于第1个问题，可以使用作用域解析符来避免方法名二义性：
+
+``` c++
+C c = new C();
+c.B1::show();
+```
+
+但是最好的方法是在派生类中重写同名方法。
+
+### 类模板
+
+类模板将类型作为参数初始化对象。在容器类中最为常见。定义类模板有两种方式，一种是使用 `typedef` ，这种方式最大的问题是每个程序只能生成一种类型的类。第二种是使用 `template`。
 
 
