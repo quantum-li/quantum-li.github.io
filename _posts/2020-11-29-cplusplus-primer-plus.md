@@ -478,7 +478,78 @@ protected对于派生类和public一致。对外部类和private一致。
 
 ## C++中的代码重用
 
+### 包含对象成员的类
 
+在类中包含各种成员对象以达到代码重用的目的
+
+### 私有继承
+
+共有继承中派生类会继承基类的接口，所以是`is-a`的关系；在私有继承的不完全继承中类继承的是实现，是`has-a`的关系，派生类`has-a`基类。使用私有继承和包含对象成员的不同是省略了显示的对象名称。
+
+``` c++
+class Student : private std::string, private std::valarray<double>
+{
+    public:
+    ...
+}
+```
+
+私有继承和成员对象不同的是没有变量名，因此在构造函数中使用成员初始化列表语法时，使用类名来初始化基类：
+
+``` c++
+Student(const char * str,const double * pd, int m)
+    :std::string(str), std::valarray<double>(pd, n)
+    {
+        ...
+    }
+```
+
+同样由于没有变量名，在调用基类方法时使用类名和作用于解析运算符来调用方法：
+
+``` c++
+double Student::Average() const
+{
+    if(std::valarray<double>::size() > 0)
+        return std::valarray<double>::sum();
+    else
+        return 0;
+}
+```
+
+或者重新声明私有基类方法：
+
+```c++
+double Student::sum() const
+{
+    return std::valarray<double>::sum();
+}
+```
+
+或者使用 using 声明来指出派生类可以使用特定的基类成员,注意没有圆括号、函数特征标识和返回类型：
+
+``` c++
+using std::valarray<double>::sum; 
+```
+
+访问基类的对象时，由于没有对象成员声明，所以使用强制类型转换：
+
+``` c++
+const string & Student::Name() const
+{
+    return (const string &) *this;
+}
+```
+
+因为友元函数不属于类，因此不能用类名加作用于限定符限定函数名，所以需要显示的转换为基类来调用正确的函数：
+
+``` c++
+ostream & operator<<(ostream & os, const Student & stu)
+{
+    os << (const string &)stu;
+}
+```
+
+### 多重继承
 
 
 
