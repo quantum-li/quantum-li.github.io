@@ -706,3 +706,74 @@ template <template <typename T1> class T2> class TemplateWapper{...};
 + 非模板友元
 + 约束模板友元，友元的类型取决于类实例化时的类型
 + 非约束模板友元，友元的所有具体化都是类的每一个具体化的友元
+
+
+------
+
+为模板指定别名：
+
+``` c++
+template<typename T> using arrayType = std::array<T,12>;
+arrayType<double> t1;   //等于std::array<double,12>
+arrayType<int> t2;      //等于std::array<int,12>
+
+//c++11 也允许使用语法 `using =` 用于非模板
+using i = int;    //等于typedef int i;
+```
+
+## 友元、异常和其他
+
+### 友元
+
+类并非只能拥有友元函数，也可以将类作为友元。这时友元类的所有方法都可以访问原始类的私有成员和保护成员。另外，也可以做更严格的限制，只将特定的成员函数指定为另一个类的友元。哪些函数、成员函数或类为友元是又类定义的，而不能从外部强加友情。
+
+例如对于电视机和遥控器，可以这样声明友元类：
+
+``` c++
+//声明遥控器类
+class Remote
+{
+    public:
+        void set_chan(Tv & t,int c){t.channel = c;}
+        ...
+}
+//声明电视机类
+class Tv
+{
+    public:
+        friend class Remote;   //Remote类的所有方法都将是Tv类的友元
+        ...
+}
+```
+
+当然也可以选择仅让特定的类成员成为另一个类的友元，而不必让整个类成为友元。这时会有一些麻烦，在代码上需要小心排列各种声明和定义的顺序，下面介绍原因：
+
+让 `Remote::set_chan()` 成为Tv类的友元方法是在Tv类声明中将其声明为友元:
+
+```c++
+class Tv
+{
+    friend void Remote::set_chan(Tv & t, int c);
+}
+```
+
+然而要使编译器能处理这条语句，它必须知道Remote的定义，否则编译器无法知道Remote是一个类，set_chan是这个类的方法。这意味着需要将 Remote 的定义放到 Tv 的定义前面。 Remote的方法提到了Tv对象，而这意味着Tv的定义应当在Remote前面。这时就有了循环依赖。
+
+这种情况需要使用前向声明预先声明一个类，再声明类的定义。Tv类需要知道Remote类的详情，而Remote类只需要Tv类的存在。因此使用下面定义顺序：
+
+```c++
+class Tv;                                                   //1.先声明Tv类
+class Remote {void set_chan(Tv& t,int c){...}}              //2.再声明Remote类的定义
+class Tv {friend void Remote::set_chan(Tv& t,int c){...}}   //3.再声明Tv类的定义
+```
+
+友元类型还有互相友元和共同友元，相互友元和共同友元都需要注意类声明和类定义的顺序。都需要前向定义方式。
+
+### 嵌套类
+
+### 异常
+
+
+### RTTI
+
+### 类型转换运算符
