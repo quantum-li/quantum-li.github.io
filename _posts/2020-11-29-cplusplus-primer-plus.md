@@ -627,7 +627,7 @@ Stack<string> st;
 
 模板类中的类变量可以为指针，但是要注意合理使用。
 
-------
+#### 非类型参数
 
 模板参数也可以为非类型参数，也就是值参数。值参数带有参数类型，且可以有默认值。值参数可以为整型、枚举、引用或指针。模板代码不能修改参数的值，也不能使用参数的地址。在实例化模板时，用作表达式参数的值必须是常量表达式。
 
@@ -645,7 +645,7 @@ Stack<T,n>::Stack(const T & v)
 }
 ```
 
-------
+#### 模板的多功能性
 
 可以将用于常规类的技术用于模板类。模板类可用作基类，也可用作组件类，还可用作其他模板的类型参数。
 
@@ -653,7 +653,7 @@ Stack<T,n>::Stack(const T & v)
 Array<Stack<int>> ast;
 ```
 
-------
+#### 模板的具体化
 
 类模板与函数模板都有隐式实例化、显式实例化和显示具体化。模板以泛型的方式描述类，而具体化是使用具体的类型生成类声明。
 
@@ -690,7 +690,7 @@ template <class T1, class T2> class Pair {...};
 template <class T1> class Pair<T1, int> {...};  //关键字template后面的<>声明的是没有被具体化的类型参数。
 ```
 
-------
+#### 将模板用作参数
 
 模板可以包含类型参数(typename T)和非类型参数(int n)。模板还可以包含本身就是模板的参数。
 
@@ -699,7 +699,7 @@ template <class T1> class Pair<T1, int> {...};  //关键字template后面的<>�
 template <template <typename T1> class T2> class TemplateWapper{...};
 ```
 
-------
+#### 模板类和友元
 
 模板类声明也可以有友元，模板的友元分3类：
 
@@ -713,7 +713,7 @@ template <template <typename T1> class T2> class TemplateWapper{...};
 
 //TODO 模板类和友元
 
-------
+#### 模板别名
 
 为模板指定别名：
 
@@ -778,11 +778,11 @@ class Tv {friend void Remote::set_chan(Tv& t,int c){...}}   //3.再声明Tv类�
 
 将类声明放在另一个类中，成为嵌套类。嵌套类通过使用作用域来避免名称混淆。包含类的成员函数可以创建和使用被嵌套类的对象；而仅当声明位于公有部分，才能在包含类的外面使用嵌套类,而且必须使用作用域解析运算符。
 
-------
+#### 嵌套类和访问权限
 
 有两种访问权限适合于嵌套类。首先，嵌套类的声明位置决定了嵌套类的作用域，即它决定了程序的哪些部分可以创建这种类的对象。其次，和其他类一样，嵌套类的公有部分、保护部分和私有部分控制了对类成员的访问。在哪些地方可以使用嵌套类以及如何使用嵌套类，取决于作用域和访问控制。
 
-------
+#### 模板中的嵌套
 
 模板类中的类嵌套语法：
 
@@ -808,6 +808,122 @@ QueueTp<char> cq;
 
 ### 异常
 
+#### 调用abort()
+
+C++ 处理异常的方式之一是调用`abort( )`函数。`abort()`函数的原型位于头文件`cstdlib (或stdlib.h)`中，其典型实现是向标准错误流(即cerr使用的错误流)发送消息`abnormal program termination (程序异常终止)`，然后终止程序。它还返回一个随实现而异的值，告诉操作系统或父进程处理失败。`abort( )`是否刷新文件缓冲区取决于实现。如果愿意，也可以使用`exit( )`，该函数刷新文件缓冲区，但不显示消息。
+
+#### 返回错误码
+
+另一种比异常终止更灵活的方法是，使用函数的返回值来指出问题。
+
+#### 异常机制
+
+最好的方案是使用C++的异常捕获机制，其语法为：
+
+``` c++
+
+int main(){
+    try{
+        methodThrowException();
+    }catch(const char * e){
+        cout<<e<<endl;
+    }
+}
+
+void methodThrowException(){
+    throw "这是一个异常";
+}
+```
+
+执行throw语句类似于执行返回语句，因为它也将终止函数的执行。但throw不是将控制权返回给调用程序，而是导致程序沿函数调用序列后退，直到找到包含try块的函数。如果函数引发了异常，而没有try块或没有匹配的处理程序时，程序最终将调用`abort( )`函数，但可以修改这种行为。
+
+通常异常使用对象来传递。
+
+#### 异常规范
+
+c++98中新增异常规范语法，随后在c++11中被摒弃。其格式为`void method() throw(bad_thing)`，含义为这个方法可能会抛出异常。c++11中同样也提供了异常规范语法`void method() noexcept;`，其含义是这个方法不会抛出异常。
+
+#### 栈解退
+
+C++通常通过将信息放在栈中来处理函数调用。具体地说，程序将调用函数的指令的地址(返回地址)放到栈中。当被调用的函数执行完毕后，程序将使用该地址来确定从哪里开始继续执行。另外，函数调用将函数参数放到栈中。在栈中，这些函数参数被视为自动变量。如果被调用的函数创建了新的自动变量，则这些变量也将被添加到栈中。如果被调用的函数调用了另一个函数，则后者的信息将被添加到栈中，依此类推。当函数结束时，程序流程将跳到该函数被调用时存储的地址处，同时栈顶的元素被释放。因此，函数通常都返回到调用它的函数，依此类推，同时每个函数都在结束时释放其自动变量。如果自动变量是类对象，则类的析构函数(如果有的话)将被调用。现在假设函数由于出现异常(而不是由于返回)而终止，则程序也将释放栈中的内存，但不会在释放栈的第一个返回地址后停止，而是继续释放栈，直到找到一个位于try块中的返回地址。随后，控制权将转到块尾的异常处理程序，而不是函数调用后面的第一条语句。 这个过程被称为栈解退。引发机制的一个
+非常重要的特性是，和函数返回一样，对于栈中的自动类对象，类的析构函数将被调用。然而，函数返回仅仅处理该函数放在栈中的对象，而throw语句则处理try块和throw之间整个函数调用序列放在栈中的对象。
+
+#### 其他异常特性
+
+引发异常时编译器会创建异常对象的一个临时拷贝。之后异常对象将不复存在。
+
+在捕获异常对象时通常使用引用`catch(problem & p)`。这样基类引用可以执行派生类对象。假设有一组通过继承关联起来的异常类型，则在异常规范中只需列出一个基类引用，它将与任何派生类对象匹配。
+
+#### exception 类
+
+c++还提供了所有异常的基类`exception`类，其位于exception头文件（以前为exception.h或except.h）。这个类有一个名为`what()`的虚拟成员函数，它返回一个字符串，可以在派生类中重新定义它。
+
+```c++
+class bad : public std::exception
+{
+    const char * whar() {return "bad";}
+}
+```
+
+同时c++库定义了很多基于exception的异常类型。头文件`stdexcept`定义了`logic_error`和`runtime_error`类。同时基于这两个类派生出其他类：
+
+异常类系列`logic_error`描述了典型的逻辑错误：
+
++ invalid_argument 参数错误
++ length_error 超长
++ out_of_bounds 超出索引范围
+
+异常类系列`runtime_error`描述可能在运行期间发生但难以预防的错误:
+
++ range_error 数值超出范围
++ overflow_error 溢出
+
+对于使用new导致的内存分配问题，C++的最新处理方式是让new引发`bad_alloc`异常。头文件new包含`bad_alloc`类的声明它是从exception类公有派生而来的。但在以前，当无法分配请求的内存量时，new返回一个空指针。
+
+很多代码都是在new在失败时返回空指针时编写的，有些编译器提供了一个标记开关，让用户选择所需的行为：
+
+``` c++
+int * pi = new (std::nothrow) int;
+```
+
+#### 异常、类和继承
+
+异常、类和继承以三种方式相互关联。首先，可以从一个异常类派生出另一个。其次，可以在类定义中嵌套异常类声明来组合异常，第三这种嵌套声明本身可被继承，还可用作基类。
+
+#### 未知异常的处理
+
+对于带规范列表的函数，抛出了不在规范列表中的异常称为意外异常。如果函数不带规范列表抛出的异常称为未捕获异常。
+
+未捕获异常不会导致程序立刻异常终止。相反，程序将首先调用函数`terminate( )`。在默认情况下,`terminate( )`调用`abort( )`函数。可以指定`terminate( )`应调用的函数来修改`terminate( )`的这种行为。为此，可调用`set_terminate( )`函数。`set_terminate( )`和`terminate( )`都是在头文件`exception`中声明的:
+
+```c++
+typedef void (*terminate_ handler) ();
+terminate_handler set_terminate (terminate_handler f) throw();   // C++98
+terminate_handler set_terminate (terminate_handler f) noexcept;  // C++11
+void terminate() ;          // C++98
+void terminate{) noexcept ; // C++11
+```
+其中的`typedef`使`terminate_handler`成为这样一种类型的名称：指向没有参数和返回值的函数的指针。`set_terminate( )`函数将不带任何参数且返回类型为`void`的函数的名称(地址)作为参数，并返回该函数的地址。如果调用了`set_terminate( )`函数多次，则`terminate( )`将调用最后一次 `set_terminate( )`调用设置的函数。
+
+如果发生意外异常，程序将调用`unexpected( )`函数。这个函数将调用`terminate( )`,也有一个可用于修改`unexpected( )`的行为的`set_unexpected( )`函数。这些新函数也是在头文件exception中声明的:
+
+```c++
+typedef void (*unexpected_handler) ();
+unexpected_handler set_unexpected (unexpected_handler f) throw() ;  // C++98
+unexpected_handler set_unexpected (unexpected_handler f) noexcept;  // C++11
+void unexpected() ;         // C++98
+void unexpected() noexcept; // C++11
+```
+然而，与提供给`set_terminate( )`的函数的行为相比，提供给`set_unexpected( )`的函数的行为受到更严格的限制。具体地说，`unexpected_handler`函数可以: 
+
++ 通过调用`terminate() (默认行为)`、`abort( )`或`exit( )`来终止程序
++ 引发异常。
+
+引发异常的结果取决于`unexpected_handler`函数所引发的异常以及引发意外异常的函数的异常规范:
+
++ 如果新引发的异常与原来的异常规范匹配，则程序将从那里开始进行正常处理，即寻找与新引发的异常匹配的catch块。基本上，这种方法将用预期的异常取代意外异常
++ 如果新引发的异常与原来的异常规范不匹配，且异常规范中没有包括`std::bad_exception` 类型，则程序将调用`terminate( )`。`bad_exception` 是从`exception`派生而来的，其声明位于头文件exception中
++ 如果新引发的异常与原来的异常规范不匹配，且原来的异常规范中包含了`std::bad_exception` 类型，则不匹配的异常将被`std::bad_exception`异常所取代
 
 ### RTTI
 
