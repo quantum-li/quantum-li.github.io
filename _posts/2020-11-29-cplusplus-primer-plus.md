@@ -927,4 +927,38 @@ void unexpected() noexcept; // C++11
 
 ### RTTI
 
+RTTI是运行阶段类型识别(Runtime Type Identification) 的简称。RTTI旨在为程序在运行阶段确定对象的类型提供一种标准方式。在类的多重继承当中，RTTI可以帮助确定对象是否安全的转换成另一个类（基类转换成派生类），或判断一个对象当前的类型。
+
+#### dynamic_cast 运算符
+
+如果可能的话，`dynamic_cast`运算符将使用一个基类指针转换成派生类指针。否则返回0（空指针）
+
+```c++
+class Base{}                //基类
+class Impl : public Base{}  //派生类
+Impl ip = new Impl();
+Base bp = new Base();
+if(ip = dynamic_cast<Base *>(bp))   //尝试把基类指针转换成派生类指针
+    ip->callMethod();
+```
+也可以将 `dynamic_ cast` 用于引用，其用法稍微有点不同：没有与空指针对应的引用值，因此无法使用特殊的引用值来指示失败。当请求不正确时，`dynamic_ cast` 将引发类型为`bad_ _cast` 的异常，这种异常是从`exception`类派生而来的，它是在头文件`typeinfo`中定义的。因此，可以像下面这样使用该运算符:
+
+``` c++
+#include <typeinfo> // for bad_cast
+try {
+ Impl & ir = dynamic_cast<Impl &>(br) ;
+}
+catch(bad_ cast &) {
+};
+```
+
+#### typeid 运算符和 type_info 类
+
+`typeid`运算符能够确定两个对象是否为同种类型。其返回一个对`type_info`对象的引用，`type_info`是在头文件`typeinfo`中定义的一个类，其重载了 `==` 和 `!=` 运算符。`type_info`类包含一个`name()`成员，改函数返回类名称。
+
+``` c++
+typeid(Impl) == typeid(*bp);
+//如果bp是一个空指针，程序将引发bad_typeid异常，改异常从exception类派生而来，在头文件typeinfo中声明。
+```
+
 ### 类型转换运算符
