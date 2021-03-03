@@ -962,3 +962,48 @@ typeid(Impl) == typeid(*bp);
 ```
 
 ### 类型转换运算符
+
+#### dynamic_cast
+
+仅当Base是Impl的可访问基类时，才允许转换一个实现类指针到一个基类指针。
+
+```c++
+Impl impl;
+Base * pb = dynamic_cast<Base *> impl;
+```
+
+#### const_cast
+
+将一个原本非常量，后被转换成不可修改的常量指针转换为可以修改指针时使用。
+
+```c++
+Base b;
+const Base * pb1 = &b;
+Base * pb2 = const_cast<Base *>(pb1);
+```
+
+#### static_cast
+
+用于转换两个可以隐式转换的类型的指针
+
+```c++
+Base base;
+Impl impl;
+
+Base * pb = static_cast<Base *>(&impl);
+Impl * pi = static_cast<Impl *>(&base);
+```
+
+#### reinterpret_cast
+
+一种依赖于底层实现的内存转换
+
+```c++
+struct dat {short a; short b;};
+long value = 0xA224B118;
+dat * pd = reinterpret_cast< dat * > (&value);
+cout << hex << pd->a;   //value的前两个字节
+```
+
+## string类和标准模板库
+
