@@ -1007,3 +1007,15 @@ cout << hex << pd->a;   //value的前两个字节
 
 ## string类和标准模板库
 
+string 类是由头文件 `string` 支持的(头文件 `string.h` 和 `cstring` 支持对C风格字符串进行操纵的C库字符串函数，但不支持string类)。
+
+string 实际上是模板具体化 `basic_string<char>` 的一个typedef,同时省略了与内存管理相关的参数。同时`basic_stirng`有4个具体化：
+
+``` c++
+typedef basic_string<char> string;
+typedef basic_string<wchar_t> wstring;
+typedef basic_string<char16_t> ul6string; // C++11
+typedef basic_string<char32_t> u32string;  // C++11
+```
+
+### 智能指针模板类
