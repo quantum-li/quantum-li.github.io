@@ -1019,3 +1019,61 @@ typedef basic_string<char32_t> u32string;  // C++11
 ```
 
 ### 智能指针模板类
+
+智能指针模板类可以帮助管理动态内存分配。当方法正常或异常终止时，自动释放临时变量指针指向的内存。
+
+智能指针对象位于`memory`头文件中。通过定义类似指针的对象，将new获得的地址赋给对象，当智能指针过期时，析构函数使用delete来释放内存。c++98中提供了`auto_ptr`，但c++11将其弃用并提供了`unique_ptr`,`shared_ptr`模板类。
+
+智能指针和普通指针之间使用如下方式进行赋值：
+
+```c++
+shared_ptr<double> tpd;
+double * pd = new double;
+tpd = pd;                       //不可以
+tpd = shared_ptr<double>(pd);   //可以
+shared_ptr<double> tpd1 = pd;   //不可以
+shared_ptr<double> tpd1(pd);    //可以
+```
+
+当同类型智能指针互相赋值时，使同一个对象被智能指针释放两次。使用`auto_ptr`无法避免这种情况，因此会导致行为不确定，而`shared_ptr`通过引用计数可以避免对象被提前释放。`unique_ptr`会通过在编译时报错来避免发生，但作为返回对象时却允许通过编译，因为返回语句表明临时指针指针将不再访问对象。
+
+标准库函数`std::move()`用于将一个`unique_ptr`智能指针赋给另一个`unique_ptr`智能指针。当`unique_ptr`为右值时，可将其赋给`shared_ptr`。
+
+`auto_ptr`不支持`new []`，而`unique_ptr`同时支持`new`和`new []`。
+
+当程序需要多个指向同一个对象的智能指针时，推荐使用`shared_ptr`。当程序不需要多个时，使用`unique_ptr`。
+
+### 标准模板库
+
+STL提供了一组表示容器、迭代器、函数对象和算法的模板。函数对象是类似于函数的对象，可以是类对象或函数指针（包括函数名，因为函数名被用作指针）。
+
+STL中提供的模板基本都接受指定分配器来管理内存，例如`vector`模板：
+
+```c++
+//如果省略模板参数的值，将默认使用allocator分配器，它使用new和delete来管理内存
+template <class T, class Allocator = allocator<T>>
+```
+
+在计算中，矢量(vector)对应数组。在头文件`vector`或`vector.h`中。
+
+``` c++
+#include vector
+using namespace std;
+vector<int> v(5);
+cout << v[2];
+```
+
+对`vector`进行迭代:
+
+```c++
+vector<double>::iterator iter;
+vector<double> scores;
+auto iter2 = scores.begin();
+for(iter=scores.begin();iter!=scores.end();iter++);
+```
+
+但是STL中的容器实现并不使用成员函数实现搜索、排序、随机排序能算法。而是使用非成员函数来实现，从而避免算法的重复造轮子。比如`for_each()`方法`sort()`方法。
+
+建议优先使用`for(auto i:list)`其次`for_each()`等STL函数，其次才是使用迭代器。
+
+### 泛型编程
