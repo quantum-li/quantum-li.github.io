@@ -1077,3 +1077,42 @@ for(iter=scores.begin();iter!=scores.end();iter++);
 建议优先使用`for(auto i:list)`其次`for_each()`等STL函数，其次才是使用迭代器。
 
 ### 泛型编程
+
+#### 迭代器
+
+模板使得算法独立于存储的数据类型，而迭代器使算法独立于使用的容器类型。因此迭代器是STL通用方法的重要组成部分。
+
+STL 定义了5种迭代器：
+
++ 输入迭代器：从容器读取数据。单向迭代，可以递增，不能倒退。不能保证每次顺序一样。
++ 输出迭代器：修改容器内数据，但不能读。
++ 正向迭代器：只使用 `++` 运算符遍历容器。总是按相同的顺序遍历。可以读取和修改。
++ 双向迭代器：支持 `--` 运算符。
++ 随机访问迭代器
++ reverse_iterator：执行递增操作会反向迭代
++ back_iterator：将元素插入到容器尾部
++ front_insert_iterator：将元素插入到容器前端
++ insert_iterator：将元素插入到构造函数指定的位置前面
+
+#### 容器
+
+STL中提供的容器有：deque、list、queue、priority_queue、stack、vector、map、multimap、set、multiset、bitset，及C++11新增的：forward_list、unordered_map、unordered_multimap、unordered_set、unordered_multiset
+
++ vector：数组实现
++ deque：双端队列，在首位和末位添加删除时间都是固定的
++ list：链表实现，不支持随机访问
++ forward_list：单向链表，只支持正向迭代，不可翻转
++ queue：deque的适配器类，不允许随机访问队列和遍历队列。从队尾添加元素，从队首删除元素。查看队首和队尾的元素
++ priority_queue：vector的适配类，支持的操作与queue相同。最大的元素会被移到队首。
++ stack：vector的适配器类，不允许随机访问和遍历。只支持操作栈顶的值。
++ array：非STL容器，长度固定，不支持会调整容器大小的操作如insert。
+
+关联容器将值与键关联，通过键来查找值。map和multimap使用`pair<const keytype,datatype>`来管理数据。
+
++ set：值与键相同，键唯一，可反转和排序，一个键对应一个值
++ multiset：值与键相同，键唯一，可反转和排序，一个键可对应多个值
++ map：值与键不同，键唯一，可反转和排序，一个键对应一个值
++ multimap：值与键不同，键唯一，可反转和排序，一个键对应多个值
+
+### 函数对象
+
