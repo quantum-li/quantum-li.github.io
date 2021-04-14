@@ -1116,3 +1116,91 @@ STL中提供的容器有：deque、list、queue、priority_queue、stack、vecto
 
 ### 函数对象
 
+也叫函数符（functor），在 c++11 中提供了lambda表达式来替代函数符。包括函数名、指向函数的指针和重载了`()`运算符的类对象。例如：
+
+```c++
+class Linear
+{
+    private:
+        double a;
+        double b;
+    public:
+        double operator()(double x){return a+(B*x);}
+}
+
+Linear f;
+double y = f(2);
+```
+
+不同的函数符概念：
+
++ 生成器：是不用参数就可以调用的函数符
++ 一元函数：是用一个参数可以调用的函数符
++ 二元函数：是用两个参数可以调用的函数符
++ 谓词：返回bool值的一元函数
++ 二元谓词：返回bool值得二元函数
+
+STL 预定义了多个基本函数符。头文件 `functional(function.h)`定义了多个模板类函数对象。
+
+| 运算符 | 函数符 |
+| --- | --- |
+| + | plus |
+| - | minus |
+| * | multiplies |
+| / | divides |
+| ... |
+
+STL 提供了多种函数适配器用于适配上面这些自适应函数符。例如想要把列表所有元素值减3，则可以使用函数适配器绑定`minus`函数符的一个参数为3。    
+
+### 算法
+
+STL 包含很多处理容器的非成员函数，前面已经介绍过其中的一些：sort()、copy()、find()、transform()。他们总体设计是相同的，都使用迭代器来标识要处理的数据区间和结果的放置位置。都使用模板来提供泛型。
+
+STL 将算法库分成4组：
+
++ 非修改式序列操作：对区间中的每个元素进行操作，但不修改元素内容。例如find() 和 for_each()
++ 修改式序列操作：对区间中的每个元素进行操作，但是会修改元素内容。例如transform() 和 copy()
++ 排序和相关操作：排序 sort() 或集合操作
++ 通用数字运算：区间的内容累积、计算两个容器的内部乘积等
+
+前3组都在头文件 `algorithm(algo.h)` 中。第4组在 `numeric(algo.h)` 中。
+
+像 sort() 这种结果替换原始数据，是就地算法。copy() 这种结果发送到其他位置，是复制算法。有些算法有两个版本即可以是就地计算，也可以复制计算，STL 约定复制版本以 `_copy()` 结尾，接受一个额外的输出迭代器参数。
+
+还有根据应于到元素的函数结果来执行操作的，通常以 `_if` 结尾，例如 replace_if() 函数。
+
+有些算法同时存在于对象的内置方法，或STL的非成员函数中。这种通常调用对象的方法是更好的选择。因为一般STL的非成员函数无法管理对象内存。
+
+### 其他库
+
+复数计算类 complex 位于头文件 `complex` 中。头文件 `random` 提供了更多的随机数功能。
+
+模板 `initializer_list` 是 c++11 中新增的，用于实现使用初始化列表语法将 STL 容器初始化为一系列值：`vector<double> dlist {11.2, 34.5};`。这之所以可行，就是因为容器类包含将 `initializer_list<T>` 作为参数的构造函数。因此上述代码等价于 `vector<double> dlist ({11.2, 34.5});`。
+
+`initializer_list` 模板除了在 STL 中使用，我们也可以在自己的代码中使用：
+
+```c++
+#include <iostream>
+#include <initializer_list>
+
+double sum(std::initializer_list<double> i1);
+double average(const std::initializer_list<double> & ri1);
+
+int main()
+{
+    sum({2,3,4});
+    average({2,3,4});
+    std::initializer_list<double> dl = {1.1,2.2,3.3};
+    sum(dl);
+    average(dl);
+}
+
+...
+...
+
+```
+
+## 输入、输出和文件
+
+
+
