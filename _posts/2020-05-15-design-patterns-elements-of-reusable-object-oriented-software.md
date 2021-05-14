@@ -49,6 +49,7 @@ excerpt: 所有结构良好的面向对象软件体系结构中都包含了许�
 
 好的设计者不仅知道哪些变化会促使重构，还要知道哪些类和对象结构能够避免重构，使得设计对需求的变化具有健壮性。对需求的彻底分析有助于突出易于发生变化的需求。设计模式可以尽量防止以后的重构。
 
+- - -
 
 ## 创造型模式
 
@@ -169,6 +170,8 @@ TODO
 ### 简单工厂模式
 
 简单工厂模式(Simple Factory Pattern)：又称为静态工厂方法(Static Factory Method)模式。
+
+- - -
 
 ## 结构型模式
 
@@ -560,8 +563,69 @@ Flyweight模式通常和Composite模式结合起来，用共享叶结点的有�
 
 通常，最好用Flyweight实现State和Strategy对象。
 
+### PROXY（代理）一对象结构型模式
 
+#### 意图
 
+为其他对象提供一种代理以控制对这个对象的访问。
+
+#### 别名
+
+Surrogate
+
+#### 适用性
+
++ 远程代理(RemoteProxy)，为一个对象在不同的地址空间提供局部代表。
++ 虚代理(Virtual Proxy)，根据需要创建开销很大的对象。
++ 保护代理(Protection Proxy)，控制对原始对象的访问。保护代理用于对象应该有不同的访问权限的时候。
++ 智能指引(Smart Reference)，取代了简单的指针，它在访问对象时执行一些附加操作。它的典型用途包括:
+  + 对指向实际对象的引用计数，这样当该对象没有引用时，可以自动释放它。
+  + 当第一次引用一个持久对象时，将它装人内存。
+  + 在访问一个实际对象前，检查是否已经锁定了它，以确保其他对象不能改变它。
+
+#### 结构
+
+![代理模式结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/代理模式结构图.png)
+
+这是运行时刻一种可能的代理结构的对象图
+
+![代理模式运行时](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/代理模式运行时.png)
+
+#### 参与者
+
++ Proxy
+  + 保存一个引用使得代理可以访问实体。若RealSubject和Subject的接口相同，Proxy会引用Subject。
+  + 提供一个与Subject的接口相同的接口，这样代理就可以用来替代实体。
+  + 控制对实体的存取，并可能负责创建和删除它。
+  + 其他功能依赖于代理的类型:
+    + RemoteProxy负责对请求及其参数进行编码，并向不同地址空间中的实体发送已编码的请求。
+    + Virtual Proxy可以缓存实体的附加信息，以便延迟对它的访问。
+    + Protection Proxy检查调用者是否具有实现一个请求所必需的访问权限。
++ Subject
+  + 定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy。
++ RealSubject
+  + 定义Proxy所代表的实体。
+
+#### 协作
+
+代理根据其种类，在适当的时候向RealSubject转发请求。
+
+#### 效果
+
+Proxy模式在访问对象时引入了一定程度的间接性。根据代理的类型，附加的间接性有多种用途:
+  + Remote Proxy可以隐藏一个对象存在于不同地址空间的事实。
+  + Virtual Proxy可以进行最优化，例如根据要求创建对象。
+  + Protection Proxies和Smart Reference都允许在访问一个对象时有一些附加的内务处理。
+
+#### 相关模式
+
+Adapter：适配器Adapter为它所适配的对象提供了一个不同的接口。相反，代理提供了与它的实体相同的接口。然而，用于访问保护的代理可能会拒绝执行实体会执行的操作，因此，它的接口实际上可能只是实体接口的一个子集。
+
+Decorator：尽管decorator的实现部分与代理相似，但decorator的目的不一样。Decorator为对象添加一个或多个功能，而代理则控制对对象的访问。
+
+代理的实现与decorator的实现类似，但是在相似的程度上有所差别。Protection Proxy的实现可能与decorator的实现差不多。另一方面，Remote Proxy不包含对实体的直接引用，而只是一个间接引用，如“主机ID,主机上的局部地址。”Virtual Proxy开始的时候使用一个间接引用，例如一个文件名，但最终将获取并使用一个直接引用。
+
+- - -
 
 ## 行为模式
 
@@ -1235,8 +1299,7 @@ ConcreteClass靠AbstractClass来实现算法中不变的步骤
 + Composite，访问者可以用于对一-个由Composite模式定义的对象结构进行操作
 + Interpreter，访问者可以用于解释
 
-
-
+- - -
 
 ## 附录——词汇表
 
