@@ -83,7 +83,7 @@ Factory Method使一个设计可以定制且只略微有一些复杂。其他设
 
 使用Abstract Factory、 Prototype 或Builder的设计甚至比使用Factory Method的那些设计更灵活，但它们也更加复杂。通常，设计以使用Factory Method开始，并且当设计者发现需要更大的灵活性时，设计便会向其他创建型模式演化。当你在设计标准之间进行权衡的时候，了解多个模式可以给你提供更多的选择余地。
 
-### ABSTRACT FACTORY(抽象工厂)——对象创造型模式
+### Abstract Factory(抽象工厂)——对象创造型模式
 
 #### 意图
 
@@ -140,7 +140,7 @@ Kit
 
 AbstractFactory类通常用工厂方法（Factory Method）实现，但也可以用Prototype实现。一个具体的工厂通常是一个单件（Singleton）
 
-### BUILDER（生成器）——对象创建型模式
+### Builder（生成器）——对象创建型模式
 
 #### 意图
 
@@ -191,7 +191,7 @@ Abstract Factory与Builder相似，因为它也可以创建复杂的对象。主
 
 Composite通常是用Builder生成的
 
-### FACTORY METHOD（工厂方法）——对象创建型模式
+### Factory Method（工厂方法）——对象创建型模式
 
 #### 意图
 
@@ -250,7 +250,7 @@ Abstract Factory经常用工厂方法来实现。
 
 Prototypes不需要创建Creator的子类。但是，它们通常要求一个针对Product类的Initialize操作。Creator使用Initialize来初始化对象。而Factory Method不需要这样的操作。
 
-### PROTOTYPE（原型）——对象创建型模式
+### Prototype（原型）——对象创建型模式
 
 #### 意图
 
@@ -328,7 +328,7 @@ Composite模式和Decoratro模式具有类似的结构图，这说明它们都�
 
 模式间的这些差异非常重要，因为它们针对了面向对象设计过程中一些特定的经常发生问题的解决方法。但这并不意味着这些模式不能结合使用。
 
-### ADAPTER（适配器）——类对象结构型模式
+### Adapter（适配器）——类对象结构型模式
 
 #### 意图
 
@@ -395,7 +395,7 @@ Decorator模式增强了其他对象的功能而同时又不改变它的接口�
 
 模式Proxy在不改变它的接口的条件下，为另一个对象定义了一个代理。
 
-### BRIDGE（桥接）——对象结构型模式
+### Bridge（桥接）——对象结构型模式
 
 #### 意图
 
@@ -447,7 +447,7 @@ Handle/Body
 Abstract Factory模式可以用来创建和配置一个特定的Bridge模式。
 Adapter模式用来帮助无关的类协同工作，它通常在系统设计完成后才会被使用。然而，Bridge模式则是在系统开始时就被使用，它使得抽象接口和实现部分可以独立进行改变。
 
-### COMPOSITE（组合）——对象结构型模式
+### Composite（组合）——对象结构型模式
 
 #### 意图
 
@@ -514,7 +514,7 @@ Itertor可用来遍历Composite。
 
 Visitor将本来应该分布在Composite和Leaf类中的操作和行为局部化。
 
-### DECORATOR (装饰)——对象结构型模式
+### Decorator (装饰)——对象结构型模式
 
 #### 意图
 
@@ -572,7 +572,7 @@ Composite模式：可以将装饰视为一个退化的、仅有一个组件的�
 
 Strategy模式：用一个装饰你可以改变对象的外表；而Strategy模式使得你可以改变对象的内核。这是改变对象的两种途径。
 
-### FACADE（外观）——对象结构型模式
+### Facade（外观）——对象结构型模式
 
 #### 意图
 
@@ -622,7 +622,7 @@ Mediator模式与Facade模式的相似之处是，它抽象了一些已有的类
 
 通常来讲，仅需要一个Facade对象，因此Facade对象通常属于Singleton模式。
 
-### FLYWEIGHT（享元）——对象结构型模式
+### Flyweight（享元）——对象结构型模式
 
 #### 意图
 
@@ -684,7 +684,7 @@ Flyweight模式通常和Composite模式结合起来，用共享叶结点的有�
 
 通常，最好用Flyweight实现State和Strategy对象。
 
-### PROXY（代理）一对象结构型模式
+### Proxy（代理）一对象结构型模式
 
 #### 意图
 
@@ -818,7 +818,7 @@ Observer模式定义并保持对象间的依赖关系。其他的行为对象模
 
 职责链通常与Composite一起使用，这样一个构件的父构件可作为它的后继处理对象。
 
-### COMMAND（命令）——对象行为型模式
+### Command（命令）——对象行为型模式
 
 #### 意图
 
@@ -890,7 +890,7 @@ Observer模式定义并保持对象间的依赖关系。其他的行为对象模
 Composite模式可被用来实现宏命令。
 Memento模式可用来保持某个状态，命令用这一状态来取消它的效果。在被放入历史表列前必须被拷贝的命令起到一种原型的作用。
 
-### INTERPRETER(解释器)——类行为模式
+### Interpreter(解释器)——类行为模式
 
 #### 意图
 
@@ -947,7 +947,7 @@ Flyweight模式: 说明了如何在抽象语法树中共享终结符
 Iterator:解释器可用一个迭代器遍历该结构
 Visitor:可用来在一个类中维护抽象语法树中的各节点的行为
 
-### ITERATOR(迭代器)——对象行为型模式
+### Iterator(迭代器)——对象行为型模式
 
 #### 意图
 
@@ -1018,7 +1018,7 @@ Composite:迭代器常被应用到象复合这样的递归结构上
 Factory Method:多态迭代器靠Factory Method来例化适当的迭代器子类
 Memento:常与迭代器模式一起使用。迭代器可使用一个memento来捕获一个迭代的状态。迭代器在其内部存储memento
 
-### MEDIATOR(中介者)——对象行为型模式
+### Mediator(中介者)——对象行为型模式
 
 #### 意图
 
@@ -1073,7 +1073,7 @@ Facade与中介者的不同之处在于它是对一个对象子系统进行抽�
 
 Colleague可使用Observer模式与Mediator通信。
 
-### MEMENTO(备忘录)——对象行为型模式
+### Memento(备忘录)——对象行为型模式
 
 #### 意图
 
@@ -1132,7 +1132,7 @@ Token
 + Command：命令可使用备忘录来为可撤销的操作维护状态
 + Iterator：备忘录可用于迭代
 
-### OBSERVER(观察者)——对象行为型模式
+### Observer(观察者)——对象行为型模式
 
 #### 意图
 
@@ -1203,7 +1203,7 @@ Token
 Mediator:通过封装复杂的更新语义, ChangeManager充当目标和观察者之间的中介者。
 Singleto: ChangeManager可使用Singleton模式来保证它是唯一的并且是可全局访问的。
 
-### STATE(状态)——对象行为型模式
+### State(状态)——对象行为型模式
 
 #### 意图
 
@@ -1259,7 +1259,7 @@ Singleto: ChangeManager可使用Singleton模式来保证它是唯一的并且是
 + Flyweight解释了何时以及怎样共享状态对象
 + 状态对象通常是Singleton
 
-### STRATEGY(策略)——对象行为型模式
+### Strategy(策略)——对象行为型模式
 
 #### 意图
 
@@ -1320,7 +1320,7 @@ Policy
 
 Flyweight: Strategy对象经常是很好的轻量级对象
 
-### TEMPLATE METHOD(模板方法)——类行为型模式
+### Template Method(模板方法)——类行为型模式
 
 #### 意图
 
@@ -1358,7 +1358,7 @@ ConcreteClass靠AbstractClass来实现算法中不变的步骤
 + Factory Method 常被模板方法凋用
 + Strategy  模板方法使用继承来改变算法的一部分。Strategy使用委托来改变整个算法.
 
-### VISITOR(访问者)——对象行为型模式
+### Visitor(访问者)——对象行为型模式
 
 #### 意图
 
