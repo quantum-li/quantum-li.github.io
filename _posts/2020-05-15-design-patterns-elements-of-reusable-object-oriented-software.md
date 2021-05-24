@@ -8,7 +8,7 @@ excerpt: 所有结构良好的面向对象软件体系结构中都包含了许�
 ---
 
 + [Design Patterns, Elements of Reusable Object-Oriented Software.pdf](https://leezw.net/assets/pdf/Design%20Patterns,%20Elements%20of%20Reusable%20Object-Oriented%20Software.pdf)
-
++ [图说设计模式](https://design-patterns.readthedocs.io/zh_CN/latest/index.html)
 ## 设计模式
 
 ### 创造型模式
@@ -146,16 +146,14 @@ AbstractFactory类通常用工厂方法（Factory Method）实现，但也可以
 
 将一个复杂对象的创建与它的表示分离，使得同样的构建过程可以创建不同的表示。
 
-#### 实用性
+#### 适用性
 
 + 当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时。
 + 当构造过程必须允许被构造的对象有不同的表示时。
 
-
 #### 结构
 
 ![生成器结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/生成器模式结构图.png)
-
 
 #### 参与者
 
@@ -164,8 +162,131 @@ AbstractFactory类通常用工厂方法（Factory Method）实现，但也可以
 + Director，构造一个使用Builder接口的对象。
 + Product，表示被构造的复杂对象。 ConcreteBuilderf创建该产品的内部表示并定义它的装配过程。包含定义组成部件的类，包括将这些部件装配成最终产品的接口。
 
-TODO
+#### 协作
 
++ 客户创建Director对象，并用它所想要的Builder对象进行配置
++ 一旦产品部件被生成，导向器就会通知生成器
++ 生成器处理导向器的请求，并将部件添加到该产品中
++ 客户从生成器中检索产品
+
+![建造者模式协作图](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/建造者模式协作图.png)
+
+#### 效果
+
++ 它使你可以改变一个产品的内部表示，Builder对象提供给导向器一个构造产品的抽象接口。该接口使得生成器可以隐藏这个产品的表示和内部结构。它同时隐藏了该产品是如何装配的。因为产品是通过抽象接口构造的，你在改变该产品的内部表示时所要做的只是定义一个新的生成器。
++ 它将构造代码和表示代码分开，Builder模式通过封装一个复杂对象的创建和表示方式提高了对象的模块性。用户不需要知道定义该产品内部结构的类的所有信息；这些类是不出现在Builder接口中的。每个ConcreteBuilder包含了创建和装配一个特定产品的所有代码。这些代码只需要写一次；然后不同的Director可以复用它以在相同部件集合的基础上构作不同的Product
++ 它使你可对构造过程进行更精准的控制，Builder模式与一下子就生成产品的创建模型不同，它是在导向者的控制下一步一步构造产品的。仅当该产品完成时导向者才从生成器中取回它。
+
+#### 实现
+
+通常有一个抽象的Builder类为导向者可能要求创建的没一个构件定义一个操作。这些操作默认情况下什么都不做。一个ConcreteBuilder类对它有兴趣创建的构件重新定义这些操作。
+
++ 装配和构造接口，生成器逐步的构造它们的产品。因此Builder类接口必须足够普遍，以便为各种类型的具体生成器构造产品
++ 为什么产品没有抽象类？通常情况下由具体生成器生成产品，它们的表示相差是如此之大以至于给不同的产品以公共父类没有太大意思
++ 在Builder中默认的方法为空，在C++中，生成方法故意不声明为纯虚成员函数，而是把它们定义为空方法，这使客户只重定义他们所感兴趣的操作
+
+#### 相关模式
+
+Abstract Factory与Builder相似，因为它也可以创建复杂的对象。主要的区别是Builder模式着重于一步步构造一个复杂对象。而Abstract Factory着重于多个系列的产品对象。Builder在最后一步返回产品，而对于Abstract Factory来说，产品是立即返回的。
+
+Composite通常是用Builder生成的
+
+### FACTORY METHOD（工厂方法）——对象创建型模式
+
+#### 意图
+
+定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。
+
+#### 别名
+
+虚构造器（Virtual Constructor）
+
+#### 适用性
+
++ 当一个类不知道它所必须创建的对象的类的时候
++ 当一个类希望由它的子类来指定它所创建的对象的时候
++ 当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类是代理者这一信息局部化的时候。
+
+#### 结构
+
+![抽象工厂结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/抽象工厂模式结构图.png)
+
+#### 参与者
+
++ Product
+  + 定义工厂方法所创建的对象的接口
++ ConcreteProduct
+  + 实现Product接口
++ Creator
+  + 声明工厂方法，该方法返回一个Product类型的对象。Creator也可以定义一个工厂方法的缺省实现，它返回一个缺省的ConcreteProduct对象
+  + 可以调用工厂方法以创建一个Product对象
++ ConcreteCreator
+  + 重定义工厂方法以返回一个ConcreteProduct实例
+
+#### 协作
+
++ Creator依赖于它的子类来定义工厂方法，所以它返回一个适当的ConcreteProduct实例
+  
+#### 效果
+
+工厂方法不再将与特定应用有关的类绑定到你的代码中。代码仅处理Product接口；因此它可以与用户定义的任何ConcreteProduct类一起使用。
+
+工厂方法的一个潜在的缺点在于客户可能仅仅为了创建一个特定的ConcreteProduct对象，就不得不创建Creator的子类。当Creator子类不必需时，客户现在必然要处理类演化的其他方面；但是当客户无论如何必须创建Creator的子类时，创建子类也是可行的。
+
++ 为子类提供hook，用工厂方法在一个类的内部创建对象通常比直接创建对象更灵活。Factory Method给子类一个挂钩以提供对象的扩展版本
+  
+#### 实现
+
+当应用FactoryMethod模式时需要考虑下面一些问题：
+
++ 主要有两种不同的情况，第一种情况是Creator类是一个抽象类并且不提供它所声明的工厂方法的实现，需要子类来实现，因为没有合理的缺省实现，它避免了不得不实例化不可预见的类的问题。；第二种情况是Creator是一个具体的类而且为工厂方法提供一个缺省的实现。也有可能有一个定义了缺省实现的抽象类，但不常见，保证了子类的设计者能够在必要的时候改变父类所实例化的对象的类。
++ 参数化工厂方法，该模式的另一种情况是的工厂方法可以创建多种产品。工厂方法采用一个标识要被创建的对象种类的参数。工厂方法创建的所有对象将工厂Product接口。
+
+#### 相关模式
+
+Abstract Factory经常用工厂方法来实现。
+
+工厂方法通常在Template Methods中被调用。
+
+Prototypes不需要创建Creator的子类。但是，它们通常要求一个针对Product类的Initialize操作。Creator使用Initialize来初始化对象。而Factory Method不需要这样的操作。
+
+### PROTOTYPE（原型）——对象创建型模式
+
+#### 意图
+
+用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。
+
+#### 适用性
+
+当一个系统应该独立于它的产品创建、构成和表示时，要使用Prototype模式；以及
++ 当要实例化的类是在运行时刻指定时，例如通过动态装载
++ 为了避免创建一个与产品类层次平行的工厂类层次时
++ 当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些
+
+#### 结构
+
+![原型模式结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/原型模式结构图.png)
+
+#### 参与者
+
++ Prototype
+  + 声明一个克隆自身的接口
++ ConcretePrototype
+  + 实现一个克隆自身的操作
++ Client
+  + 让一个原型克隆自身从而创建一个新的对象
+
+#### 协作
+
+客户请求一个原型克隆自身
+
+#### 效果
+
+
+
+
+
+TODO
 
 ### 简单工厂模式
 
