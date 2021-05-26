@@ -282,15 +282,58 @@ Prototypes不需要创建Creator的子类。但是，它们通常要求一个针
 
 #### 效果
 
-
-
+对客户隐藏了具体的产品类，此外使用户无需改变即可使用与特定应用相关的类。
++ 运行时刻增加和删除产品
 
 
 TODO
 
-### 简单工厂模式
+#### 相关模式
 
-简单工厂模式(Simple Factory Pattern)：又称为静态工厂方法(Static Factory Method)模式。
+Prototype和Abstract Factory模式在某种方面是相互竞争的。但是它们也可以一起使用。Abstract Factory可以存储一个被克隆的原型的集合，并且返回产品对象。
+
+大量使用Composite和Decorator模式的设计通常可以从Prototype模式处获益。
+
+### Singleton（单件）——对象创建型模式
+
+#### 意图
+
+保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+
+#### 适用性
+
++ 当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时
++ 当这个唯一实例应该是通过子类化可扩展时，并且客户应该无需更改代码就能使用一个扩展的实例时
+
+#### 结构
+
+![单例模式结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/单例模式结构图.png)
+
+#### 参与者
+
++ Singleton
+  + 定义一个Instance操作，允许客户访问它的唯一实例。Instance是一个类操作
+  + 可以负责创建它自己的唯一实例
+
+#### 协作
+
+客户只能通过Singleton的Instance操作访问一个Singleton的实例
+
+#### 效果
+
++ 对唯一实例的受控访问，因为Singleton类封装它的唯一实例，所以它可以严格的控制客户怎样以及何时访问它
++ 缩小namespace，Singleton模式是对全局变量的一种改进，它避免了那些存储唯一实例的全局变量污染namespace
++ 允许对操作和表示的精华，Singleton类可以有子类，而且用这个扩展类的实例来配置一个应用是很容易的
++ 允许可变数目的实例，允许Singleton类的多个实例
+
+#### 实现
+
++ 保证一个唯一的实例
+
+#### 相关模式
+
+AbstractFactory、Builder、Prototype都可以使用Singleton模式实现
+
 
 - - -
 
