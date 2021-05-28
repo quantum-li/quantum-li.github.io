@@ -1199,7 +1199,7 @@ Token
 + Command：命令可使用备忘录来为可撤销的操作维护状态
 + Iterator：备忘录可用于迭代
 
-### Observer(观察者)——对象行为型模式
+### Observer（观察者）——对象行为型模式
 
 #### 意图
 
@@ -1277,7 +1277,7 @@ Token
 Mediator:通过封装复杂的更新语义, ChangeManager充当目标和观察者之间的中介者。
 Singleto: ChangeManager可使用Singleton模式来保证它是唯一的并且是可全局访问的。
 
-### State(状态)——对象行为型模式
+### State（状态）——对象行为型模式
 
 #### 意图
 
