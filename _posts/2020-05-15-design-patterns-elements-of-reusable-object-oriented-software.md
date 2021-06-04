@@ -235,7 +235,7 @@ Composite通常是用Builder生成的
 
 #### 结构
 
-![抽象工厂结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/抽象工厂模式结构图.png)
+![抽象工厂结构](/assets/images/design-patterns-elements-of-reusable-object-oriented-software/工厂方法模式结构.jpeg)
 
 #### 参与者
 
