@@ -2,6 +2,7 @@
 title: JAVA发展史
 categories:
 - JAVA
+classify: javahistory
 description: 内容源自《深入理解Java虚拟机——JVM高级特性与最佳实践》.第三版.第一章.第3节
 permalink: "/posts/java-history"
 excerpt: 从Java的第一-个版本诞生到现在已经有二十余年的时间，白驹过隙，沧海桑田，转眼已过了四分之一个世纪，JDK的版本已经发展到了JDK 13。这二十多年里诞生过无数与Java相关的产品、技术与标准。现在让我们走入时间隧道，从孕育Java语言的时代开始，再来回顾一下Java的发展轨迹和历史变迁。
@@ -58,5 +59,12 @@ excerpt: 从Java的第一-个版本诞生到现在已经有二十余年的时间
 
 2019年，JDK 12发布，引入Shenandoah垃圾收集器。作为首个非Oracle开发的垃圾收集器，由于目标与Oracle在JDK 11引入的ZGC几乎一致存在竞争。OracleJDK 12把相关代码通过条件编译强行提出，使其无法在OracleJDK中使用。
 
-2019年9月，JDK 13发布，动态 CDS 归档；ZGC: 取消提交未使用存储器；重新实现旧版 Socket API；Switch 表达式（预览阶段）；
+2019年9月，JDK 13发布，动态 CDS 归档；ZGC: 取消提交未使用存储器；重新实现旧版 Socket API；Switch 表达式（预览阶段）。
 
+2020年3月，JDK14发布，包含主要16个功能改进和漏洞修复。
+
+2020年9月，JDK15发布，主要是安全更新和bug修复。
+
+2021年3月，JDK16发布，包含主要17个更新。
+
+2021年9月，LTS版本的JDK17发布，包含主要14个更新。
