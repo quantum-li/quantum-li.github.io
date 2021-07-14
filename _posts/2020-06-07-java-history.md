@@ -16,11 +16,19 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 
 1991年，绿色计划(Green Project)开始启动，此计划最初的目标是开发一种能够在各种消费性电子产品(如机顶盒、冰箱、收音机等)上运行的程序架构。这个计划的产品就是Java语言的前身: Oak (领导人办公室外的一棵橡树) 。Oak当时在消费品市场上并不算成功，但随着1995年互联网潮流的兴起，Oak迅速找到了最适合自己发展的市场定位并蜕变成为Java语言。
 
+------
+
 1995年，Oak语言改名为Java，并正式发布Java 1.0版本，是Java Alpha和Beta的第一个版本，它们的API非常不稳定。提供的Java Web浏览器名为 WebRunner。Java语言第一次提出了"Write Once，Run Anywhere"的口号。
+
+------
 
 1996年，JDK 1.0发布，Java语言有了第一个正式版本的运行环境。JDK 1.0提供了一个纯解释执行的Java虚拟机实现(Sun Classic VM)。JDK 1.0版本的代表技术包括: Java虚拟机、Applet、AWT等。在JDK 1.0.1之前，private和protected关键字可以一起使用来创建另一种保护形式，该保护形式主要用作对给定类的子类的方法或变量的限制。在JDK 1.0.2中，此功能已被删除。
 
+------
+
 1996年，首届JavaOne大会，从此JavaOne成为全世界数百万Java语言开发者每年一度的技术盛会。
+
+------
 
 1997年，Sun公司发布了JDK 1.1，Java里许多最基础的技术支撑点(如JDBC等)都是在JDK 1.1版本中提出的，JDK 1.1版的技术代表有: JAR文件格式、JDBC、JavaBeans、 RMI等。Java语言的语法也有了一定的增强，如内部类(Inner Class)和反射(Reflection) 都是在这时候出现的。
 1. 内部类的概念
@@ -32,6 +40,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 7. Symantec公司为JavaSoft制作了Microsoft Windows平台上的 JIT（Just In Time）编译器
 8. 来自Taligent公司的国际化和Unicode支持
 
+------
+
 1998年，JDK迎来了一个里程碑式的重要版本:工程代号为Playground的JDK 1.2，Sun在这个版本中把Java技术体系拆分为三个方向，分别是J2SE 、J2EE 和J2ME 。在这个版本中出现的代表性技术非常多，如EJB、Java Plug-in、Java IDL、Swing等，并且这个版本中Java虚拟机第一次内置了JIT(Just In Time)即时编译器(JDK 1.2中曾并存过三个虚拟机，Classic VM、HotSpot VM和Exact VM，其中Exact VM只在Solaris平台出现过；后面两款虛拟机都是内置了JIT即时编译器的，而之前版本所带的Classic VM只能以外挂的形式使用即时编译器)。在语言和API层面上，Java添加了一系列Collections集合类等。
 1. Java plug-in(Java applet)
 2. Java IDL，一种用于CORBA互操作性的IDL实现
@@ -40,7 +50,11 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 5. Sun的JVM首次配备了JIT编译器
 6. strictfp关键字
 
+------
+
 1999年，HotSpot虚拟机诞生。
+
+------
 
 2000年，JDK 1.3发布。从此Sun公司维持着稳定的研发节奏：大约每隔两年发布一个JDK的主版本，以动物命名，期间发布的各个修正版本则以昆虫作为工程代号。
 1. 包括了HotSpot JVM（HotSpot JVM于1999年4月首次发布，用于J2SE 1.2 JVM）
@@ -49,6 +63,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 4. Java Platform Debugger Architecture (JPDA)
 5. JavaSound API
 6. [Synthetic proxy classes](https://stackoverflow.com/questions/399546/synthetic-class-in-java)
+
+------
 
 2002年，JDK 1.4发布，是标志着Java真正走向成熟的一个版本，带来了很多新的技术特性，如正则表达式、异常链、NIO、日志类、XML解析器和XSLT转换器，
 1. assert关键字
@@ -61,6 +77,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 8. 集成了XML解析器和XSLT处理器 (JAXP)
 9. 集成了安全和加密扩展（JCE、JSSE、JAAS）
 10. 包括了Java Web Start（Java Web Start 于2001年3月首次发布，适用于J2SE 1.3）
+
+------
 
 2004年，JDK 5发布，从这个版本开始将产品版本号修改成了“JDK x”。在Java语法易用性上做出了非常大的改进。如:自动装箱、泛型、动态注解、枚举、可变长参数、遍历循环(foreach循环) 等语法特性。这个版本改进了Java的内存模型(Java Memory Model, JMM)、提供了java.util.concurent并发包等。
 1. 引入了泛型：避免了手动类型转换，使用类型擦除实现，在编译时删除泛型信息并使用Object替换，在实际使用时强转会原始类型
@@ -76,6 +94,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 11. 用于解析来自各种输入流和缓冲区的数据的扫描器类(Scanner class)
 12. 版本命名变更，1.5.0 表示开发者内部版本，JDK 5表示产品版本
 
+------
+
 2006年，JDK 6发布，在这个版本中，Sun公司终结了J2EE、J2SE、 J2ME的产品线命名方式，启用JavaEE6、 JavaSE6、 JavaME 6的新命名来代替。
 1. 脚本语言支持：用于与脚本语言紧密集成的通用API，以及内置的 Mozilla JavaScript Rhino 集成。
 2. Swing 的显着性能改进
@@ -87,7 +107,11 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 8. 许多GUI接口的改进
 9. JVM 改进包括：同步和编译器性能优化、新算法和对现有垃圾收集算法的升级以及应用程序启动性能。
 
+------
+
 在2006年的JavaOne大会上，Sun公 司宜布计划要把Java开源，它陆续地将JDK的各个部分在GPLv2 (GNU General Public Lcensev2)协议下公开了源码，并建立了OpenJDK组织对这些源码进行独立管理。
+
+------
 
 2009年，JDK 7完成了其第第一个里程碑版本。按照JDK 7最初的功能规划，一共会设置十个里程碑。从JDK 7最原始的功能清单来看，它本应是一个包含许多重要改进的JDK版本，但现实不如人愿，以下功能没能全在JDK 7中实现：
 1. Lambda项目:支持Lambda表达式，支持函数式编程。(JDK 8)
@@ -95,6 +119,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 3. 动态语言支持: Java是静态语言，为其他运行在Java虛拟机上的动态语言提供支持。
 4. Garbage-First收集器。（JDK 8）
 5. Coin项目: Java语法细节进化。(部分JDK 8)
+
+------
 
 从JDK 7 Update 4起，Java SE的核心功能正式开始为MacOS X操作系统提供支持，并在JDK 7 Update 6中达到所有功能与Mac OS X完全兼容的程度；同时，JDK 7 Update 6还对ARM指令集架构提供了支持。至此，官方提供的JDK可以运行于Wndows (不含Windows 9x)、Linux、 Solaris和Mac OS X操作系统上，支持ARM、x86、x86-64和SPARC指令集架构，JDK 7也是可以支持WIndows XP操作系统的最后一个版本。
 1. 动态语言支持，使用新的invokedynamic字节码，遵循当前在多语言虚拟机上完成的原型设计工作
@@ -121,6 +147,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 15. XML和Unicode的上游更新
 16. Java deployment rule sets
 
+------
+
 2014年，JDK8发布，提供了Lambda表达式支持、内置Nashorn JavaScript引擎支持、新的时间日期API、彻底移除HotSpot永久代。
 1. Lambda表达式
 2. stream操作
@@ -133,6 +161,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 9. 静态链接的JNI库
 10. 启动JavaFX应用程序（直接启动JavaFX应用程序JAR）
 11. 删除永久代
+
+------
 
 2017年，JDK9发布，带来了Jigsaw虚拟机模块化支持。从此每六个JDK大版本划出一个三年支持的LTS版，普通版只有六个月生命周期。JDK 8和JDK 11是LTS版。下一就是要在2021年发布的JDK 17了。
 1. Jigsaw项目下JDK的模块化（Java 平台模块系统）
@@ -154,6 +184,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 17. jlink：Java 链接器：创建一个工具，可以将一组模块及其依赖项组装和优化为自定义运行时映像。它有效地允许生成一个完全可用的可执行文件，包括运行它的 JVM。
 18. 提前编译：GraalVM 提供的提前编译。
 
+------
+
 2018年，JDK 10发布，主要是内部重构。同年，Oracle宣告Java EE成为历史名词。同年，JavaOne大会成为最后一届
 1. 局部变量类型推断 var 关键字
 2. GC接口：通过引入干净的垃圾收集器 (GC) 接口来改进不同垃圾收集器的源代码隔离
@@ -165,6 +197,8 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 8. 替代内存设备上的堆分配：启用HotSpot VM以在用户指定的备用内存设备（例如 NV-DIMM）上分配Java对象堆
 9. 实验性基于 Java 的 JIT 编译器
 10. 基于时间的发布版本控制：针对当前和未来基于时间的发布模型，修订 Java SE 平台和 JDK 的版本字符串方案以及相关版本控制信息
+
+------
 
 2018年，LTS版本的JDK 11发布，ZGC出现。同时Oracle调整了JDK授权许可证。OpenJDK免费单只有半年支持。OracleJDK在生产环境必须付费，但有三年支持。迫使商业用户要么不断升级JDK版本，要么就去购买商业支持。
 1. 
