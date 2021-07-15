@@ -179,7 +179,7 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 12. HiDPI graphics：自动缩放和调整大小
 13. 变量句柄(Variable handles)：用来代替`java.util.concurrent.atomic`和`sun.misc.Unsafe`操作的等价物
 14. Coin语法改进项目继续进行
-15. jshell：Java Shell：JShell 是Java语言的REPL（读取-评估-打印循环）命令行界面
+15. jshell：Java Shell：JShell 是Java语言的REPL（读取-执行-打印循环）命令行界面
 16. XML目录
 17. jlink：Java 链接器：创建一个工具，可以将一组模块及其依赖项组装和优化为自定义运行时映像。它有效地允许生成一个完全可用的可执行文件，包括运行它的 JVM。
 18. 提前编译：GraalVM 提供的提前编译。
