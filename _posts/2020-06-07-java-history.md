@@ -12,6 +12,24 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 + [doc](https://docs.oracle.com/en/java/javase/index.html)
 + [Java存档](https://www.oracle.com/cn/java/technologies/oracle-java-archive-downloads.html)
 
++ [OpenJDK](https://openjdk.java.net/)
++ [OpenJDK Wiki](https://wiki.openjdk.java.net/)
+
+使用向(除GUI相关)关键项目：
++ [Amber](https://openjdk.java.net/projects/amber)，Java语法优化项目
++ [Closures](https://openjdk.java.net/projects/closures),Java闭包项目，Lambda语法
++ [Coin](https://openjdk.java.net/projects/coin)，计划完善JDK 7的项目
++ [Duke](https://openjdk.java.net/projects/duke)，Java的吉祥物项目，主要是Java的吉祥物图片
++ [Graal](http://openjdk.java.net/projects/graal)，用Java实现的适用于所有语言的AOT编译器项目，不过在JDK 17中由于没有被使用且维护成本高而被移除 [JEP 407](https://openjdk.java.net/jeps/407)
++ [IcedTea](http://openjdk.java.net/projects/icedtea)
++ [JDK 6](http://openjdk.java.net/projects/jdk6)——[JDK](http://openjdk.java.net/projects/jdk)
++ [JDK Updates](http://openjdk.java.net/projects/jdk-updates)，为JDK提供更新的项目
++ [Jigsaw](http://openjdk.java.net/projects/jigsaw)，JDK 模块化项目
++ [Kona](http://openjdk.java.net/projects/kona)，为物联网(IoT)领域常用的技术和协议定义和实现
++ [Kulla](http://openjdk.java.net/projects/kulla)，Java语言提供REPL工具的项目
++ 
+
+
 ![Java技术发展的时间线](/assets/images/java-history/ce2ed681-f046-4102-9e2e-4159a2d8c173.png)
 
 1991年，绿色计划(Green Project)开始启动，此计划最初的目标是开发一种能够在各种消费性电子产品(如机顶盒、冰箱、收音机等)上运行的程序架构。这个计划的产品就是Java语言的前身: Oak (领导人办公室外的一棵橡树) 。Oak当时在消费品市场上并不算成功，但随着1995年互联网潮流的兴起，Oak迅速找到了最适合自己发展的市场定位并蜕变成为Java语言。
