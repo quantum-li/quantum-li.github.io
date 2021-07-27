@@ -272,7 +272,7 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 8. ZGC现可被引入生产环境
 9. 文本块语法结束了预览阶段，进入了正式版本
 10. Shenandoah现可用于生产环境
-11. Solaris and SPARC Ports在JDK14被标记为废弃，在JDK15版本正式移除
+11. Solaris and SPARC 移植内容在JDK14被标记为废弃，在JDK15版本正式移除
 12. 外部内存访问API进入二次孵化阶段
 13. record类型进入二次预览阶段
 14. JDK15废弃了RMI Activation，后续将被移除
