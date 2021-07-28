@@ -27,8 +27,32 @@ excerpt: 从Java的第一个版本诞生到现在已经有二十余年的时间�
 + [Jigsaw](http://openjdk.java.net/projects/jigsaw)，JDK 模块化项目
 + [Kona](http://openjdk.java.net/projects/kona)，为物联网(IoT)领域常用的技术和协议定义和实现
 + [Kulla](http://openjdk.java.net/projects/kulla)，Java语言提供REPL工具的项目
-+ 
-
++ [Lambda](https://openjdk.java.net/projects/lambda)，Java支持Lambda语法项目
++ [Lilliput](https://openjdk.java.net/projects/lilliput)，将Java对象头从128bit减小到64bit的项目
++ [Locale Enhancement](https://openjdk.java.net/projects/locale-enhancement)，Java的java.util.Locale增强项目
++ [Loom](https://openjdk.java.net/projects/loom)，支持 Java 平台上易于使用、高吞吐量的轻量级并发和新的编程模型。协程的支持
++ [Memory Model Update](https://openjdk.java.net/projects/jmm)，更新Java内存模型的项目
++ [Metropolis](https://openjdk.java.net/projects/metropolis)，Java on Java 项目，使用Graal编译器和AOT静态编译技术代替现有的HotSpot虚拟机编译器
++ [Mission Control](https://openjdk.java.net/projects/jmc)，JDK Mission Control项目
++ [Modules](https://openjdk.java.net/projects/modules)，JDK模块化项目（已经被Jigsaw取代）
++ [Multi-Language VM](https://openjdk.java.net/projects/mlvm)，达芬奇机器计划，扩展JVM以支持其他语言，尤其是动态语言
++ [Nashorn](https://openjdk.java.net/projects/nashorn)，一个高性能的JavaScript运行时项目
++ [New I/O](https://openjdk.java.net/projects/nio)，新IO API，已经跟随JDK 7交付
++ [OpenJFX](https://openjdk.java.net/projects/openjfx)，目标是构建下一代 Java 客户端工具包
++ [Panama](https://openjdk.java.net/projects/panama)，改进和丰富JVM与外部语言API接口调用的项目
++ [Penrose](https://openjdk.java.net/projects/penrose)，该项目的目标是探索和实现 Jigsaw 项目和 OSGi 之间的互操作性
++ [SCTP](https://openjdk.java.net/projects/sctp/)，流控制传输协议项目
++ [Skara](https://openjdk.java.net/projects/skara)，JDK代码托管平台迁移项目，从Mercurial迁移到Git
++ [Shenandoah](https://openjdk.java.net/projects/shenandoah)，一种超低暂停时间垃圾收集器
++ [Sumatra](https://openjdk.java.net/projects/sumatra)，使 Java 应用程序能够利用图形处理单元 (GPU) 和加速处理单元 (APU)——无论它们是离散设备还是与 CPU 集成——来提高性能
++ [ThreeTen](https://openjdk.java.net/projects/threeten)，Java日期和时间API优化重构项目，以随JDK8交付
++ [Tiered Attribution](https://openjdk.java.net/projects/tiered-attrib)，研究javac 类型检查子系统的替代架构
++ [Type Annotations](https://openjdk.java.net/projects/type-annotations)，类型注解项目，已随JDK8交付
++ [Valhalla](https://openjdk.java.net/projects/valhalla)，提供一个探索和孵化高级 Java VM 和语言候选功能的场所
++ [Verona](https://openjdk.java.net/projects/verona)，新 JDK 版本字符串，已随JDK 9交付
++ [VisualVM](https://openjdk.java.net/projects/visualvm)，故障排查工具
++ [Zero](https://openjdk.java.net/projects/zero)，0汇编的JDK移植项目，以便在任何系统上进行构建
++ [ZGC](https://openjdk.java.net/projects/zgc)，一种可扩展的低延迟垃圾收集器
 
 ![Java技术发展的时间线](/assets/images/java-history/ce2ed681-f046-4102-9e2e-4159a2d8c173.png)
 
