@@ -61,9 +61,9 @@
     
       {"src": "/posts/vscode-task","dest": "/posts/vscode-task.html"},
     
-      {"src": "/posts/b+tree","dest": "/posts/b+tree.html"},
+      {"src": "/posts/bplus-tree","dest": "/posts/bplus-tree.html"},
     
-      {"src": "/posts/btree","dest": "/posts/btree.html"}
+      {"src": "/posts/b-tree","dest": "/posts/b-tree.html"}
     
     ]
 }
