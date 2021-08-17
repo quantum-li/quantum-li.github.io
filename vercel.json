@@ -1,9 +1,8 @@
-
 {
     "routes": [
-      {"src": "/posts/btree","dest": "/posts/btree.html"},
-      {"src": "/posts/b+tree","dest": "/posts/b+tree.html"},
+    
       {"src": "/posts/algorithm","dest": "/posts/algorithm.html"},
+    
       {"src": "/posts/vs-code","dest": "/posts/vs-code.html"},
     
       {"src": "/posts/cplusplus-primer-plus","dest": "/posts/cplusplus-primer-plus.html"},
@@ -18,8 +17,6 @@
     
       {"src": "/posts/operating-system-history","dest": "/posts/operating-system-history.html"},
     
-      {"src": "/posts/vscode-extension-focus","dest": "/posts/vscode-extension-focus.html"},
-    
       {"src": "/posts/understanding-the-jvm-advanced-features-and-best-practices","dest": "/posts/understanding-the-jvm-advanced-features-and-best-practices.html"},
     
       {"src": "/posts/java-history","dest": "/posts/java-history.html"},
@@ -32,13 +29,13 @@
     
       {"src": "/posts/high-performance-mysql","dest": "/posts/high-performance-mysql.html"},
     
-      {"src": "/posts/mysql-distinct-sort-query","dest": "/posts/mysql-distinct-sort-query.html"},
-    
       {"src": "/posts/computer-networks-6","dest": "/posts/computer-networks-6.html"},
     
       {"src": "/posts/redis-design-implements","dest": "/posts/redis-design-implements.html"},
     
       {"src": "/posts/linux-commandline-and-shellscripting-bible","dest": "/posts/linux-commandline-and-shellscripting-bible.html"},
+    
+      {"src": "/posts/vscode-extension-focus","dest": "/posts/vscode-extension-focus.html"},
     
       {"src": "/posts/jdk-rt-jar-java-io","dest": "/posts/jdk-rt-jar-java-io.html"},
     
@@ -62,7 +59,11 @@
     
       {"src": "/posts/implement-vscode-extension","dest": "/posts/implement-vscode-extension.html"},
     
-      {"src": "/posts/vscode-task","dest": "/posts/vscode-task.html"}
+      {"src": "/posts/vscode-task","dest": "/posts/vscode-task.html"},
+    
+      {"src": "/posts/b+tree","dest": "/posts/b+tree.html"},
+    
+      {"src": "/posts/btree","dest": "/posts/btree.html"}
     
     ]
 }
