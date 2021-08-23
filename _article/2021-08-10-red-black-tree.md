@@ -1,14 +1,14 @@
 ---
-title: AVL树
+title: 红黑树
 categories:
 - 数据结构
 - algorithm
-description: AVL树是一种自平衡搜索二叉树。在AVL树中，任何节点的两个子树的高度最多相差一个，当高度差超过一个时就要进行重新平衡。对于查找密集型应用，AVL树比红黑树更快，因为其更严格的平衡。其名字是由两位发明人的名字首字母而来。
-permalink: "/posts/avl-tree"
-excerpt: AVL树是一种自平衡搜索二叉树。在AVL树中，任何节点的两个子树的高度最多相差一个，当高度差超过一个时就要进行重新平衡。对于查找密集型应用，AVL树比红黑树更快，因为其更严格的平衡。其名字是由两位发明人的名字首字母而来。
+description: 红黑树是一种自平衡搜索二叉树。在红黑树种，每个节点都存储了其颜色（红色或黑色），用于帮助树在插入或删除过程中保持平衡。
+permalink: "/posts/red-black-tree"
+excerpt: 红黑树是一种自平衡搜索二叉树。在红黑树种，每个节点都存储了其颜色（红色或黑色），用于帮助树在插入或删除过程中保持平衡。
 ---
 
-+[Wiki](https://en.wikipedia.org/wiki/AVL_tree)
++[Wiki](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)
 
 | 指标	| 平均 | 最差 |
 | --- | --- | --- |
