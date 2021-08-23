@@ -69,7 +69,7 @@
       {"src": "/posts/2-3-4-tree","dest": "/posts/2-3-4-tree.html"},
 
       {"src": "/posts/avl-tree","dest": "/posts/avl-tree.html"},
-      {"src": "/posts/red-black-tree","dest": "/posts/red-black-tree"}
+      {"src": "/posts/red-black-tree","dest": "/posts/red-black-tree.html"}
     
     ]
 }
