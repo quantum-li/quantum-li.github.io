@@ -58,4 +58,23 @@ ACID 模型是一套数据库设计原则，侧重点在数据和关键任务的
 
 ## 原子性
 
-InnoDB 使用[事务](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_transaction)来保证原子性
+InnoDB 的原子性涉及到[事务](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_transaction)。相关功能包括：
+
++ [autocommit](https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_autocommit)配置
++ [COMMIT](https://dev.mysql.com/doc/refman/5.7/en/commit.html)语句
++ [ROLLBACK](https://dev.mysql.com/doc/refman/5.7/en/commit.html)语句
+
+## 一致性
+
+InnoDB 的一致性主要涉及 InnoDB 的内部处理，以保护数据免遭崩溃。相关的功能包括：
+
++ InnoDB 的[双写缓冲区](https://dev.mysql.com/doc/refman/5.7/en/innodb-doublewrite-buffer.html)
++ InnoDB 的[崩溃恢复](https://dev.mysql.com/doc/refman/5.7/en/innodb-recovery.html#innodb-crash-recovery)
+
+## 隔离性
+
+InnoDB 的隔离性体现在事务的隔离级别，相关特性包括：
+
++ [autocommit](https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_autocommit)配置
++ [事务隔离级别](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html)和[SET TRANSACTION](https://dev.mysql.com/doc/refman/5.7/en/set-transaction.html)语句
++ [锁](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_locking)
