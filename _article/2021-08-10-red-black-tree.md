@@ -88,58 +88,56 @@ AVL树是另一种支持 $$O(log n)$$ 时间复杂度树结构。AVL树可以被
 下面是一些基本操作示例。如：获取父节点、获取兄弟节点、向左旋转等
 
 ```c++
-// Basic type definitions:
+// 颜色定义:
 
 enum color_t { BLACK, RED };
 
-struct RBnode {     // node of red–black tree
-  RBnode* parent;   // == NULL if root of the tree
-  RBnode* child[2]; // == NIL if child is empty
-    // Index is:
-    //   LEFT  := 0, if (key < parent->key)
-    //   RIGHT := 1, if (key > parent->key)
+struct RBnode {     // 节点定义
+  RBnode* parent;   // 如果是根节点parent为NULL
+  RBnode* child[2]; // 如果无子节点child为NIL
+    // 索引定义:
+    //   左子树  := 0,  (key < parent->key)
+    //   右子树 := 1,  (key > parent->key)
   enum color_t color;
   int key;
 };
 
-#define NIL   NULL // null pointer  or  pointer to sentinel node
+#define NIL   NULL // 一般表示叶子节点，空指针或者指向哨兵节点
 #define LEFT  0
 #define RIGHT 1
 #define left  child[LEFT]
 #define right child[RIGHT]
 
-struct RBtree { // red–black tree
-  RBnode* root; // == NIL if tree is empty
+struct RBtree { // 红黑树定义
+  RBnode* root; // 如果树是空的，root == NIL
 };
 
-// Get the child direction (∈ { LEFT, RIGHT })
-//   of the non-root non-NIL  RBnode* N:
+// 获取一个节点 N（N非根节点且非NIL节点）是其父节点的左子树还是右子树(∈ { LEFT, RIGHT })
 #define childDir(N) ( N == (N->parent)->right ? RIGHT : LEFT )
 
-// Helper functions:
+// 辅助方法:
 
 RBnode* GetParent(RBnode* N) {
-  // The parent of the root node is set to NULL.
+  // 根节点的父节点是NULL
   return N == NULL ? NULL : N->parent;
 }
 
 RBnode* GetGrandParent(RBnode* N) {
-  // Will return NULL if N is root or child of root
+  // 根节点或根节点的子节点的祖父节点是NULL
   return GetParent(GetParent(N));
 }
 
 RBnode* GetSibling(RBnode* N) {
   RBnode* P = GetParent(N);
-  // No parent means no sibling:
+  // 如果没有父节点意味着也没有兄弟节点:
   assert(P != NULL);
   return P->child[1-childDir(N)];
 }
-// If parent P and child direction dir is available, same as:
-//   P->child[1-dir]
+
 
 RBnode* GetUncle(RBnode* N) {
   RBnode* P = GetParent(N);
-  // No parent means no uncle:
+  // 没有父节点意味着没有叔叔节点:
   assert(P != NULL);
   return GetSibling(P);
 }
@@ -150,7 +148,7 @@ RBnode* GetCloseNephew(RBnode* N) {
   RBnode* S;
   assert(P != NULL);
   dir = childDir(N);
-  S = P->child[1-dir]; // sibling of N
+  S = P->child[1-dir]; // N 的兄弟节点
   assert(S != NIL);
   return S->child[dir]; // the nephew close to N
 }
