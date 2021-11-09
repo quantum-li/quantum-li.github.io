@@ -6,7 +6,7 @@
       {"src": "/posts/git","dest": "/posts/git.html"},
       {"src": "/posts/spring-all","dest": "/posts/spring-all.html"},
       {"src": "/posts/microservice","dest": "/posts/microservice.html"},
-      {"src": "/posts/jdk-source","dest": "/posts/jdk-source.html"},
+      {"src": "/posts/jdk-8-source","dest": "/posts/jdk-8-source.html"},
       {"src": "/posts/operating-system-history","dest": "/posts/operating-system-history.html"},
       {"src": "/posts/understanding-the-jvm-advanced-features-and-best-practices","dest": "/posts/understanding-the-jvm-advanced-features-and-best-practices.html"},
       {"src": "/posts/java-history","dest": "/posts/java-history.html"},

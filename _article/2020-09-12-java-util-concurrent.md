@@ -1,7 +1,7 @@
 ---
 title: jdk源码rt.jar中java.util.concurrent包拆解
 categories:
-- jdk
+- jdk8
 - rt.jar
 - java
 - util
