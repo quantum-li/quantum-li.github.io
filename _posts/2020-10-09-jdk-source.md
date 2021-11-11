@@ -76,6 +76,15 @@ Object类中的默认实现是浅拷贝。并且如果对象没有实现Cloneabl
 
 返回一个对象的字符串表示形式。结果应该是一个简洁但信息丰富的提示，易于阅读。Object类的默认实现是`getClass().getName() + '@' + Integer.toHexString(hashCode())`。因此建议重写此方法。
 
+### 为什么notify和wait在Object中实现，以及synchronized与Lock的区别
+
+[相关阅读](https://www.one-tab.com/page/1pIxm9kpSeaEQr4h1jGg1A)
+
+当你看到Object类中居然有notify和wait这两个方法的时候，第一感觉可能是懵的，这不是线程并发相关的方法吗，为什么会在Java中所有对象的基类Obejct中声明？
+
+
+
+
 ### public final native void notify()
 
 ## JDK包目录
