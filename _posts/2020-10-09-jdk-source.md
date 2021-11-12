@@ -76,14 +76,39 @@ Object类中的默认实现是浅拷贝。并且如果对象没有实现Cloneabl
 
 返回一个对象的字符串表示形式。结果应该是一个简洁但信息丰富的提示，易于阅读。Object类的默认实现是`getClass().getName() + '@' + Integer.toHexString(hashCode())`。因此建议重写此方法。
 
-### 为什么notify和wait在Object中实现，以及synchronized与Lock的区别
+### 为什么notify和wait在Object中实现，以及synchronized的可重入次数
 
 [相关阅读](https://www.one-tab.com/page/XYutdKpNQdOqbfwM9NeiIw)
 
-当你看到Object类中居然有notify和wait这两个方法的时候，第一感觉可能是懵的，这不是线程并发相关的方法吗，为什么会在Java中所有对象的基类Obejct中声明？
+Java提供解决线程安全的方式有两种，一种是synchronized关键字，另一种是juc工具包。synchronized关键字是jvm虚拟机级别提供的控制反转形式的监视器线程安全处理方式。使用synchronized关键字后，由jvm处理线程并发、锁等待，锁升级、锁占用、锁释放。如果只使用了synchronized，仅解决了线程安全问题，而没有解决线程通信问题。典型的生产-消费者模型中，需要线程通信来解决消费者线程等待、生产者线程唤醒的问题。
 
+synchronized提供的监视器，可以使用任何Java类或对象来作为信号量，所以synchronized可以修饰任何方法，或使用任何对象作为参数。使用对象头中的markword当做锁。因此监视器只能知道锁被哪些线程持有，而不知道哪些线程持有锁。所以为了解决线程通信的问题，就需要使用监视器的信号量来唤醒等待中的进程。因为对象就是监视器的信号量，所以notify和wait方法需要在Object类中实现。虽然这两个方法在Object类中，但是由于它们的目的为了解决线程通信问题，所以在非synchronized代码块内调用会抛出IllegalMonitorStateException。也就是只能持有锁的线程能调用wait和notify方法。
 
+synchronized加的锁是可重入锁，持有锁的线程可以多次获取锁。juc中的Lock锁可重入次数是Integer.MAX_VALUE。而synchronized的可重入次数虚拟机规范中并没有明确说明，取决于具体的虚拟机实现。但是一般来说Lock可以在循环中调用，所以需要设置可重入次数。而synchronized关键字，由于虚拟机会对字节码进行优化，进行锁消除或合并相邻、嵌套的synchronized块，是有一个逻辑上的次数上限的。这个上限取决于class文件大小限制（最多65535个方法每个方法限制为65535个字节）和jvm的堆栈大小限制。
 
+但是从程序的角度讲，只要涉及到了计数，jvm中一定会有一个计数器的。以HotSpot虚拟机为例，查看objectMonitor.cpp文件可以看到，`ObjectMonitor::enter`方法中的计数器是`_recursions`变量，它在objectMonitor.hpp中的定义是`intptr_t`类型。`intptr_t`是个指针类型，在32位和64位操作系统中长度不一样，所以上限也不一样。
+
+``` c++
+/** objectMonitor.hpp **/
+ private:
+  volatile intptr_t  _recursions;   // recursion count, 0 for first entry
+
+  // TODO-FIXME: _count, _waiters and _recursions should be of
+  // type int, or int32_t but not intptr_t.  There's no reason
+  // to use 64-bit fields for these variables on a 64-bit JVM.
+```
+
+``` c++
+/** objectMonitor.cpp **/
+
+  if (cur == current) {
+    // TODO-FIXME: check for integer overflow!  BUGID 6557169.
+    _recursions++;
+    return true;
+  }
+```
+
+从HotSpot代码中可以看出来，关于_recursions的大小是有过争议的。在使用的地方考虑过整型溢出的问题。但是从[BUGID 6557169](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6557169)可以知道，这个风险由于字节码优化、文件大小、堆栈大小等限制，是被忽略了的。在字段定义位置的注释也可以看出设计者认为这个变量只需要32位就足够了，intptr_t在64位虚拟机上是一种浪费。
 
 ### public final native void notify()
 
