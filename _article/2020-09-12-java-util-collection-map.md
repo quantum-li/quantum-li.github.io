@@ -1,5 +1,5 @@
 ---
-title: jdk源码rt.jar中java.util包拆解
+title: JDK源码rt.jar中java.util包拆解
 categories:
 - jdk8
 - rt.jar
@@ -7,7 +7,7 @@ categories:
 - collectin
 - map
 - util
-description: jdk源码rt.jar中java.util包拆解、详解
+description: JDK源码rt.jar中java.util包拆解、详解
 permalink: "/posts/jdk-rt-jar-java-util-collection-map"
 excerpt: Collection、List、Set、SortedSet、Queue、Map、AbstractMap、SortedMap、AbstractList、AbstractSet
 ---

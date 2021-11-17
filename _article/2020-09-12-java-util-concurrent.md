@@ -1,12 +1,12 @@
 ---
-title: jdk源码rt.jar中java.util.concurrent包拆解
+title: JDK源码rt.jar中java.util.concurrent包拆解
 categories:
 - jdk8
 - rt.jar
 - java
 - util
 - concurrent
-description: jdk源码rt.jar中java.util.concurrent包拆解、详解
+description: JDK源码rt.jar中java.util.concurrent包拆解、详解
 permalink: "/posts/jdk-rt-jar-java-util-concurrent"
 excerpt: Executor、ExecutorService、ScheduledExecutorService、AbstractExecutorService、BlockingQueue、RejectedExecutionHandler、ConcurrentMap、SortedMap、AbstractList、AbstractSet
 ---
