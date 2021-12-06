@@ -1,8 +1,8 @@
 /* start custom scss snippet */
-a {
-    text-decoration: underline;
-    color: #00f;
-    font-weight: 400;
+a, a:link, a:visited {
+    text-decoration: underline!important;; 
+    color: #00f!important;;
+    font-weight: 400!important;;
 }
 .top-line {
     height: 2px;
