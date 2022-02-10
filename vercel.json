@@ -19,7 +19,7 @@
       {"src": "/posts/linux-commandline-and-shellscripting-bible","dest": "/posts/linux-commandline-and-shellscripting-bible.html"},
       {"src": "/posts/vscode-extension-focus","dest": "/posts/vscode-extension-focus.html"},
       {"src": "/posts/jdk-rt-jar-java-io","dest": "/posts/jdk-rt-jar-java-io.html"},
-      {"src": "/posts/jdk-rt-jar-java-util-collection-map","dest": "/posts/jdk-rt-jar-java-util-collection-map.html"},
+      {"src": "/posts/jdk-rt-jar-java-util","dest": "/posts/jdk-rt-jar-java-util.html"},
       {"src": "/posts/jdk-rt-jar-java-util-concurrent-lock","dest": "/posts/jdk-rt-jar-java-util-concurrent-lock.html"},
       {"src": "/posts/jdk-rt-jar-java-util-concurrent","dest": "/posts/jdk-rt-jar-java-util-concurrent.html"},
       {"src": "/posts/microservice-overview","dest": "/posts/microservice-overview.html"},
