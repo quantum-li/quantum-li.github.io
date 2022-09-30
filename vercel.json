@@ -38,6 +38,7 @@
       {"src": "/posts/red-black-tree","dest": "/posts/red-black-tree.html"},
       {"src": "/posts/innodb","dest": "/posts/innodb.html"},
       {"src": "/posts/jdk-rt-jar-java-lang","dest": "/posts/jdk-rt-jar-java-lang.html"},
-      {"src": "/posts/floating-point","dest": "/posts/floating-point.html"}
+      {"src": "/posts/floating-point","dest": "/posts/floating-point.html"},
+      {"src": "/posts/network-programming-case","dest": "/posts/network-programming-case.html"}
     ]
 }
