@@ -105,9 +105,9 @@ epoll API 可以监控多个文件描述符的I/O状态。epoll 有两种触发�
 
 epoll实例由下列方法进行创建和管理：
 
-+ `[epoll_create](https://man7.org/linux/man-pages/man2/epoll_create.2.html)` 创建一个 epoll 实例并返回这个实例的文件描述符 fd。（后来出现的 `[epoll_create1](https://man7.org/linux/man-pages/man2/epoll_create1.2.html)` 扩展了 `epoll_create` 的功能）
-+ `[epoll_ctl](https://man7.org/linux/man-pages/man2/epoll_ctl.2.html)` 向 epoll 实例注册受监控的文件描述符。
-+ `[epoll_wait](https://man7.org/linux/man-pages/man2/epoll_wait.2.html)` 等待 I/O 事件。如果没有任何就绪的 I/O 事件会阻塞调用线程。这个系统调用可以被认为是从 epoll 实例中的 ready 列表抓取文件描述符。
++ [`epoll_create`](https://man7.org/linux/man-pages/man2/epoll_create.2.html) 创建一个 epoll 实例并返回这个实例的文件描述符 fd。（后来出现的 `[epoll_create1](https://man7.org/linux/man-pages/man2/epoll_create1.2.html)` 扩展了 `epoll_create` 的功能）
++ [`epoll_ctl`](https://man7.org/linux/man-pages/man2/epoll_ctl.2.html) 向 epoll 实例注册受监控的文件描述符。
++ [`epoll_wait`](https://man7.org/linux/man-pages/man2/epoll_wait.2.html) 等待 I/O 事件。如果没有任何就绪的 I/O 事件会阻塞调用线程。这个系统调用可以被认为是从 epoll 实例中的 ready 列表抓取文件描述符。
 
 
 ### Level-triggered (LT) 和 edge-triggered (ET)
