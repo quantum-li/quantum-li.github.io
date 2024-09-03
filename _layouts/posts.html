@@ -1,0 +1,17 @@
+---
+layout: article
+---
+
+{{ content }}
+
+{% for art in site.article %}
+{% for categorie in art.categories %}
+{% if categorie == page.classify %}
+<div>
+    <br>
+    <a href="{{site.baseurl}}{{art.url}}"><h3>{{art.title}}——{{ art.date | date: "%b %-d, %Y" }}</h3></a>
+    <blockquote><p>{% if art.excerpt.size < 200 %}{{ art.excerpt | strip_html }}{% else %}{{ art.excerpt | strip_html | truncate:200}}{% endif %}</p></blockquote>
+</div>
+{% endif %}
+{% endfor %}
+{% endfor %}

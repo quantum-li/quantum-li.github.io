@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>MindMap - Leezw</title>
+    <meta name="description" content="一本书有少部分讲的是知识，大部分帮助你理解知识。">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+
+    <!-- bower:css -->
+    <link rel="stylesheet" href="assets/mindmap/bootstrap.css" />
+    <link rel="stylesheet" href="assets/mindmap/codemirror.css" />
+    <link rel="stylesheet" href="assets/mindmap/hotbox.css" />
+    <link rel="stylesheet" href="assets/mindmap/kityminder.core.css" />
+    <link rel="stylesheet" href="assets/mindmap/color-picker.min.css" />
+    <!-- endbower -->
+
+    <link rel="stylesheet" href="assets/mindmap/kityminder.editor.css">
+
+
+</head>
+
+<body ng-app="kityminderDemo" ng-controller="MainController">
+    <kityminder-editor on-init="initEditor(editor, minder)"></kityminder-editor>
+</body>
+
+<!-- bower:js -->
+<script src="assets/mindmap/jquery.js"></script>
+<script src="assets/mindmap/bootstrap.js"></script>
+<script src="assets/mindmap/angular.js"></script>
+<script src="assets/mindmap/ui-bootstrap-tpls.js"></script>
+<script src="assets/mindmap/codemirror.js"></script>
+<script src="assets/mindmap/xml.js"></script>
+<script src="assets/mindmap/javascript.js"></script>
+<script src="assets/mindmap/css.js"></script>
+<script src="assets/mindmap/htmlmixed.js"></script>
+<script src="assets/mindmap/markdown.js"></script>
+<script src="assets/mindmap/overlay.js"></script>
+<script src="assets/mindmap/gfm.js"></script>
+<script src="assets/mindmap/ui-codemirror.js"></script>
+<script src="assets/mindmap/marked.js"></script>
+<script src="assets/mindmap/kity.min.js"></script>
+<script src="assets/mindmap/hotbox.js"></script>
+<script src="assets/mindmap/json-diff.js"></script>
+<script src="assets/mindmap/kityminder.core.js"></script>
+<script src="assets/mindmap/color-picker.min.js"></script>
+<!-- endbower -->
+
+<script src="assets/mindmap/kityminder.editor.min.js"></script>
+<script src="assets/mindmap/main.min.js"></script>
+
+
+<script>
+    angular.module('kityminderDemo', ['kityminderEditor'])
+        .controller('MainController', function ($scope) {
+            $scope.initEditor = function (editor, minder) {
+                window.editor = editor;
+                window.minder = minder;
+            };
+        });
+
+    window.onload = function () {
+        loadMindMap();
+    };
+
+    function loadMindMap() {
+        var queryString = window.location.search;
+        // 解析查询参数
+        if (!queryString) {
+            console.log("无URL参数")
+            return;
+        }
+        queryString = queryString.substring(1); // 去掉开头的问号
+        var pairs = queryString.split('&');
+        var params = {};
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i].split('=');
+            var key = decodeURIComponent(pair[0]);
+            var value = decodeURIComponent(pair[1] || '');
+            params[key] = value;
+        }
+
+        if (!params.hasOwnProperty('source')) {
+            console.log("无关键参数")
+            return;
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', params['source']);
+        xhr.responseType = 'json';
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var data = xhr.response;
+                    editor.minder.importJson(data);
+                } else {
+                    console.log('请求失败：' + xhr.status);
+                }
+            }
+        };
+    };
+
+</script>
+
+</html>
