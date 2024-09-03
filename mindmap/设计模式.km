@@ -92,7 +92,7 @@
                                             "id": "cbos5a57foo0",
                                             "created": 1622195032888,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/模板方法结构.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/模板方法结构.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -200,7 +200,7 @@
                                             "id": "cbn3608ri6w0",
                                             "created": 1622023001995,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/责任链模式结构.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/责任链模式结构.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -277,7 +277,7 @@
                                             "id": "cbn14o4akpk0",
                                             "created": 1622017255020,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/命令模式结构.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/命令模式结构.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -293,7 +293,7 @@
                                             "id": "cbn15rwxpb40",
                                             "created": 1622017341646,
                                             "text": "时序图",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/命令模式时序图.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/命令模式时序图.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -390,7 +390,7 @@
                                             "id": "cbno3lv1wdc0",
                                             "created": 1622082057271,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/迭代器模式结构.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/迭代器模式结构.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -467,7 +467,7 @@
                                             "id": "cbnpspje9qg0",
                                             "created": 1622086845487,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/中介者模式结构.jpeg",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/中介者模式结构.jpeg",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -483,7 +483,7 @@
                                             "id": "cbnpswz1yzk0",
                                             "created": 1622086861672,
                                             "text": "时序图",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/中介者模式时序图.jpeg",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/中介者模式时序图.jpeg",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -570,7 +570,7 @@
                                             "id": "cbo128kqpps0",
                                             "created": 1622118624414,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/备忘录模式结构.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/备忘录模式结构.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -667,7 +667,7 @@
                                             "id": "cbojp2fxb6w0",
                                             "created": 1622171193416,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/观察者模式结构.jpeg",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/观察者模式结构.jpeg",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -764,7 +764,7 @@
                                             "id": "cboketjffbk0",
                                             "created": 1622173211505,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/状态模式结构.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/状态模式结构.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -871,7 +871,7 @@
                                             "id": "cbor9jdlh1s0",
                                             "created": 1622192545333,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/策略模式结构.jpeg",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/策略模式结构.jpeg",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -968,7 +968,7 @@
                                             "id": "cbouanbfvwg0",
                                             "created": 1622201095604,
                                             "text": "结构",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/访问者模式结构.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/访问者模式结构.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,
@@ -984,7 +984,7 @@
                                             "id": "cbouayl1j340",
                                             "created": 1622201120129,
                                             "text": "协作\n一个使用Visitor模式的客户必须创建一个ConcreteVisitor对象,然后遍历该对象结构，并用该访问者访问每一个元素。\n当一个元素被访问时，它调用对应于它的类的Visitor操作。如果必要，该元素将自身作为这个操作的一个参数以便该访问者访问它的状态。",
-                                            "image": "https://leezw.net/mindmap/images/design-partterns/访问者模式协作.png",
+                                            "image": "https://li-qr.github.io/mindmap/images/design-partterns/访问者模式协作.png",
                                             "imageTitle": "",
                                             "imageSize": {
                                                 "width": 200,

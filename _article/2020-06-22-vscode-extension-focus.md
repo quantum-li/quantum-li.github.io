@@ -58,10 +58,10 @@ excerpt: VS Code 插件，突出显示当前代码行、代码块，帮助你专
 
 
 ### 迭代记录
-See Change Log [here](https://github.com/mzzw/focus/blob/master/CHANGELOG.md)
+See Change Log [here](https://github.com/li-qr/focus/blob/master/CHANGELOG.md)
 
 ### Issues
-Submit the [issues](https://github.com/mzzw/focus/issues) if you find any bug or have any suggestion.
+Submit the [issues](https://github.com/li-qr/focus/issues) if you find any bug or have any suggestion.
 
 ### Contribution
-Fork the [repo](https://github.com/mzzw/focus) and submit pull requests.
+Fork the [repo](https://github.com/li-qr/focus) and submit pull requests.

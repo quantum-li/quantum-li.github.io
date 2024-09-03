@@ -9,7 +9,7 @@ permalink: "/posts/kafka-the-definitive-guide"
 excerpt: 内容全部源自《Kafka权威指南》，取自里面的重点内容摘要。包括为什么选择kafka、控制器、存储等。
 ---
 
-+ [Kafka权威指南.pdf](https://leezw.net/assets/pdf/Kafka%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97.pdf)
++ [Kafka权威指南.pdf](https://li-qr.github.io/assets/pdf/Kafka%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97.pdf)
 
 ## 初识Kafka
 

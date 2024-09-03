@@ -9,7 +9,7 @@ excerpt: Branching and Merging、Small and Fast、Distributed、Data Assurance�
 
 + [About](https://git-scm.com/about)
 + [docs](https://git-scm.com/docs)
-+ [pdf](https://leezw.net/assets/pdf/progit_v2.1.53.pdf)
++ [pdf](https://li-qr.github.io/assets/pdf/progit_v2.1.53.pdf)
 
 ## 起步
 
@@ -212,7 +212,7 @@ Git 可以使用四种不同的协议来传输资料:本地协议(Local)，HTTP 
 
 ### 搭建Git
 
-见pdf：[progit_v2.1.53.pdf](https://leezw.net/assets/pdf/progit_v2.1.53.pdf)
+见pdf：[progit_v2.1.53.pdf](https://li-qr.github.io/assets/pdf/progit_v2.1.53.pdf)
 
 ## 分布式Git
 
@@ -250,7 +250,7 @@ Git集成管理者的工作流是开发者Fork出自己的远程仓库后提交�
 
 ### 维护一个项目
 
-见pdf：[progit_v2.1.53.pdf](https://leezw.net/assets/pdf/progit_v2.1.53.pdf)
+见pdf：[progit_v2.1.53.pdf](https://li-qr.github.io/assets/pdf/progit_v2.1.53.pdf)
 
 ## GitHub
 

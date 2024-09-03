@@ -8,8 +8,8 @@ permalink: "/posts/understanding-the-jvm-advanced-features-and-best-practices"
 excerpt: 序员可以把主要精力放在具体业务逻辑，而不是放在保障物理硬件的兼容性上。通常情况下，一个程序员只要了解了必要的Java类库API、Java语法，学习适当的第三方开发框架，就已经基本满足日常开发的需要了。虚拟机会在用户不知不觉中完成对硬件平台的兼容及对内存等资源的管理工作。如果开发人员不了解虚拟机诸多技术特性的运行原理，就无法写出最适合虚拟机运行和自优化的代码。但是，如果用于生产开发，尤其是大规模的、企业级的生产开发，就迫切需要开发人员中至少有一部分人对虚拟机的特性及调节方法具有很清晰的认识。所以在Java开发体系中，对架构师、系统调优师、高级程序员等角色的需求一直都非常大。学习虚拟机中各种自动运作特性的原理也成为Java程序员成长路上最终必然会接触到的一课。
 ---
 
-+ [jls11.pdf](https://leezw.net/assets/pdf/jls11.pdf)
-+ [jvms11.pdf](https://leezw.net/assets/pdf/jvms11.pdf)
++ [jls11.pdf](https://li-qr.github.io/assets/pdf/jls11.pdf)
++ [jvms11.pdf](https://li-qr.github.io/assets/pdf/jvms11.pdf)
 
 # Java内存区域与内存溢出异常
 

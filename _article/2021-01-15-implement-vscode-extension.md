@@ -115,7 +115,7 @@ code ./focus-demo
 
 Run -> Start Debugging
 
-## 文件目录 [⚓️](https://github.com/mzzw/focus)
+## 文件目录 [⚓️](https://github.com/li-qr/focus)
 
 + 主要代码文件 extension.js
 + 配置文件 package.json（VS Code约定）
@@ -132,9 +132,9 @@ Run -> Start Debugging
     "version": "0.2.0",  # 插件版本，发布时需升高版本号才能发布成功
     "publisher": "QuanLi", # 扩展页面展示的发布者名字
     "author": {    # 插件作者信息
-        "email": "lee@leezw.net",
-        "name": "Quan Li",
-        "url": "https://leezw.net"
+        "email": "",
+        "name": "",
+        "url": ""
     },
     "icon":"images/logo.png",  # 插件Logo
     "license": "SEE LICENSE IN LICENSE", # 约定内容，指向根目录LICENSE文件
@@ -156,13 +156,13 @@ Run -> Start Debugging
         "multi-root ready"
     ],
     "bugs": {  # BUG提交地址
-        "url":"https://github.com/mzzw/focus/issues",
-        "email": "lee@leezw.net"
+        "url":"https://github.com/li-qr/focus/issues",
+        "email": ""
     },
-    "homepage": "https://github.com/mzzw/focus/blob/master/README.md",  # 扩展主页
+    "homepage": "https://github.com/li-qr/focus/blob/master/README.md",  # 扩展主页
     "repository": { # 扩展代码仓库位置
         "type": "git",
-        "url": "https://github.com/mzzw/focus.git"
+        "url": "https://github.com/li-qr/focus.git"
     },
     "main": "./extension.js", # 扩展代码入口
     "contributes": {
