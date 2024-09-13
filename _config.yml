@@ -20,7 +20,7 @@ timezone: Asia/Shanghai # see https://en.wikipedia.org/wiki/List_of_tz_database_
 ##############################
 author:
   type      : "person" # "person" (default), "organization"
-  name      : 无
+  name      : 
   url       : "https://li-qr.github.io"
   avatar    : # path or url of avatar image (square)
   bio       : # 😃
