@@ -26,7 +26,33 @@
 }
 
 a > .item__header, a.item__header, .item__header > a {
-  @include link-colors($text-color-d, $main-color-1);
+  color: $main-color-1;
+  text-decoration: underline;
+  font-weight: 400;
+
+  h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+    margin: 0;
+    font-weight: inherit;
+  }
+
+  &:hover {
+    color: darken($main-color-1, 10%);
+    text-decoration: underline;
+
+    h1, h2, h3, h4, h5, h6 {
+      color: inherit;
+    }
+  }
+
+  &:active {
+    color: darken($main-color-1, 15%);
+    text-decoration: underline;
+
+    h1, h2, h3, h4, h5, h6 {
+      color: inherit;
+    }
+  }
 }
 
 .item__meta {
