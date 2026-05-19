@@ -22,30 +22,30 @@ InnoDB 是一种兼顾高可靠和高性能的通用存储引擎。在 MySQL 5.7
 + InnoDB 将数据基于主键顺序存储在磁盘上以优化查询性能。主键索引又称为 “聚簇索引”，可以提高查找的IO效率。
 + InnoDB 支持外键约束，关键字 `FOREIGN KEY`。外键约束可以防止插入、更新和删除时导致相关表数据不一致。
 
-| 功能特性 | 是否支持 |
-|:--- | --- |
-| B树索引 | :white_check_mark: |
-| 通过备份或时间点进行恢复(由server支持，而不是存储引擎) | :white_check_mark: |
-| 分布式数据库 | :x: |
-| 聚簇索引 | :white_check_mark: |
-| 压缩数据 | :white_check_mark: |
-| 数据缓存 | :white_check_mark: |
-| 加密(由server支持，而不是存储引擎) | :white_check_mark: |
-| 外键约束 | :white_check_mark: |
-| 全文检索索引 | :white_check_mark: |
-| 地理空间数据类型支持 | :white_check_mark: |
-| 地理空间索引支持 | :white_check_mark: |
-| Hash 索引(InnoDB 为自适应Hash索引，仅限内部使用) | :x: |
-| 索引缓存 | :white_check_mark: |
-| 锁粒度 | 行级锁 |
-| MVCC | :white_check_mark: |
-| 复制集支持(由server支持) | :white_check_mark: |
-| 存储极限 | 64TB |
-| T树索引 | :x: |
-| 事务 | :white_check_mark: |
-| 更新数据字典的统计信息 | :white_check_mark: |
+| 功能特性                              | 是否支持               |
+|:--------------------------------- | ------------------ |
+| B树索引                              | :white_check_mark: |
+| 通过备份或时间点进行恢复(由server支持，而不是存储引擎)   | :white_check_mark: |
+| 分布式数据库                            | :x:                |
+| 聚簇索引                              | :white_check_mark: |
+| 压缩数据                              | :white_check_mark: |
+| 数据缓存                              | :white_check_mark: |
+| 加密(由server支持，而不是存储引擎)             | :white_check_mark: |
+| 外键约束                              | :white_check_mark: |
+| 全文检索索引                            | :white_check_mark: |
+| 地理空间数据类型支持                        | :white_check_mark: |
+| 地理空间索引支持                          | :white_check_mark: |
+| Hash 索引(InnoDB 为自适应Hash索引，仅限内部使用) | :x:                |
+| 索引缓存                              | :white_check_mark: |
+| 锁粒度                               | 行级锁                |
+| MVCC                              | :white_check_mark: |
+| 复制集支持(由server支持)                  | :white_check_mark: |
+| 存储极限                              | 64TB               |
+| T树索引                              | :x:                |
+| 事务                                | :white_check_mark: |
+| 更新数据字典的统计信息                       | :white_check_mark: |
 
-## TODO 
+## TODO
 
 # ACID 模型
 

@@ -15,12 +15,16 @@ layout: none
     {%- include scripts/variables.html -%}
   </head>
   <body>
-    <div class="top-line"></div>
     <div class="root" data-is-touch="false">
       {{ content }}
     </div>
+    <button class="dark-mode-toggle js-dark-mode-toggle" aria-label="Toggle dark mode">
+      <i class="fas fa-sun dark-mode-toggle__icon--light"></i>
+      <i class="fas fa-moon dark-mode-toggle__icon--dark"></i>
+    </button>
     <script>
       {%- include scripts/common.js -%}
+      {%- include scripts/dark-mode.js -%}
     </script>
   </body>
 </html>

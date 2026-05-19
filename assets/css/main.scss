@@ -5,6 +5,7 @@
 @import
 
     "skins/{{ site.text_skin | default: site.data.variables.default.text_skin }}",
+    "skins/dark-vars",
     // "skins/chocolate",
     // "skins/dark",
     // "skins/default",

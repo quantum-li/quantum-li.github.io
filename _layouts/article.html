@@ -9,6 +9,7 @@ type: article
 {%- assign _sharing = __return -%}
 
 <div class="layout--article">
+  <div class="reading-progress-bar"></div>
   {%- include article/top/custom.html -%}
 
   <div class="article__content" itemprop="articleBody">{{ content }}</div>
@@ -24,6 +25,13 @@ type: article
 
 </div>
 
+<button class="back-to-top" aria-label="Back to top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
 <script>
   {%- include scripts/article.js -%}
+  {%- include scripts/reading-progress.js -%}
+  {%- include scripts/code-copy.js -%}
+  {%- include scripts/back-to-top.js -%}
 </script>
