@@ -47,12 +47,18 @@
   background-color: lighten($main-color-1, 10%);
   transform: translateY(-2px);
 }
-.dark-mode-toggle__icon--dark { display: none; }
-.dark-mode-toggle__icon--light { display: inline; }
 
-.dark-mode-toggle--active {
-  .dark-mode-toggle__icon--dark { display: inline; }
-  .dark-mode-toggle__icon--light { display: none; }
+// 默认状态（浅色模式）
+.dark-mode-toggle .dark-mode-toggle__icon--dark {
+  display: none !important;
+}
+
+// 激活状态（暗色模式）
+.dark-mode-toggle--active .dark-mode-toggle__icon--dark {
+  display: inline !important;
+}
+.dark-mode-toggle--active .dark-mode-toggle__icon--light {
+  display: none !important;
 }
 
 [data-text-skin="dark"] .dark-mode-toggle {
