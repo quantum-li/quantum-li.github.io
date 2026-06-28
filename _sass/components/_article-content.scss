@@ -103,8 +103,19 @@
       margin: 0;
       background-color: $text-background-color;
       border-radius: map-get($base, border-radius);
+      position: relative;
       & > code {
         display: block;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: pre;
+        background-color: transparent;
+      }
+      .code-copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
       }
     }
   }
@@ -126,9 +137,15 @@
       border-top-left-radius: 0;
       border-top-right-radius: 0;
       & > code {
-        & > .rouge-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        background-color: transparent;
+        white-space: pre;
+        .rouge-table {
           width: auto;
-          margin: 0 0 #{- map-get($spacers, 3)} #{- map-get($spacers, 3)};
+          min-width: 100%;
           tbody, tr, td {
             padding-top: 0;
             padding-bottom: 0;
@@ -142,6 +159,12 @@
               & > .code {
                 padding: 0 0 map-get($spacers, 3) map-get($spacers, 2);
                 @include overflow(auto);
+                overflow-x: auto !important;
+                width: auto;
+                min-width: 100%;
+                code {
+                  white-space: pre;
+                }
               }
             }
           }
@@ -153,7 +176,10 @@
               display: block;
               margin: 0;
               border-radius: 0;
-              @include overflow(auto);
+              overflow-x: auto;
+              overflow-y: hidden;
+              white-space: pre;
+              width: 100%;
               &.lineno {
                 color: $text-color-l;
                 @include user-select(none);
